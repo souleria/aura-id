@@ -1,19 +1,14 @@
-# Aura ID — Portable Virtual Identity & Taste Token for AI
+# Aura ID: Portable AI Identity & Taste Token
 
-An open, browser-local identity builder and Model Context Protocol (MCP) Taste Token server. Built with zero-dependency HTML, CSS, and ES modules.
+A browser-local identity creator and Model Context Protocol (MCP) Taste Token server. Buildless HTML, CSS, and ES modules. No third-party scripts, remote font dependencies, or application database.
 
-## Why Aura ID?
+## Capabilities
 
-Instead of repeating your context, communication style, material taste, sizes, and shopping list to every AI and platform, build one portable **Aura ID** and **Scoped Taste Token**:
+- **Personal AI Profile (`aura-id/profile`)**: Context, communication style, reasoning expectations, visual taste, material preferences, active shopping/intent list, and action boundaries.
+- **Scoped Taste Token (`aura-id/taste-token`)**: Strips personal identifiers (name, role, goal, raw instructions) so a personal agent can hand a clean taste vector and active shopping needs to a store's agent without leaking private identity.
+- **Agent-to-Agent (A2A) Store Handshake Demo**: Interactive in-browser comparison showing how a store agent filters its catalog using a Taste Token.
+- **Zero-Dependency MCP & HTTP Agent Server (`mcp/server.mjs`)**: Exposes `get_taste_token`, `update_taste`, `manage_needs`, and `match_store_catalog` over MCP stdio and HTTP REST endpoints.
 
-- **Personal AI Profile (`aura-id/profile`)**: Captures your working context, reply style, honesty preferences, visual surface, material taste, active shopping list, and safety boundaries.
-- **Scoped Taste Token (`aura-id/taste-token`)**: Strips personal identifiers (name, role, private notes) so your personal agent can hand a clean taste vector and active needs list to any store agent (`privacy: "scoped-handshake-no-pii"`).
-- **MCP & Agent API Server (`mcp/server.mjs`)**: Zero-dependency Node.js server exposing `get_taste_token`, `update_taste`, `manage_needs`, and `match_store_catalog`.
+## Quick Verification
 
-## Quick Start
-
-Run `node mcp/server.mjs --http 8000 --profile ./aura-id-profile.json` to start the web app and live Agent API locally, or run `node --test profile.test.mjs` for automated privacy and schema checks.
-
-## Philosophy
-
-Made to be yours. No sign-up, no tracking database, no third-party scripts.
+Run `node --test profile.test.mjs` for export privacy, import validation, Taste Token scoping, and MCP server checks. Static files are in `dist/`.

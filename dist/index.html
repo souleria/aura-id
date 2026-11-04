@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Set your AI preferences, personal taste, and shopping needs once. Share your Taste Token with any AI or shopping agent.">
+  <meta name="theme-color" content="#f5f4f0"><title>Aura ID | Your identity &amp; Taste Token for every AI</title>
+  <link rel="icon" href="data:,"><link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="header">
+    <div class="brand-wrap">
+      <button class="wordmark" id="home" aria-label="Aura ID home">aura<span>id</span><span class="wordmark-period">.</span></button>
+      <span class="header-tagline">One portable profile &amp; Taste Token for every AI and shopping agent</span>
+    </div>
+    <nav aria-label="Main navigation">
+      <button class="text-button" id="about">The idea</button>
+      <button class="text-button" id="mcp-api">MCP &amp; API</button>
+      <button class="text-button" id="load">Open a profile</button>
+      <a class="text-button" id="github-link" href="https://github.com/souleria/aura-id" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <button class="theme-button" id="site-theme" aria-label="Switch to dark theme">◐</button>
+    </nav>
+  </header>
+  <main id="main" tabindex="-1"></main>
+  <footer>
+    <span>Aura ID · Open Identity &amp; Taste Token standard</span>
+    <div class="footer-links">
+      <button class="text-button" id="privacy">Your data &amp; this prototype</button>
+      <a class="text-button" id="footer-github" href="https://github.com/souleria/aura-id" target="_blank" rel="noopener noreferrer">Open source on GitHub</a>
+      <button class="support-link" id="coffee-link" type="button">Buy me a coffee (Crypto) ☕</button>
+    </div>
+  </footer>
+  <dialog id="dialog" aria-labelledby="dialog-title"><button class="dialog-close" id="close-dialog" aria-label="Close dialog">×</button><div id="dialog-body"></div></dialog>
+  <input type="file" id="file-input" accept="application/json,.json" hidden>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="./app.mjs"></script>
+</body></html>
