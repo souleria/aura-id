@@ -31,8 +31,8 @@ A browser-local identity creator and Model Context Protocol (MCP) Taste Token se
 - **System**: National AI Agent Registration & Portable Identity Framework
 
 ## Web3 Wallets
-- **TRON Wallet**: `TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t`
-- **MetaMask (EVM) Wallet**: `0x71C7656EC7ab88b098defB751B7401B5f6d8976F`
+- **TRON Wallet**: `TUozifQrM8qc2NgAr6AVrVrrBJNpGJS9Bc`
+- **MetaMask (EVM) Wallet**: `0x8E0Ffb9fED9840BE0C6e343a807535119f6b3a8f`
 
 ## Prior Art (حق تقدم مؤلف)
 This project establishes prior art for decentralized portable AI agent identity, cryptographic taste token attestation, and privacy-preserving agent-to-agent protocol architecture.
