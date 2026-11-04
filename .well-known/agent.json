@@ -1,0 +1,36 @@
+{
+  "schema": "aura-id/agent.json",
+  "version": "1.0",
+  "protocol": "Aura-KYA-Verification/v1",
+  "registry_name": "Aura ID — Universal Agent Registry & KYA Protocol",
+  "description": "Global Agent Identity Standard, Post-CAPTCHA Machine Passports, and Scoped Human Taste Tokens.",
+  "discovery": {
+    "llms_txt": "/llms.txt",
+    "agent_manifest": "/.well-known/agent.json"
+  },
+  "kya_verification_policy": {
+    "signature_algorithm": "Ed25519",
+    "required_headers": ["X-Aura-Agent-ID", "X-Aura-Owner-Domain", "X-Aura-Public-Key"],
+    "replaces_captcha": true,
+    "privacy_mode": "scoped-handshake-no-pii"
+  },
+  "registered_agents": [
+    {
+      "agent_id": "AURA-BUY-8D1F-43A0",
+      "name": "Hermes Procurement v2",
+      "owner_domain": "souleria.github.io",
+      "role": "buyer",
+      "model": "Claude 3.5 Sonnet",
+      "capabilities": ["catalog_search", "taste_token_match", "cart_staging", "price_check"],
+      "trust_tier": "verified",
+      "trust_score": 98,
+      "spend_limit": "$150 / session",
+      "public_key": "ed25519:pk_aura_8d1f43a099b2c4e1d7a3f5012b8c"
+    }
+  ],
+  "author": "souleria",
+  "support_wallets": {
+    "tron_usdt_trc20": "TUozifQrM8qc2NgAr6AVrVrrBJNpGJS9Bc",
+    "evm_metamask": "0x8E0Ffb9fED9840BE0C6e343a807535119f6b3a8f"
+  }
+}
