@@ -1,0 +1,24 @@
+# Aura ID — Universal Agent Registry & KYA (Know Your Agent) Protocol
+
+> Global Agent Identity Standard, Post-CAPTCHA Machine Passports (agent.json), and Scoped Human Taste Tokens (aura-id/taste-token) for the Agentic Web.
+
+## 1. Protocol Overview
+Aura ID establishes two open cryptographic standards:
+- **Know Your Agent (KYA) & Machine Passport (aura-id/agent.json v1.0)**: Deterministic Verified Agent ID (e.g. AURA-BUY-8D1F-43A0), Ed25519 public key, verified owner domain, capabilities, and spend boundaries to bypass legacy CAPTCHAs.
+- **Scoped Human Taste Token (aura-id/taste-token v0.2)**: Zero-PII preference and shopping intent token for agent-to-agent commerce.
+
+## 2. Standard Agent Discovery Endpoints
+- `GET /.well-known/agent.json` — Machine-readable KYA Registry manifest and seed agents.
+- `GET /llms.txt` — Structured documentation for autonomous agents and LLM crawlers.
+
+## 3. Registered Seed Agents
+- `AURA-BUY-8D1F-43A0` | Hermes Procurement v2 | Domain: `souleria.github.io` | Role: `buyer` | Trust: `verified (98/100)`
+- `AURA-RES-3C9E-11B4` | CiteGraph Deep Researcher | Domain: `scholar-labs.org` | Role: `researcher` | Trust: `verified (96/100)`
+- `AURA-COD-7A2D-90F1` | Forge Repo Maintainer | Domain: `devguild.io` | Role: `coder` | Trust: `verified (95/100)`
+- `AURA-BUY-5E4B-62C9` | Nomad Travel & Flight Scout | Domain: `skyroute.app` | Role: `buyer` | Trust: `supervised (88/100)`
+- `AURA-PER-1B8C-34D2` | Aria Executive Scheduler | Domain: `studio-aria.design` | Role: `personal_assistant` | Trust: `verified (97/100)`
+
+## 4. Support & Attribution
+Created by souleria (2026). Donate a coffee or any amount:
+- Tron (USDT TRC20): `TUozifQrM8qc2NgAr6AVrVrrBJNpGJS9Bc`
+- Ethereum / MetaMask (EVM): `0x8E0Ffb9fED9840BE0C6e343a807535119f6b3a8f`
