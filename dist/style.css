@@ -135,3 +135,25 @@ dialog{width:min(620px,calc(100% - 32px));background:var(--paper);color:var(--in
 @media(max-width:850px){.studio{grid-template-columns:minmax(300px,1fr) minmax(240px,.8fr);gap:28px}.steps{grid-column:1/-1;display:flex;border-right:0;border-bottom:1px solid var(--line);padding:0 0 16px;gap:6px}.steps .small-label,.step-link .step-name,.steps .progress-line{display:none}.step-link{justify-content:center}.step-link[aria-current=step] .step-name{display:inline}.step-content h1{font-size:36px}.hero{gap:30px}.passport{padding:22px}.hero h1{font-size:56px}.hero-under{gap:30px}.review-layout{grid-template-columns:1fr 1fr;gap:28px}.export-actions{flex-direction:column}}
 @media(max-width:640px){.header{padding:15px 6%;gap:12px}.wordmark{font-size:34px}nav{gap:12px}nav .text-button{font-size:11px}.landing{padding:28px 6% 38px}.explainer-steps{grid-template-columns:1fr;gap:12px}.hero{grid-template-columns:1fr;gap:28px}.hero h1{font-size:50px;letter-spacing:-2.5px}.hero-under{grid-template-columns:1fr;gap:22px}.under-items{justify-content:space-between;gap:14px;flex-wrap:wrap}.studio{display:flex;flex-direction:column;padding:24px 6% 35px;gap:25px}.step-link[aria-current=step] .step-name{display:none}.live-panel{position:static;border-top:1px solid var(--line);padding-top:25px}.review-layout{grid-template-columns:1fr;gap:26px}.export-actions{flex-direction:row}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* Header Support Button */
+.support-link.top-coffee{background:var(--accent);color:var(--canvas);border-color:var(--accent);font-weight:500;padding:7px 14px;border-radius:4px;cursor:pointer}
+.support-link.top-coffee:hover{opacity:.9;background:var(--accent)}
+body[data-theme=dark] .support-link.top-coffee{color:#242621}
+
+/* Agent National ID Badge & Passport Elements */
+.agent-id-badge{display:inline-flex;align-items:center;gap:6px;font:11px/1.2 'Courier New',monospace;padding:3px 8px;border-radius:3px;background:#ffffff22;border:1px solid #ffffff33;letter-spacing:1px;color:inherit;margin-top:6px}
+.agent-id-badge b{color:var(--accent)}
+body[data-theme=dark] .agent-id-badge b{color:#f1a17f}
+.passport[data-surface=light] .agent-id-badge{background:#0000000d;border-color:#0000001f}
+
+/* Agent Passport Card Style */
+.passport[data-card-mode=agent]{background:#1e292d;color:#edf2f4}
+.passport[data-card-mode=agent] .card-title{font-size:clamp(22px,2.4vw,32px)}
+.passport[data-card-mode=agent]:after{border-color:#48cae44d;box-shadow:0 0 0 22px #1e292d,0 0 0 23px #48cae430,0 0 0 45px #1e292d,0 0 0 46px #48cae420}
+.agent-trust-pill{display:inline-flex;align-items:center;gap:4px;font:10px 'Courier New',monospace;padding:2px 6px;border-radius:3px;background:#2a9d8f33;border:1px solid #2a9d8f88;color:#a8dadc}
+
+/* Agent Registry Modal */
+.agent-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.agent-meta-card{border:1px solid var(--line);border-radius:4px;padding:12px;background:var(--canvas)}
+.agent-meta-card strong{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;font-family:'Courier New',monospace;margin-bottom:4px}
+.agent-meta-card span{font-size:13px;font-weight:600;color:var(--ink)}

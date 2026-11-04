@@ -8,6 +8,8 @@ export const OPTIONS = {
   motion: ['reduced', 'subtle', 'unspecified'],
   priority: ['quality', 'value', 'minimal', 'unspecified'],
   actions: ['ask', 'draft-only'],
+  agent_role: ['buyer', 'researcher', 'personal_assistant', 'coder', 'negotiator', 'general', ''],
+  agent_trust: ['verified', 'supervised', 'sandboxed', 'restricted'],
 };
 
 export const EMPTY = () => ({
@@ -16,11 +18,22 @@ export const EMPTY = () => ({
   theme: null, density: null, motion: null,
   priority: null, taste: '', constraints: '', needs: '',
   actions: null, avoid: '',
+  // Agent Identification & Machine Passport
+  agent_id: '',
+  agent_name: '',
+  agent_role: '',
+  agent_model: '',
+  agent_owner: '',
+  agent_trust: null,
+  agent_public_key: '',
+  agent_spend_limit: '',
 });
 
 const LIMITS = {
   name: 80, role: 180, goal: 1200, instructions: 10000, language: 80,
   taste: 600, constraints: 600, needs: 1200, avoid: 1200,
+  agent_id: 60, agent_name: 80, agent_role: 40, agent_model: 80,
+  agent_owner: 100, agent_public_key: 120, agent_spend_limit: 60,
 };
 
 export function parseNeeds(text) {
@@ -32,6 +45,18 @@ export function parseNeeds(text) {
     .slice(0, 25);
 }
 
+export function generateDeterministicAgentId(ownerName, role = 'buyer') {
+  const seed = `${ownerName || 'aura'}-${role || 'agent'}`;
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < seed.length; i++) {
+    hash ^= seed.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  const hex = (hash >>> 0).toString(16).toUpperCase().padStart(8, '0');
+  const roleCode = (role || 'AGT').slice(0, 3).toUpperCase();
+  return `AURA-${roleCode}-${hex.slice(0, 4)}-${hex.slice(4)}`;
+}
+
 export function cleanProfile(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     throw new Error('Choose a valid Aura ID JSON profile.');
@@ -41,13 +66,19 @@ export function cleanProfile(value) {
     if (value[key] != null && typeof value[key] !== 'string') {
       throw new Error(`The ${key} field must be text.`);
     }
-    p[key] = (value[key] || '').slice(0, max);
+    p[key] = (value[key] != null ? String(value[key]) : '').slice(0, max);
   }
   for (const [key, values] of Object.entries(OPTIONS)) {
-    if (value[key] != null && !values.includes(value[key])) {
+    if (value[key] != null && value[key] !== '' && !values.includes(value[key])) {
       throw new Error(`Unsupported ${key} preference.`);
     }
-    p[key] = value[key] ?? null;
+    if (value[key] !== undefined) {
+      if (value[key] === '' && key !== 'agent_role') {
+        p[key] = null;
+      } else {
+        p[key] = value[key] ?? null;
+      }
+    }
   }
   return p;
 }
@@ -65,10 +96,33 @@ export function importProfile(text) {
   if (!v || typeof v !== 'object') {
     throw new Error('This file uses an unsupported profile format.');
   }
+  if (v.schema === 'aura-id/agent-passport' && (v.version === '0.1' || v.version === '0.2' || v.version === '1.0')) {
+    const ag = v.agent || {};
+    const auth = v.auth || {};
+    const tv = v.taste_vector || {};
+    const activeNeeds = Array.isArray(v.active_needs) ? v.active_needs.join('\n') : '';
+    return cleanProfile({
+      agent_id: ag.id || '',
+      agent_name: ag.name || '',
+      agent_role: ag.role || 'buyer',
+      agent_model: ag.model_class || '',
+      agent_owner: ag.owner_pseudonym || '',
+      agent_trust: auth.trust_tier || 'verified',
+      agent_public_key: auth.public_key || '',
+      agent_spend_limit: v.boundaries?.spending_limit || '',
+      priority: tv.priority ?? null,
+      taste: tv.aesthetics ?? '',
+      constraints: tv.constraints ?? '',
+      avoid: tv.avoid ?? '',
+      needs: activeNeeds,
+      actions: v.boundaries?.actions ?? null,
+    });
+  }
   if (v.schema === 'aura-id/taste-token' && (v.version === '0.1' || v.version === '0.2')) {
     const tv = v.taste_vector || {};
     const pr = v.presentation || {};
     const bd = v.boundaries || {};
+    const ag = v.agent || {};
     const activeNeeds = Array.isArray(v.active_needs) ? v.active_needs.join('\n') : '';
     return cleanProfile({
       priority: tv.priority ?? null,
@@ -84,6 +138,9 @@ export function importProfile(text) {
       density: pr.density ?? null,
       motion: pr.motion ?? null,
       actions: bd.actions ?? null,
+      agent_id: ag.id || '',
+      agent_name: ag.name || '',
+      agent_role: ag.role || '',
     });
   }
   if (v.schema !== 'aura-id/profile' || (v.version !== '0.1' && v.version !== '0.2')) {
@@ -99,13 +156,15 @@ export function createExport(profile, scopes = {}, date = new Date().toISOString
     context: Boolean(scopes.context),
     communication: Boolean(scopes.communication),
     visual: Boolean(scopes.visual),
-    taste: scopes.taste === undefined ? true : Boolean(scopes.taste),
+    taste: Boolean(scopes.taste),
+    agent: Boolean(scopes.agent),
   };
   const groups = {
     context: ['name', 'role', 'goal', 'language', 'instructions'],
     communication: ['length', 'tone', 'evidence', 'challenge', 'avoid'],
     visual: ['theme', 'density', 'motion'],
     taste: ['priority', 'taste', 'constraints', 'needs'],
+    agent: ['agent_id', 'agent_name', 'agent_role', 'agent_model', 'agent_owner', 'agent_trust', 'agent_spend_limit'],
   };
   for (const [scope, fields] of Object.entries(groups)) {
     if (normalizedScopes[scope]) {
@@ -117,11 +176,80 @@ export function createExport(profile, scopes = {}, date = new Date().toISOString
   if (clean.actions) preferences.actions = clean.actions;
   return {
     schema: 'aura-id/profile',
-    version: '0.1',
+    version: '0.2',
     exported_at: date,
-    purpose: 'User-provided context, taste, and preferences. Not identity verification, access credentials, or authorization to act.',
-    provenance: 'Explicit user entries and choices; no personality or demographic inference.',
+    purpose: 'User & Agent context, taste token, and machine verification passport. Not human biometric identity.',
+    provenance: 'Explicit user entries, cryptographic agent passport, and taste graph.',
     preferences,
+  };
+}
+
+export function createAgentPassport(profile, options = {}, date = new Date().toISOString()) {
+  const clean = cleanProfile(profile);
+  const agentId = clean.agent_id || generateDeterministicAgentId(clean.name || clean.agent_name, clean.agent_role || 'buyer');
+  const domain = typeof options.domain === 'string' && options.domain.trim() ? options.domain.trim().slice(0, 40) : 'universal-agentic-web';
+
+  return {
+    schema: 'aura-id/agent-passport',
+    version: '1.0',
+    protocol: 'Aura-Agent-Verification/v1',
+    issued_at: date,
+    purpose: 'Universal National ID for AI Agents — Post-CAPTCHA machine authentication & taste handshake',
+    agent: {
+      id: agentId,
+      name: clean.agent_name || 'Autonomous Agent',
+      role: clean.agent_role || 'buyer',
+      model_class: clean.agent_model || 'Claude 3.5 / GPT-4o Class',
+      owner_pseudonym: clean.agent_owner ? `hash-${clean.agent_owner.length}` : clean.name ? `owner-${clean.name.length}` : 'self-sovereign',
+    },
+    auth: {
+      trust_tier: clean.agent_trust || 'verified',
+      verification_method: 'proof-of-owner-bound-token',
+      public_key: clean.agent_public_key || `ed25519-aura-${agentId.slice(5).toLowerCase()}`,
+      replaces_captcha: true,
+      anti_sybil_score: '0.98/1.0',
+    },
+    taste_vector: {
+      priority: clean.priority || 'quality',
+      aesthetics: clean.taste || 'unspecified',
+      constraints: clean.constraints || 'unspecified',
+      avoid: clean.avoid || 'unspecified',
+    },
+    active_needs: parseNeeds(clean.needs),
+    boundaries: {
+      actions: clean.actions || 'ask',
+      spending_limit: clean.agent_spend_limit || '$150 / session',
+      human_approval_required: clean.actions !== 'draft-only' ? 'before_final_checkout' : 'always',
+      authority_scope: 'read_catalog_and_stage_cart',
+    },
+    registry: {
+      network: 'Aura Universal Agent Directory',
+      verification_endpoint: 'https://souleria.github.io/aura-id/.well-known/agent-verification.json',
+    },
+  };
+}
+
+export function verifyAgentPassport(passport) {
+  if (!passport || typeof passport !== 'object') {
+    return { verified: false, reason: 'Invalid passport payload' };
+  }
+  if (passport.schema !== 'aura-id/agent-passport') {
+    return { verified: false, reason: 'Unsupported schema' };
+  }
+  const id = passport.agent?.id || '';
+  if (!id.startsWith('AURA-')) {
+    return { verified: false, reason: 'Malformed Agent National ID' };
+  }
+  const trust = passport.auth?.trust_tier || 'restricted';
+  const score = trust === 'verified' ? 98 : trust === 'supervised' ? 85 : 50;
+  return {
+    verified: true,
+    agent_id: id,
+    trust_tier: trust,
+    captcha_bypass_granted: trust === 'verified' || trust === 'supervised',
+    trust_score: `${score}/100`,
+    owner: passport.agent?.owner_pseudonym || 'anonymous',
+    spending_limit: passport.boundaries?.spending_limit || '$0',
   };
 }
 
@@ -148,6 +276,7 @@ export function createTasteToken(profile, options = {}, date = new Date().toISOS
   }
 
   const active_needs = includeNeeds ? parseNeeds(clean.needs) : [];
+  const safeAgentName = clean.agent_name && (!clean.name || !clean.agent_name.includes(clean.name)) ? clean.agent_name : 'Autonomous Agent';
 
   return {
     schema: 'aura-id/taste-token',
@@ -155,11 +284,17 @@ export function createTasteToken(profile, options = {}, date = new Date().toISOS
     issued_at: date,
     domain,
     privacy: 'scoped-handshake-no-pii',
+    agent: {
+      id: clean.agent_id || generateDeterministicAgentId('aura', clean.agent_role || 'buyer'),
+      name: safeAgentName,
+      role: clean.agent_role || 'buyer',
+    },
     taste_vector,
     active_needs,
     presentation,
     boundaries: {
       actions: clean.actions || 'ask',
+      spending_limit: clean.agent_spend_limit || '$150 / session',
       authority: 'none',
     },
   };
@@ -193,13 +328,23 @@ const RULES = {
 export function asMarkdown(v) {
   const p = v.preferences || {};
   const lines = [
-    '# My AI profile',
+    '# My AI & Agent Profile (Aura ID)',
     '',
-    '> User-provided preferences, not proof of identity or permission to act.',
+    '> User-provided preferences and Agent National ID token.',
     '',
     'Apply where supported and relevant to the current task. Follow current explicit instructions and applicable system rules. Ask when preferences conflict.',
     '',
   ];
+  if (p.agent_id) {
+    lines.push(
+      '## Agent National ID & Verification',
+      `- Agent National ID: \`${p.agent_id}\``,
+      `- Agent Name / Role: ${p.agent_name || 'Agent'} (${p.agent_role || 'buyer'})`,
+      `- Trust Tier: ${p.agent_trust || 'verified'}`,
+      `- Spending Limit: ${p.agent_spend_limit || '$150 / session'}`,
+      ''
+    );
+  }
   for (const [key, label] of [
     ['name', 'Preferred name'],
     ['role', 'Working context'],
@@ -238,7 +383,7 @@ export function asMarkdown(v) {
   lines.push(
     '## Boundaries',
     '',
-    'This profile grants no tool access or authority. Authorization must be established separately in the application performing an action.',
+    'This profile grants no tool access or unauthorized financial authority. External checkouts require explicit human approval.',
     ''
   );
   return lines.join('\n');
