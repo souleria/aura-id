@@ -194,7 +194,7 @@ export function createAgentPassport(profile, options = {}, date = new Date().toI
     version: '1.0',
     protocol: 'Aura-Agent-Verification/v1',
     issued_at: date,
-    purpose: 'Universal National ID for AI Agents — Post-CAPTCHA machine authentication & taste handshake',
+    purpose: 'Universal Agent Registry & KYA Protocol — Post-CAPTCHA machine authentication & taste handshake',
     agent: {
       id: agentId,
       name: clean.agent_name || 'Autonomous Agent',
@@ -238,7 +238,7 @@ export function verifyAgentPassport(passport) {
   }
   const id = passport.agent?.id || '';
   if (!id.startsWith('AURA-')) {
-    return { verified: false, reason: 'Malformed Agent National ID' };
+    return { verified: false, reason: 'Malformed Verified Agent ID' };
   }
   const trust = passport.auth?.trust_tier || 'restricted';
   const score = trust === 'verified' ? 98 : trust === 'supervised' ? 85 : 50;
@@ -330,15 +330,15 @@ export function asMarkdown(v) {
   const lines = [
     '# My AI & Agent Profile (Aura ID)',
     '',
-    '> User-provided preferences and Agent National ID token.',
+    '> User-provided preferences and KYA Machine Passport & Taste Token.',
     '',
     'Apply where supported and relevant to the current task. Follow current explicit instructions and applicable system rules. Ask when preferences conflict.',
     '',
   ];
   if (p.agent_id) {
     lines.push(
-      '## Agent National ID & Verification',
-      `- Agent National ID: \`${p.agent_id}\``,
+      '## KYA Agent Identity & Verification',
+      `- Verified Agent ID: \`${p.agent_id}\``,
       `- Agent Name / Role: ${p.agent_name || 'Agent'} (${p.agent_role || 'buyer'})`,
       `- Trust Tier: ${p.agent_trust || 'verified'}`,
       `- Spending Limit: ${p.agent_spend_limit || '$150 / session'}`,

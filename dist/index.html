@@ -2,37 +2,198 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Set your AI preferences, personal taste, and shopping needs once. Generate an Agent National ID &amp; Taste Token for the post-CAPTCHA agentic web.">
-  <meta name="theme-color" content="#f5f4f0"><title>Aura ID | Universal Agent ID &amp; Taste Token Registry</title>
+  <meta name="description" content="Universal Agent Registry &amp; KYA (Know Your Agent) Protocol. Global Agent Identity Standard, Post-CAPTCHA Machine Passports (agent.json), and Scoped Human Taste Tokens.">
+  <meta name="theme-color" content="#f5f4f0"><title>Aura ID | Universal Agent Registry &amp; KYA Protocol</title>
   <link rel="icon" href="data:,"><link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
   <header class="header">
     <div class="brand-wrap">
-      <button class="wordmark" id="home" aria-label="Aura ID home">aura<span>id</span><span class="wordmark-period">.</span></button>
-      <span class="header-tagline">Universal Agent National ID &amp; Taste Token Standard</span>
+      <a class="wordmark" id="home" href="#top" aria-label="Aura ID home">aura<span>id</span><span class="wordmark-period">.</span></a>
+      <span class="header-tagline">Universal Agent Registry &amp; KYA Protocol</span>
     </div>
     <nav aria-label="Main navigation">
-      <button class="support-link top-coffee" id="top-coffee-btn" type="button">Support (Crypto) ☕</button>
-      <button class="text-button" id="agent-registry-nav">Agent ID Registry</button>
-      <button class="text-button" id="about">The idea</button>
-      <button class="text-button" id="mcp-api">MCP &amp; API</button>
-      <button class="text-button" id="load">Open profile</button>
+      <a class="support-link top-coffee" id="top-coffee-btn" href="#support-crypto">Support (Crypto)</a>
+      <a class="text-button" id="mint-agent-nav" href="#mint-agent">Mint Agent ID</a>
+      <a class="text-button" id="agent-registry-nav" href="#agent-explorer">Agent Explorer</a>
+      <a class="text-button" id="about" href="#kya-protocol">The idea</a>
+      <a class="text-button" id="mcp-api" href="#mcp-api-spec">MCP &amp; API</a>
+      <a class="text-button" id="load" href="#open-profile">Open a profile</a>
       <a class="text-button" id="github-link" href="https://github.com/souleria/aura-id" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <button class="theme-button" id="site-theme" aria-label="Switch to dark theme">◐</button>
+      <a class="text-button" id="site-theme" href="#toggle-theme" aria-label="Switch to dark theme">Theme</a>
     </nav>
   </header>
-  <main id="main" tabindex="-1"></main>
+  <main id="main" tabindex="-1">
+    <div class="landing">
+      <aside class="explainer-bar" aria-label="How Aura ID works">
+        <div class="explainer-lead">
+          <strong>Universal Agent Registry &amp; KYA (Know Your Agent) Protocol</strong>
+          When legacy CAPTCHAs disappear, websites verify autonomous AI agents using cryptographic <b>KYA Machine Passports (<code>agent.json</code>)</b> and <b>Scoped Human Taste Tokens</b>.
+        </div>
+        <div class="explainer-steps">
+          <div class="explainer-step"><span>01 · KYA Identity</span><b>Verified Agent ID</b>Every agent gets an Ed25519 keypair and deterministic ID (e.g. <code>AURA-BUY-8D1F-43A0</code>) bound to its owner domain.</div>
+          <div class="explainer-step"><span>02 · Taste Token</span><b>Scoped Human Preferences</b>Carries personal style, sizes, and active shopping needs without exposing human PII.</div>
+          <div class="explainer-step"><span>03 · Post-CAPTCHA</span><b>Zero-Friction Gateway</b>Stores and APIs verify trust score and spend limits in milliseconds instead of serving visual puzzles.</div>
+        </div>
+      </aside>
+      <div class="intro-line">Global Agent Identity Standard &amp; Scoped Taste Token Protocol.</div>
+      <section class="hero">
+        <div class="hero-copy">
+          <h1>The global identity standard<br>for <em>AI Agents &amp; Humans.</em></h1>
+          <p>Provision your autonomous agents with a verifiable KYA Machine Passport (<code>agent.json</code>) and equip them with your personal Taste Token—replacing CAPTCHAs across the agentic web.</p>
+          <div class="hero-actions">
+            <button class="primary" id="create" type="button">Issue Agent ID &amp; Token (2 min)</button>
+            <button class="secondary" id="try-sample" type="button">Load example Agent ID</button>
+            <button class="text-button" id="example" type="button">See sample passport</button>
+          </div>
+          <div class="quiet">Free &amp; open standard · Discovery endpoints: <a href="https://souleria.github.io/aura-id/llms.txt" target="_blank" rel="noopener noreferrer">/llms.txt</a> · <a href="https://souleria.github.io/aura-id/.well-known/agent.json" target="_blank" rel="noopener noreferrer">/.well-known/agent.json</a></div>
+        </div>
+        <div class="card-stage">
+          <div class="passport" data-surface="dark" data-priority="quality" data-density="focused" aria-label="Example Agent Passport">
+            <div class="card-top">
+              <span class="card-word">aura id.</span>
+              <span class="mono">KYA Passport<br>AURA-BUY-8D1F-43A0</span>
+            </div>
+            <div>
+              <h2 class="card-title">The clear editor</h2>
+              <div class="card-owner">Hermes Buyer · Owner: souleria.github.io · Claude 3.5 Sonnet</div>
+              <div class="agent-id-badge"><span>VERIFIED AGENT ID:</span> <b>AURA-BUY-8D1F-43A0</b></div>
+              <div class="card-pills" style="margin-top:8px">
+                <span class="card-pill">ID: AURA-BUY-8D1F-43A0</span>
+                <span class="card-pill">Procurement &amp; Shopping Agent</span>
+                <span class="card-pill">Buy once, keep for years</span>
+                <span class="card-pill">Limit: $150 / session</span>
+              </div>
+            </div>
+            <div class="card-bottom">
+              <div class="mono">Agent ID: AURA-BUY-8D1F-43A0 · Trust: Verified · Always ask me first<br>Post-CAPTCHA verified machine passport</div>
+              <div class="swatches" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+          <p class="card-note">Live KYA Passport &amp; Taste Token Card. Updates in real time as you adjust preferences.</p>
+        </div>
+      </section>
+      <section class="captcha-sandbox" aria-label="Live Bypass CAPTCHA Sandbox">
+        <div class="sandbox-head">
+          <div>
+            <div class="small-label">Interactive Post-CAPTCHA Sandbox · KYA Gateway Verification</div>
+            <h2>What happens when an AI agent visits a website?</h2>
+            <p>Unregistered bots are blocked behind legacy visual CAPTCHA walls (<code>HTTP 403</code>), while agents presenting a signed Aura KYA header (<code>X-Aura-Agent-ID</code>) authenticate in milliseconds.</p>
+          </div>
+          <div class="mode-switch" role="group" aria-label="CAPTCHA Sandbox Mode">
+            <button type="button" id="sb-mode-aura" aria-pressed="true">Aura-Equipped Agent (Bypass)</button>
+            <button type="button" id="sb-mode-bot" aria-pressed="false">Unregistered Bot (Blocked)</button>
+          </div>
+        </div>
+        <div class="sandbox-grid" id="sandbox-stage">
+          <div class="sandbox-terminal">
+            <div>
+              <div class="term-bar"><span>Agent Outbound Request</span><span>Ed25519 Signed</span></div>
+              <div>GET /store/api/catalog-handshake HTTP/2</div>
+              <div>Host: merchant.example.com</div>
+              <div style="color:#a8dadc">X-Aura-Agent-ID: AURA-BUY-8D1F-43A0</div>
+              <div style="color:#a8dadc">X-Aura-Owner-Domain: souleria.github.io</div>
+              <div style="color:#a8dadc">X-Aura-Public-Key: ed25519:pk_aura_8d1f43a0...</div>
+              <div style="color:#f1a17f">X-Aura-Taste-Token: scoped-no-pii (2 active needs)</div>
+            </div>
+            <div style="margin-top:16px;padding-top:10px;border-top:1px solid #2e352f;color:#959c90;font-size:11px">
+              ✓ Cryptographic KYA signature verified in 11 ms · Zero human puzzle
+            </div>
+          </div>
+          <div class="sandbox-gate">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px">
+                <span class="bypass-badge">✓ CAPTCHA BYPASSED · 200 OK</span>
+                <span class="mono">Trust Score: 98 / 100</span>
+              </div>
+              <h3 style="font:22px Georgia,serif;margin:0 0 8px">Instant Agent Entry Granted</h3>
+              <p style="font-size:13px;color:var(--muted);margin:0 0 14px">The gateway verified <strong>Hermes Procurement v2</strong> (<code>AURA-BUY-8D1F-43A0</code>), confirmed domain ownership (<code>souleria.github.io</code>), and matched the attached Taste Token.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="captcha-sandbox" style="margin-top:28px" aria-label="Public Agent Directory Snapshot">
+        <div class="sandbox-head">
+          <div>
+            <div class="small-label">Global Agent Identity Standard · Public Directory Snapshot</div>
+            <h2>Registered KYA Agents on the Network</h2>
+            <p>Machine-readable discovery endpoints: <a href="https://souleria.github.io/aura-id/llms.txt" target="_blank" rel="noopener noreferrer" class="text-button" style="text-decoration:underline">/llms.txt</a> and <a href="https://souleria.github.io/aura-id/.well-known/agent.json" target="_blank" rel="noopener noreferrer" class="text-button" style="text-decoration:underline">/.well-known/agent.json</a></p>
+          </div>
+          <button type="button" class="secondary" id="home-open-explorer">Open Full Agent Explorer →</button>
+        </div>
+        <div class="explorer-table-wrap">
+          <table class="explorer-table">
+            <thead>
+              <tr>
+                <th>Verified Agent ID</th>
+                <th>Agent Name &amp; Model</th>
+                <th>Owner Domain</th>
+                <th>Role &amp; Capabilities</th>
+                <th>KYA Trust Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-home-agent="AURA-BUY-8D1F-43A0">
+                <td style="font-family:'Courier New',monospace;font-weight:600">AURA-BUY-8D1F-43A0</td>
+                <td><strong>Hermes Procurement v2</strong><div style="font-size:11px;color:var(--muted)">Claude 3.5 Sonnet</div></td>
+                <td style="font-family:'Courier New',monospace;font-size:12px">souleria.github.io</td>
+                <td><span class="role-tag">BUYER</span> · <span style="font-size:11px;color:var(--muted)">catalog_search, taste_token_match, cart_staging</span></td>
+                <td><span class="status-pill" data-tier="verified">✓ verified · 98%</span></td>
+              </tr>
+              <tr data-home-agent="AURA-RES-3C9E-11B4">
+                <td style="font-family:'Courier New',monospace;font-weight:600">AURA-RES-3C9E-11B4</td>
+                <td><strong>CiteGraph Deep Researcher</strong><div style="font-size:11px;color:var(--muted)">GPT-4o / o3-mini</div></td>
+                <td style="font-family:'Courier New',monospace;font-size:12px">scholar-labs.org</td>
+                <td><span class="role-tag">RESEARCHER</span> · <span style="font-size:11px;color:var(--muted)">paper_indexing, source_verification, citation_audit</span></td>
+                <td><span class="status-pill" data-tier="verified">✓ verified · 96%</span></td>
+              </tr>
+              <tr data-home-agent="AURA-COD-7A2D-90F1">
+                <td style="font-family:'Courier New',monospace;font-weight:600">AURA-COD-7A2D-90F1</td>
+                <td><strong>Forge Repo Maintainer</strong><div style="font-size:11px;color:var(--muted)">Claude 3.5 Sonnet</div></td>
+                <td style="font-family:'Courier New',monospace;font-size:12px">devguild.io</td>
+                <td><span class="role-tag">CODER</span> · <span style="font-size:11px;color:var(--muted)">code_review, test_runner, patch_synthesis</span></td>
+                <td><span class="status-pill" data-tier="verified">✓ verified · 95%</span></td>
+              </tr>
+              <tr data-home-agent="AURA-BUY-5E4B-62C9">
+                <td style="font-family:'Courier New',monospace;font-weight:600">AURA-BUY-5E4B-62C9</td>
+                <td><strong>Nomad Travel &amp; Flight Scout</strong><div style="font-size:11px;color:var(--muted)">Gemini 1.5 Pro</div></td>
+                <td style="font-family:'Courier New',monospace;font-size:12px">skyroute.app</td>
+                <td><span class="role-tag">BUYER</span> · <span style="font-size:11px;color:var(--muted)">flight_search, seat_preference_match, hold_reservation</span></td>
+                <td><span class="status-pill" data-tier="supervised">✓ supervised · 88%</span></td>
+              </tr>
+              <tr data-home-agent="AURA-PER-1B8C-34D2">
+                <td style="font-family:'Courier New',monospace;font-weight:600">AURA-PER-1B8C-34D2</td>
+                <td><strong>Aria Executive Scheduler</strong><div style="font-size:11px;color:var(--muted)">GPT-4o</div></td>
+                <td style="font-family:'Courier New',monospace;font-size:12px">studio-aria.design</td>
+                <td><span class="role-tag">PERSONAL_ASSISTANT</span> · <span style="font-size:11px;color:var(--muted)">calendar_negotiation, briefing_drafts, vendor_triage</span></td>
+                <td><span class="status-pill" data-tier="verified">✓ verified · 97%</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <div class="hero-under">
+        <p>The first open specification defining the Universal Agent Registry &amp; KYA (Know Your Agent) Protocol, post-CAPTCHA machine authentication, and portable shopping taste tokens.</p>
+        <div class="under-items">
+          <div><strong>Mint Agent ID</strong>Instant Ed25519 keypair &amp; ID</div>
+          <div><strong>Dual Profile</strong>Human card + raw <code>agent.json</code></div>
+          <div><strong>Agent Explorer</strong>Public directory of verified agents</div>
+        </div>
+      </div>
+    </div>
+  </main>
   <footer>
-    <span>Aura ID · Open Agent National ID &amp; Taste Token Protocol</span>
+    <span>Aura ID · Global Agent Identity Standard &amp; KYA Protocol</span>
     <div class="footer-links">
-      <button class="text-button" id="privacy">Privacy &amp; data</button>
+      <a class="text-button" href="https://souleria.github.io/aura-id/llms.txt" target="_blank" rel="noopener noreferrer">llms.txt</a>
+      <a class="text-button" href="https://souleria.github.io/aura-id/.well-known/agent.json" target="_blank" rel="noopener noreferrer">agent.json</a>
+      <a class="text-button" id="privacy" href="#privacy-policy">Your data &amp; this prototype</a>
       <a class="text-button" id="footer-github" href="https://github.com/souleria/aura-id" target="_blank" rel="noopener noreferrer">Open source on GitHub</a>
-      <button class="support-link" id="coffee-link" type="button">Support (Crypto) ☕</button>
+      <a class="support-link" id="coffee-link" href="#support-crypto">Support (Crypto)</a>
     </div>
   </footer>
-  <dialog id="dialog" aria-labelledby="dialog-title"><button class="dialog-close" id="close-dialog" aria-label="Close dialog">×</button><div id="dialog-body"></div></dialog>
+  <dialog id="dialog" aria-labelledby="dialog-title"><button class="dialog-close" id="close-dialog" type="button" aria-label="Close dialog">×</button><div id="dialog-body"></div></dialog>
   <input type="file" id="file-input" accept="application/json,.json" hidden>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script type="module" src="./app.mjs"></script>

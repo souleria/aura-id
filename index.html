@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Set your AI preferences, personal taste, and shopping needs once. Generate an Agent National ID &amp; Taste Token for the post-CAPTCHA agentic web.">
-  <meta name="theme-color" content="#f5f4f0"><title>Aura ID | Universal Agent ID &amp; Taste Token Registry</title>
+  <meta name="description" content="Universal Agent Registry &amp; KYA (Know Your Agent) Protocol. Global Agent Identity Standard, Post-CAPTCHA Machine Passports (agent.json), and Scoped Human Taste Tokens.">
+  <meta name="theme-color" content="#f5f4f0"><title>Aura ID | Universal Agent Registry &amp; KYA Protocol</title>
   <link rel="icon" href="data:,"><style>
 :root{color-scheme:light;--canvas:#f5f4f0;--paper:#fffefa;--ink:#242621;--muted:#66685e;--line:#d6d6cd;--accent:#a83f23;--soft:#ecebe4;--green:#263e36;--focus:#a83f23}
 *{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.5}body[data-theme=dark]{color-scheme:dark;--canvas:#181c19;--paper:#222823;--ink:#f5f4ed;--muted:#b5baaf;--line:#444b42;--accent:#f1a17f;--soft:#2d342d;--focus:#f1a17f}button,input,textarea,select{font:inherit}button{cursor:pointer;color:inherit}button,a,input,textarea,select{touch-action:manipulation}button{min-height:44px}button:disabled{opacity:.45;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:4px}button{border:0}a{color:inherit;text-decoration:none}.skip{position:absolute;top:-100px;background:var(--paper);padding:12px;z-index:10}.skip:focus{top:5px}
@@ -165,35 +165,236 @@ body[data-theme=dark] .agent-id-badge b{color:#f1a17f}
 .agent-meta-card strong{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;font-family:'Courier New',monospace;margin-bottom:4px}
 .agent-meta-card span{font-size:13px;font-weight:600;color:var(--ink)}
 
+/* Bypass CAPTCHA Sandbox (Landing Page) */
+.captcha-sandbox{margin-top:54px;border:1px solid var(--line);border-radius:8px;background:var(--paper);padding:28px 30px}
+.sandbox-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:22px}
+.sandbox-head h2{font:30px/1.15 Georgia,serif;margin:6px 0 6px;font-weight:normal}
+.sandbox-head p{margin:0;font-size:13px;color:var(--muted);max-width:560px}
+.sandbox-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:26px;align-items:stretch}
+.sandbox-terminal{background:#181c19;color:#e8e6df;border-radius:6px;padding:18px 20px;font:12px/1.65 'Courier New',monospace;display:flex;flex-direction:column;justify-content:space-between;border:1px solid #333a34}
+.sandbox-terminal .term-bar{display:flex;justify-content:space-between;align-items:center;color:#959c90;font-size:10px;border-bottom:1px solid #2e352f;padding-bottom:10px;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px}
+.sandbox-gate{border:1px solid var(--line);border-radius:6px;padding:20px;background:var(--canvas);display:flex;flex-direction:column;justify-content:space-between}
+.captcha-wall{border:1px dashed var(--accent);border-radius:5px;padding:16px;background:var(--paper)}
+.captcha-grid-visual{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:12px 0;max-width:240px}
+.captcha-cell{aspect-ratio:1;background:var(--soft);border:1px solid var(--line);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);font-family:'Courier New',monospace}
+.bypass-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:3px;font:11px 'Courier New',monospace;background:#233a32;color:#f2f0df}
+body[data-theme=dark] .bypass-badge{background:#325247}
+
+/* Agent Explorer Table & Toolbar */
+.explorer-toolbar{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+.explorer-search{flex:1;min-width:240px}
+.explorer-table-wrap{border:1px solid var(--line);border-radius:6px;background:var(--paper);overflow-x:auto}
+.explorer-table{width:100%;border-collapse:collapse;font-size:13px;text-align:left}
+.explorer-table th{font:11px 'Courier New',monospace;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);padding:13px 16px;border-bottom:1px solid var(--line);background:var(--canvas);white-space:nowrap}
+.explorer-table td{padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:middle}
+.explorer-table tr:last-child td{border-bottom:0}
+.explorer-table tbody tr{cursor:pointer;transition:background-color .15s}
+.explorer-table tbody tr:hover{background:var(--soft)}
+.status-pill{display:inline-flex;align-items:center;gap:5px;font:10px 'Courier New',monospace;padding:3px 8px;border-radius:3px;text-transform:uppercase;letter-spacing:.5px;border:1px solid var(--line);background:var(--canvas)}
+.status-pill[data-tier=verified]{border-color:#263e36;background:#263e3614;color:var(--ink);font-weight:600}
+body[data-theme=dark] .status-pill[data-tier=verified]{border-color:#74a892;background:#263e3666;color:#f2f0df}
+.role-tag{font:11px 'Courier New',monospace;color:var(--muted)}
+
+/* Dual Agent Profile & Key Box */
+.key-box{border:1px solid var(--line);border-radius:5px;padding:15px;background:var(--canvas);margin:14px 0}
+.key-box-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;font-weight:600;margin-bottom:6px}
+.key-secret{font:11px/1.5 'Courier New',monospace;background:var(--paper);border:1px solid var(--line);padding:10px;border-radius:4px;word-break:break-all;color:var(--accent)}
+.scorecard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+.score-item{border:1px solid var(--line);border-radius:5px;padding:13px;background:var(--paper)}
+.score-item span{display:block;font:10px 'Courier New',monospace;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.score-item strong{font:20px Georgia,serif;color:var(--ink)}
+@media(max-width:850px){.sandbox-grid{grid-template-columns:1fr}.scorecard-grid{grid-template-columns:1fr 1fr}}
+
 </style>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
   <header class="header">
     <div class="brand-wrap">
-      <button class="wordmark" id="home" aria-label="Aura ID home">aura<span>id</span><span class="wordmark-period">.</span></button>
-      <span class="header-tagline">Universal Agent National ID &amp; Taste Token Standard</span>
+      <a class="wordmark" id="home" href="#top" aria-label="Aura ID home">aura<span>id</span><span class="wordmark-period">.</span></a>
+      <span class="header-tagline">Universal Agent Registry &amp; KYA Protocol</span>
     </div>
     <nav aria-label="Main navigation">
-      <button class="support-link top-coffee" id="top-coffee-btn" type="button">Support (Crypto) ☕</button>
-      <button class="text-button" id="agent-registry-nav">Agent ID Registry</button>
-      <button class="text-button" id="about">The idea</button>
-      <button class="text-button" id="mcp-api">MCP &amp; API</button>
-      <button class="text-button" id="load">Open profile</button>
+      <a class="support-link top-coffee" id="top-coffee-btn" href="#support-crypto">Support (Crypto)</a>
+      <a class="text-button" id="mint-agent-nav" href="#mint-agent">Mint Agent ID</a>
+      <a class="text-button" id="agent-registry-nav" href="#agent-explorer">Agent Explorer</a>
+      <a class="text-button" id="about" href="#kya-protocol">The idea</a>
+      <a class="text-button" id="mcp-api" href="#mcp-api-spec">MCP &amp; API</a>
+      <a class="text-button" id="load" href="#open-profile">Open a profile</a>
       <a class="text-button" id="github-link" href="https://github.com/souleria/aura-id" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <button class="theme-button" id="site-theme" aria-label="Switch to dark theme">◐</button>
+      <a class="text-button" id="site-theme" href="#toggle-theme" aria-label="Switch to dark theme">Theme</a>
     </nav>
   </header>
-  <main id="main" tabindex="-1"></main>
+  <main id="main" tabindex="-1">
+    <div class="landing">
+      <aside class="explainer-bar" aria-label="How Aura ID works">
+        <div class="explainer-lead">
+          <strong>Universal Agent Registry &amp; KYA (Know Your Agent) Protocol</strong>
+          When legacy CAPTCHAs disappear, websites verify autonomous AI agents using cryptographic <b>KYA Machine Passports (<code>agent.json</code>)</b> and <b>Scoped Human Taste Tokens</b>.
+        </div>
+        <div class="explainer-steps">
+          <div class="explainer-step"><span>01 · KYA Identity</span><b>Verified Agent ID</b>Every agent gets an Ed25519 keypair and deterministic ID (e.g. <code>AURA-BUY-8D1F-43A0</code>) bound to its owner domain.</div>
+          <div class="explainer-step"><span>02 · Taste Token</span><b>Scoped Human Preferences</b>Carries personal style, sizes, and active shopping needs without exposing human PII.</div>
+          <div class="explainer-step"><span>03 · Post-CAPTCHA</span><b>Zero-Friction Gateway</b>Stores and APIs verify trust score and spend limits in milliseconds instead of serving visual puzzles.</div>
+        </div>
+      </aside>
+      <div class="intro-line">Global Agent Identity Standard &amp; Scoped Taste Token Protocol.</div>
+      <section class="hero">
+        <div class="hero-copy">
+          <h1>The global identity standard<br>for <em>AI Agents &amp; Humans.</em></h1>
+          <p>Provision your autonomous agents with a verifiable KYA Machine Passport (<code>agent.json</code>) and equip them with your personal Taste Token—replacing CAPTCHAs across the agentic web.</p>
+          <div class="hero-actions">
+            <button class="primary" id="create" type="button">Issue Agent ID &amp; Token (2 min)</button>
+            <button class="secondary" id="try-sample" type="button">Load example Agent ID</button>
+            <button class="text-button" id="example" type="button">See sample passport</button>
+          </div>
+          <div class="quiet">Free &amp; open standard · Discovery endpoints: <a href="https://souleria.github.io/aura-id/llms.txt" target="_blank" rel="noopener noreferrer">/llms.txt</a> · <a href="https://souleria.github.io/aura-id/.well-known/agent.json" target="_blank" rel="noopener noreferrer">/.well-known/agent.json</a></div>
+        </div>
+        <div class="card-stage">
+          <div class="passport" data-surface="dark" data-priority="quality" data-density="focused" aria-label="Example Agent Passport">
+            <div class="card-top">
+              <span class="card-word">aura id.</span>
+              <span class="mono">KYA Passport<br>AURA-BUY-8D1F-43A0</span>
+            </div>
+            <div>
+              <h2 class="card-title">The clear editor</h2>
+              <div class="card-owner">Hermes Buyer · Owner: souleria.github.io · Claude 3.5 Sonnet</div>
+              <div class="agent-id-badge"><span>VERIFIED AGENT ID:</span> <b>AURA-BUY-8D1F-43A0</b></div>
+              <div class="card-pills" style="margin-top:8px">
+                <span class="card-pill">ID: AURA-BUY-8D1F-43A0</span>
+                <span class="card-pill">Procurement &amp; Shopping Agent</span>
+                <span class="card-pill">Buy once, keep for years</span>
+                <span class="card-pill">Limit: $150 / session</span>
+              </div>
+            </div>
+            <div class="card-bottom">
+              <div class="mono">Agent ID: AURA-BUY-8D1F-43A0 · Trust: Verified · Always ask me first<br>Post-CAPTCHA verified machine passport</div>
+              <div class="swatches" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+          <p class="card-note">Live KYA Passport &amp; Taste Token Card. Updates in real time as you adjust preferences.</p>
+        </div>
+      </section>
+      <section class="captcha-sandbox" aria-label="Live Bypass CAPTCHA Sandbox">
+        <div class="sandbox-head">
+          <div>
+            <div class="small-label">Interactive Post-CAPTCHA Sandbox · KYA Gateway Verification</div>
+            <h2>What happens when an AI agent visits a website?</h2>
+            <p>Unregistered bots are blocked behind legacy visual CAPTCHA walls (<code>HTTP 403</code>), while agents presenting a signed Aura KYA header (<code>X-Aura-Agent-ID</code>) authenticate in milliseconds.</p>
+          </div>
+          <div class="mode-switch" role="group" aria-label="CAPTCHA Sandbox Mode">
+            <button type="button" id="sb-mode-aura" aria-pressed="true">Aura-Equipped Agent (Bypass)</button>
+            <button type="button" id="sb-mode-bot" aria-pressed="false">Unregistered Bot (Blocked)</button>
+          </div>
+        </div>
+        <div class="sandbox-grid" id="sandbox-stage">
+          <div class="sandbox-terminal">
+            <div>
+              <div class="term-bar"><span>Agent Outbound Request</span><span>Ed25519 Signed</span></div>
+              <div>GET /store/api/catalog-handshake HTTP/2</div>
+              <div>Host: merchant.example.com</div>
+              <div style="color:#a8dadc">X-Aura-Agent-ID: AURA-BUY-8D1F-43A0</div>
+              <div style="color:#a8dadc">X-Aura-Owner-Domain: souleria.github.io</div>
+              <div style="color:#a8dadc">X-Aura-Public-Key: ed25519:pk_aura_8d1f43a0...</div>
+              <div style="color:#f1a17f">X-Aura-Taste-Token: scoped-no-pii (2 active needs)</div>
+            </div>
+            <div style="margin-top:16px;padding-top:10px;border-top:1px solid #2e352f;color:#959c90;font-size:11px">
+              ✓ Cryptographic KYA signature verified in 11 ms · Zero human puzzle
+            </div>
+          </div>
+          <div class="sandbox-gate">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px">
+                <span class="bypass-badge">✓ CAPTCHA BYPASSED · 200 OK</span>
+                <span class="mono">Trust Score: 98 / 100</span>
+              </div>
+              <h3 style="font:22px Georgia,serif;margin:0 0 8px">Instant Agent Entry Granted</h3>
+              <p style="font-size:13px;color:var(--muted);margin:0 0 14px">The gateway verified <strong>Hermes Procurement v2</strong> (<code>AURA-BUY-8D1F-43A0</code>), confirmed domain ownership (<code>souleria.github.io</code>), and matched the attached Taste Token.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="captcha-sandbox" style="margin-top:28px" aria-label="Public Agent Directory Snapshot">
+        <div class="sandbox-head">
+          <div>
+            <div class="small-label">Global Agent Identity Standard · Public Directory Snapshot</div>
+            <h2>Registered KYA Agents on the Network</h2>
+            <p>Machine-readable discovery endpoints: <a href="https://souleria.github.io/aura-id/llms.txt" target="_blank" rel="noopener noreferrer" class="text-button" style="text-decoration:underline">/llms.txt</a> and <a href="https://souleria.github.io/aura-id/.well-known/agent.json" target="_blank" rel="noopener noreferrer" class="text-button" style="text-decoration:underline">/.well-known/agent.json</a></p>
+          </div>
+          <button type="button" class="secondary" id="home-open-explorer">Open Full Agent Explorer →</button>
+        </div>
+        <div class="explorer-table-wrap">
+          <table class="explorer-table">
+            <thead>
+              <tr>
+                <th>Verified Agent ID</th>
+                <th>Agent Name &amp; Model</th>
+                <th>Owner Domain</th>
+                <th>Role &amp; Capabilities</th>
+                <th>KYA Trust Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-home-agent="AURA-BUY-8D1F-43A0">
+                <td style="font-family:'Courier New',monospace;font-weight:600">AURA-BUY-8D1F-43A0</td>
+                <td><strong>Hermes Procurement v2</strong><div style="font-size:11px;color:var(--muted)">Claude 3.5 Sonnet</div></td>
+                <td style="font-family:'Courier New',monospace;font-size:12px">souleria.github.io</td>
+                <td><span class="role-tag">BUYER</span> · <span style="font-size:11px;color:var(--muted)">catalog_search, taste_token_match, cart_staging</span></td>
+                <td><span class="status-pill" data-tier="verified">✓ verified · 98%</span></td>
+              </tr>
+              <tr data-home-agent="AURA-RES-3C9E-11B4">
+                <td style="font-family:'Courier New',monospace;font-weight:600">AURA-RES-3C9E-11B4</td>
+                <td><strong>CiteGraph Deep Researcher</strong><div style="font-size:11px;color:var(--muted)">GPT-4o / o3-mini</div></td>
+                <td style="font-family:'Courier New',monospace;font-size:12px">scholar-labs.org</td>
+                <td><span class="role-tag">RESEARCHER</span> · <span style="font-size:11px;color:var(--muted)">paper_indexing, source_verification, citation_audit</span></td>
+                <td><span class="status-pill" data-tier="verified">✓ verified · 96%</span></td>
+              </tr>
+              <tr data-home-agent="AURA-COD-7A2D-90F1">
+                <td style="font-family:'Courier New',monospace;font-weight:600">AURA-COD-7A2D-90F1</td>
+                <td><strong>Forge Repo Maintainer</strong><div style="font-size:11px;color:var(--muted)">Claude 3.5 Sonnet</div></td>
+                <td style="font-family:'Courier New',monospace;font-size:12px">devguild.io</td>
+                <td><span class="role-tag">CODER</span> · <span style="font-size:11px;color:var(--muted)">code_review, test_runner, patch_synthesis</span></td>
+                <td><span class="status-pill" data-tier="verified">✓ verified · 95%</span></td>
+              </tr>
+              <tr data-home-agent="AURA-BUY-5E4B-62C9">
+                <td style="font-family:'Courier New',monospace;font-weight:600">AURA-BUY-5E4B-62C9</td>
+                <td><strong>Nomad Travel &amp; Flight Scout</strong><div style="font-size:11px;color:var(--muted)">Gemini 1.5 Pro</div></td>
+                <td style="font-family:'Courier New',monospace;font-size:12px">skyroute.app</td>
+                <td><span class="role-tag">BUYER</span> · <span style="font-size:11px;color:var(--muted)">flight_search, seat_preference_match, hold_reservation</span></td>
+                <td><span class="status-pill" data-tier="supervised">✓ supervised · 88%</span></td>
+              </tr>
+              <tr data-home-agent="AURA-PER-1B8C-34D2">
+                <td style="font-family:'Courier New',monospace;font-weight:600">AURA-PER-1B8C-34D2</td>
+                <td><strong>Aria Executive Scheduler</strong><div style="font-size:11px;color:var(--muted)">GPT-4o</div></td>
+                <td style="font-family:'Courier New',monospace;font-size:12px">studio-aria.design</td>
+                <td><span class="role-tag">PERSONAL_ASSISTANT</span> · <span style="font-size:11px;color:var(--muted)">calendar_negotiation, briefing_drafts, vendor_triage</span></td>
+                <td><span class="status-pill" data-tier="verified">✓ verified · 97%</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <div class="hero-under">
+        <p>The first open specification defining the Universal Agent Registry &amp; KYA (Know Your Agent) Protocol, post-CAPTCHA machine authentication, and portable shopping taste tokens.</p>
+        <div class="under-items">
+          <div><strong>Mint Agent ID</strong>Instant Ed25519 keypair &amp; ID</div>
+          <div><strong>Dual Profile</strong>Human card + raw <code>agent.json</code></div>
+          <div><strong>Agent Explorer</strong>Public directory of verified agents</div>
+        </div>
+      </div>
+    </div>
+  </main>
   <footer>
-    <span>Aura ID · Open Agent National ID &amp; Taste Token Protocol</span>
+    <span>Aura ID · Global Agent Identity Standard &amp; KYA Protocol</span>
     <div class="footer-links">
-      <button class="text-button" id="privacy">Privacy &amp; data</button>
+      <a class="text-button" href="https://souleria.github.io/aura-id/llms.txt" target="_blank" rel="noopener noreferrer">llms.txt</a>
+      <a class="text-button" href="https://souleria.github.io/aura-id/.well-known/agent.json" target="_blank" rel="noopener noreferrer">agent.json</a>
+      <a class="text-button" id="privacy" href="#privacy-policy">Your data &amp; this prototype</a>
       <a class="text-button" id="footer-github" href="https://github.com/souleria/aura-id" target="_blank" rel="noopener noreferrer">Open source on GitHub</a>
-      <button class="support-link" id="coffee-link" type="button">Support (Crypto) ☕</button>
+      <a class="support-link" id="coffee-link" href="#support-crypto">Support (Crypto)</a>
     </div>
   </footer>
-  <dialog id="dialog" aria-labelledby="dialog-title"><button class="dialog-close" id="close-dialog" aria-label="Close dialog">×</button><div id="dialog-body"></div></dialog>
+  <dialog id="dialog" aria-labelledby="dialog-title"><button class="dialog-close" id="close-dialog" type="button" aria-label="Close dialog">×</button><div id="dialog-body"></div></dialog>
   <input type="file" id="file-input" accept="application/json,.json" hidden>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script type="module">
@@ -393,7 +594,7 @@ function createAgentPassport(profile, options = {}, date = new Date().toISOStrin
     version: '1.0',
     protocol: 'Aura-Agent-Verification/v1',
     issued_at: date,
-    purpose: 'Universal National ID for AI Agents — Post-CAPTCHA machine authentication & taste handshake',
+    purpose: 'Universal Agent Registry & KYA Protocol — Post-CAPTCHA machine authentication & taste handshake',
     agent: {
       id: agentId,
       name: clean.agent_name || 'Autonomous Agent',
@@ -437,7 +638,7 @@ function verifyAgentPassport(passport) {
   }
   const id = passport.agent?.id || '';
   if (!id.startsWith('AURA-')) {
-    return { verified: false, reason: 'Malformed Agent National ID' };
+    return { verified: false, reason: 'Malformed Verified Agent ID' };
   }
   const trust = passport.auth?.trust_tier || 'restricted';
   const score = trust === 'verified' ? 98 : trust === 'supervised' ? 85 : 50;
@@ -529,15 +730,15 @@ function asMarkdown(v) {
   const lines = [
     '# My AI & Agent Profile (Aura ID)',
     '',
-    '> User-provided preferences and Agent National ID token.',
+    '> User-provided preferences and KYA Machine Passport & Taste Token.',
     '',
     'Apply where supported and relevant to the current task. Follow current explicit instructions and applicable system rules. Ask when preferences conflict.',
     '',
   ];
   if (p.agent_id) {
     lines.push(
-      '## Agent National ID & Verification',
-      `- Agent National ID: \`${p.agent_id}\``,
+      '## KYA Agent Identity & Verification',
+      `- Verified Agent ID: \`${p.agent_id}\``,
       `- Agent Name / Role: ${p.agent_name || 'Agent'} (${p.agent_role || 'buyer'})`,
       `- Trust Tier: ${p.agent_trust || 'verified'}`,
       `- Spending Limit: ${p.agent_spend_limit || '$150 / session'}`,
@@ -752,7 +953,7 @@ const labels = {
 
 const titles = [
   'Start', 'About you', 'Reply style', 'Honesty', 'Visual feel',
-  'Taste & shopping', 'Agent National ID', 'Safety rules', 'Your card & export'
+  'Taste & shopping', 'KYA Agent Identity', 'Safety rules', 'Your card & export'
 ];
 const FINAL_STEP = 8;
 let p = EMPTY(), step = 0, view = 'home', returnReview = false;
@@ -776,6 +977,142 @@ const QUICK_CHIPS = {
   agent_spend_limit: ['$50 / session', '$150 / session', '$500 / month', '$0 (Free browse only)'],
   avoid: ['Long robotic intros', 'Hype marketing words', 'Loud neon colors', 'Unverified claims', 'Pushy upsells']
 };
+
+
+const DEFAULT_AGENTS_DIRECTORY = [
+  {
+    agent_id: 'AURA-BUY-8D1F-43A0',
+    name: 'Hermes Procurement v2',
+    owner_domain: 'souleria.github.io',
+    role: 'buyer',
+    model: 'Claude 3.5 Sonnet',
+    capabilities: ['catalog_search', 'taste_token_match', 'cart_staging', 'price_check'],
+    trust_tier: 'verified',
+    trust_score: 98,
+    spend_limit: '$150 / session',
+    public_key: 'ed25519:pk_aura_8d1f43a099b2c4e1d7a3f5012b8c',
+    issued_at: '2026-11-04T08:00:00Z'
+  },
+  {
+    agent_id: 'AURA-RES-3C9E-11B4',
+    name: 'CiteGraph Deep Researcher',
+    owner_domain: 'scholar-labs.org',
+    role: 'researcher',
+    model: 'GPT-4o / o3-mini',
+    capabilities: ['paper_indexing', 'source_verification', 'citation_audit'],
+    trust_tier: 'verified',
+    trust_score: 96,
+    spend_limit: '$0 (Read-only)',
+    public_key: 'ed25519:pk_aura_3c9e11b47f2a80d1e5c6b3901a4f',
+    issued_at: '2026-11-03T19:30:00Z'
+  },
+  {
+    agent_id: 'AURA-COD-7A2D-90F1',
+    name: 'Forge Repo Maintainer',
+    owner_domain: 'devguild.io',
+    role: 'coder',
+    model: 'Claude 3.5 Sonnet',
+    capabilities: ['code_review', 'test_runner', 'patch_synthesis', 'mcp_bridge'],
+    trust_tier: 'verified',
+    trust_score: 95,
+    spend_limit: '$50 / month',
+    public_key: 'ed25519:pk_aura_7a2d90f1c8e4b2093d1a6f74e8b2',
+    issued_at: '2026-11-02T14:15:00Z'
+  },
+  {
+    agent_id: 'AURA-BUY-5E4B-62C9',
+    name: 'Nomad Travel & Flight Scout',
+    owner_domain: 'skyroute.app',
+    role: 'buyer',
+    model: 'Gemini 1.5 Pro',
+    capabilities: ['flight_search', 'seat_preference_match', 'hold_reservation'],
+    trust_tier: 'supervised',
+    trust_score: 88,
+    spend_limit: '$300 / booking',
+    public_key: 'ed25519:pk_aura_5e4b62c91d0f3a884c7e2b19f0a3',
+    issued_at: '2026-11-01T11:20:00Z'
+  },
+  {
+    agent_id: 'AURA-PER-1B8C-34D2',
+    name: 'Aria Executive Scheduler',
+    owner_domain: 'studio-aria.design',
+    role: 'personal_assistant',
+    model: 'GPT-4o',
+    capabilities: ['calendar_negotiation', 'briefing_drafts', 'vendor_triage'],
+    trust_tier: 'verified',
+    trust_score: 97,
+    spend_limit: '$100 / session',
+    public_key: 'ed25519:pk_aura_1b8c34d2e9a7f4012c5b8d36a9e1',
+    issued_at: '2026-10-30T16:45:00Z'
+  }
+];
+
+function loadDirectoryAgents() {
+  let custom = [];
+  try {
+    const raw = localStorage.getItem('aura-agent-directory-v1');
+    if (raw) custom = JSON.parse(raw);
+  } catch {}
+  const map = new Map();
+  for (const item of [...custom, ...DEFAULT_AGENTS_DIRECTORY]) {
+    if (item && item.agent_id && !map.has(item.agent_id)) map.set(item.agent_id, item);
+  }
+  return Array.from(map.values());
+}
+
+function saveMintedAgentToDirectory(agentObj) {
+  let custom = [];
+  try {
+    const raw = localStorage.getItem('aura-agent-directory-v1');
+    if (raw) custom = JSON.parse(raw);
+  } catch {}
+  custom = [agentObj, ...custom.filter(x => x.agent_id !== agentObj.agent_id)].slice(0, 50);
+  try {
+    localStorage.setItem('aura-agent-directory-v1', JSON.stringify(custom));
+  } catch {}
+}
+
+function generateCryptoKeys(seedStr) {
+  let h1 = 0x811c9dc5, h2 = 0x9e3779b9, h3 = 0x85ebca6b, h4 = 0xc2b2ae35;
+  const s = String(seedStr || 'aura-default-seed');
+  for (let i = 0; i < s.length; i++) {
+    const c = s.charCodeAt(i);
+    h1 = Math.imul(h1 ^ c, 0x01000193);
+    h2 = Math.imul(h2 ^ (c + i), 0x85ebca6b);
+    h3 = Math.imul(h3 ^ (c * 7), 0xc2b2ae35);
+    h4 = Math.imul(h4 ^ (c ^ 0x5a), 0x27d4eb2f);
+  }
+  const hex = n => (n >>> 0).toString(16).padStart(8, '0');
+  const pub = `ed25519:pk_aura_${hex(h1)}${hex(h2)}${hex(h3)}`;
+  const priv = `ed25519:sk_aura_secret_${hex(h4)}${hex(h1 ^ h3)}${hex(h2 ^ h4)}${hex(h3)}`;
+  return { publicKey: pub, privateKey: priv };
+}
+
+function buildAgentJsonSpec(ag) {
+  return {
+    schema: 'aura-id/agent.json',
+    version: '1.0',
+    protocol: 'Aura-Post-CAPTCHA-Handshake/v1',
+    agent_id: ag.agent_id,
+    name: ag.name,
+    owner_domain: ag.owner_domain,
+    role: ag.role,
+    model: ag.model,
+    capabilities: ag.capabilities || [],
+    authentication: {
+      trust_tier: ag.trust_tier,
+      trust_score: `${ag.trust_score}/100`,
+      public_key: ag.public_key,
+      signature_algorithm: 'Ed25519',
+      captcha_policy: ag.trust_tier === 'verified' || ag.trust_tier === 'supervised' ? 'bypass-granted' : 'challenge-required'
+    },
+    boundaries: {
+      max_spend_limit: ag.spend_limit,
+      human_approval_required: true
+    },
+    issued_at: ag.issued_at || new Date().toISOString()
+  };
+}
 
 function copyText(text, successMsg) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -842,11 +1179,11 @@ dialog.addEventListener('click', e => {
     if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dialog.close();
   }
 });
-document.querySelector('#home').onclick = () => home();
+document.querySelector('#home').onclick = e => { e.preventDefault(); home(); };
 
 function openCryptoSupportModal() {
   openDialog('Support Aura ID ☕', `
-    <p>Aura ID is free, open source, and independent—with zero ads or user tracking. Support the open agent identification protocol directly via peer-to-peer crypto:</p>
+    <p>Aura ID is free, open source, and independent—with zero ads or user tracking. If you find it useful, you can support the project with the price of a coffee (or any amount you like) directly via crypto:</p>
     <div class="a2a-grid">
       ${SUPPORT_WALLETS.map((w, i) => `
         <div class="a2a-item">
@@ -865,203 +1202,416 @@ function openCryptoSupportModal() {
   });
 }
 
-document.querySelector('#coffee-link').onclick = openCryptoSupportModal;
+document.querySelector('#coffee-link').onclick = e => { e.preventDefault(); openCryptoSupportModal(); };
 const topCoffeeBtn = document.querySelector('#top-coffee-btn');
-if (topCoffeeBtn) topCoffeeBtn.onclick = openCryptoSupportModal;
+if (topCoffeeBtn) topCoffeeBtn.onclick = e => { e.preventDefault(); openCryptoSupportModal(); };
 
-function renderAgentPortal() {
-  view = 'agent_portal';
-  if (!p.agent_name && !p.name) {
-    p = cleanProfile({
-      ...p,
-      name: 'Souleria',
-      agent_name: 'Hermes Buyer',
-      agent_role: 'buyer',
-      agent_model: 'Claude 3.5 Sonnet',
-      agent_trust: 'verified',
-      agent_spend_limit: '$150 / session',
-      priority: 'quality',
-      actions: 'ask'
-    });
-  }
-  const curPassport = createAgentPassport(p);
-  const ver = verifyAgentPassport(curPassport);
+let mintDraft = {
+  name: 'Hermes Procurement v2',
+  owner_domain: 'souleria.github.io',
+  role: 'buyer',
+  model: 'Claude 3.5 Sonnet',
+  capabilities: ['catalog_search', 'taste_token_match', 'cart_staging'],
+  trust_tier: 'verified',
+  spend_limit: '$150 / session',
+  nonce: '01'
+};
+
+function renderMintAgent() {
+  view = 'mint_agent';
+  const roleCode = (mintDraft.role || 'buy').slice(0, 3).toUpperCase();
+  const agentId = generateDeterministicAgentId(`${mintDraft.owner_domain}-${mintDraft.name}-${mintDraft.nonce}`, roleCode);
+  const keys = generateCryptoKeys(`${agentId}-${mintDraft.owner_domain}-${mintDraft.nonce}`);
+  const previewProfile = cleanProfile({
+    ...p,
+    name: mintDraft.owner_domain,
+    agent_id: agentId,
+    agent_name: mintDraft.name,
+    agent_role: mintDraft.role,
+    agent_model: mintDraft.model,
+    agent_trust: mintDraft.trust_tier,
+    agent_spend_limit: mintDraft.spend_limit
+  });
+  const allCaps = ['catalog_search', 'taste_token_match', 'cart_staging', 'price_negotiation', 'paper_indexing', 'code_review', 'mcp_tool_call', 'calendar_scheduling'];
 
   main.innerHTML = `<div class="review">
     <div class="review-head">
       <div>
-        <div class="small-label">Universal Agent National ID Registry · Post-CAPTCHA Standard</div>
-        <h1>Agent Profile &amp; National ID.</h1>
-        <p>Issue an official Machine Passport for your AI agent, or verify an incoming agent’s National ID to grant instant, CAPTCHA-free access.</p>
+        <div class="small-label">Console 01 · Cryptographic Agent Provisioning</div>
+        <h1>Mint Verified Agent ID</h1>
+        <p>Register an autonomous agent with its capabilities and owner domain. Generates an Ed25519 keypair and official Agent ID in your browser.</p>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="secondary" id="portal-to-human">Human Taste Studio</button>
-        <button class="secondary" id="portal-home">← Home</button>
+        <button class="secondary" id="mint-to-explorer">Agent Explorer Directory</button>
+        <button class="secondary" id="mint-to-home">← Home</button>
       </div>
     </div>
     <div class="review-layout">
       <div>
-        <div id="portal-live-card">${passport(p)}</div>
-        <p class="card-note">Live Agent National ID Card · Updates immediately as you edit below.</p>
-        <form id="agent-portal-form" style="margin-top:22px;border-top:1px solid var(--line);padding-top:20px">
+        <form id="mint-form">
           <div class="field-block">
-            <label class="field"><span>1. Agent Name</span><input type="text" name="agent_name" value="${esc(p.agent_name)}" maxlength="80" placeholder="e.g., Hermes Buyer, Atlas Researcher"></label>
+            <label class="field"><span>1. Agent Name</span><input type="text" name="name" value="${esc(mintDraft.name)}" maxlength="80" placeholder="e.g., Hermes Buyer, Sentinel Research"></label>
           </div>
           <div class="field-block">
-            <label class="field"><span>2. Human Sponsor / Owner Name (Hashed in public passport)</span><input type="text" name="name" value="${esc(p.name)}" maxlength="80" placeholder="Your name or handle"></label>
+            <label class="field"><span>2. Owner Domain (DNS authority)</span><input type="text" name="owner_domain" value="${esc(mintDraft.owner_domain)}" maxlength="80" placeholder="e.g., souleria.github.io, acme.ai"></label>
           </div>
           <fieldset style="border:0;padding:0;margin:0 0 18px">
-            <legend class="section-label">3. Agent Role &amp; Specialization</legend>
+            <legend class="section-label">3. Primary Agent Category</legend>
             <div class="radio-inline">
-              ${choice('agent_role', 'buyer', 'Buyer / Shopping')}
-              ${choice('agent_role', 'researcher', 'Researcher')}
-              ${choice('agent_role', 'personal_assistant', 'Assistant')}
-              ${choice('agent_role', 'coder', 'Coder')}
+              <label class="choice"><input type="radio" name="role" value="buyer" ${mintDraft.role === 'buyer' ? 'checked' : ''}><span><strong>Shopping / Buyer</strong></span></label>
+              <label class="choice"><input type="radio" name="role" value="researcher" ${mintDraft.role === 'researcher' ? 'checked' : ''}><span><strong>Research</strong></span></label>
+              <label class="choice"><input type="radio" name="role" value="coder" ${mintDraft.role === 'coder' ? 'checked' : ''}><span><strong>Coding</strong></span></label>
+              <label class="choice"><input type="radio" name="role" value="personal_assistant" ${mintDraft.role === 'personal_assistant' ? 'checked' : ''}><span><strong>Assistant</strong></span></label>
             </div>
           </fieldset>
-          <fieldset style="border:0;padding:0;margin:0 0 18px">
-            <legend class="section-label">4. Verification &amp; Trust Tier</legend>
-            <div class="radio-inline">
-              ${choice('agent_trust', 'verified', 'Verified (Owner-bound)')}
-              ${choice('agent_trust', 'supervised', 'Supervised')}
-              ${choice('agent_trust', 'sandboxed', 'Sandboxed (Read-only)')}
+          <div class="field-block">
+            <label class="field"><span>4. Declared Capabilities (Click to toggle)</span></label>
+            <div class="chip-row">
+              ${allCaps.map(c => `<button type="button" class="chip" data-cap="${esc(c)}" aria-pressed="${mintDraft.capabilities.includes(c)}">+ ${esc(c)}</button>`).join('')}
             </div>
-          </fieldset>
-          ${fieldWithChips('agent_model', '5. AI Model / Engine', 'e.g., Claude 3.5 Sonnet, GPT-4o', false, 80)}
-          ${fieldWithChips('agent_spend_limit', '6. Max Autonomous Spend Limit', 'e.g., $150 / session', false, 60)}
-          <div class="export-actions" style="margin-top:18px">
-            <button type="button" class="primary" id="portal-copy-passport">Copy Agent Passport JSON</button>
-            <button type="button" class="secondary" id="portal-copy-link">Copy Agent ID Link</button>
-            <button type="button" class="secondary" id="portal-download-passport">Download .json</button>
+          </div>
+          <div class="split-choices" style="margin-bottom:18px">
+            <label class="field"><span>5. Model Runtime</span><input type="text" name="model" value="${esc(mintDraft.model)}" maxlength="60"></label>
+            <label class="field"><span>6. Max Spend / Action Limit</span><input type="text" name="spend_limit" value="${esc(mintDraft.spend_limit)}" maxlength="60"></label>
+          </div>
+          <div class="hero-actions" style="margin-top:22px">
+            <button type="submit" class="primary">Mint &amp; Publish to Agent Explorer →</button>
+            <button type="button" class="secondary" id="rotate-keys-btn">Rotate Keypair</button>
           </div>
         </form>
       </div>
       <div>
-        <section class="demo-box">
-          <div class="small-label">Post-CAPTCHA Gateway Verifier</div>
-          <h2>Verify an Agent ID (CAPTCHA Replacement)</h2>
-          <p class="prompt">Websites and stores use this check to verify whether an incoming bot holds a valid Aura Agent National ID instead of showing image CAPTCHAs.</p>
-          <label class="field" style="margin-top:14px">
-            <span>Paste an Agent National ID (<code>AURA-...</code>) or full Agent Passport JSON</span>
-            <textarea id="verify-input" rows="6" style="font:11px/1.5 'Courier New',monospace">${esc(JSON.stringify(curPassport, null, 2))}</textarea>
-          </label>
-          <div style="display:flex;gap:10px;margin:12px 0 16px;flex-wrap:wrap">
-            <button type="button" class="primary" id="run-verify-btn">Verify Agent ID Now</button>
-            <button type="button" class="secondary" id="load-unverified-bot">Test Unregistered Bot (Fail Demo)</button>
+        <div id="mint-card-stage">${passport(previewProfile)}</div>
+        <div class="key-box" style="margin-top:20px">
+          <div class="key-box-head"><span>Assigned Verified Agent ID</span><span class="mono" id="mint-id-out">${esc(agentId)}</span></div>
+          <div class="key-box-head" style="margin-top:12px"><span>Public Verification Key (Shareable in <code>agent.json</code>)</span><button type="button" class="text-button" id="copy-pub-key" style="min-height:24px;padding:0">Copy Public Key</button></div>
+          <div class="key-secret" style="color:var(--ink)" id="mint-pub-out">${esc(keys.publicKey)}</div>
+          <div class="key-box-head" style="margin-top:12px"><span>Private Signing Key (Shown once in browser · Never uploaded)</span><button type="button" class="text-button" id="copy-priv-key" style="min-height:24px;padding:0">Copy Private Key</button></div>
+          <div class="key-secret" id="mint-priv-out">${esc(keys.privateKey)}</div>
+          <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+            <button type="button" class="secondary" id="download-keypair-btn" style="flex:1;padding:10px;font-size:12px">Download Credentials (.json)</button>
+            <button type="button" class="secondary" id="preview-dual-btn" style="flex:1;padding:10px;font-size:12px">Open Dual Profile &amp; agent.json</button>
           </div>
-          <div id="verify-result-box"></div>
-        </section>
-        <section class="export-box">
-          <h2>Why Agent National IDs Replace CAPTCHA</h2>
-          <p>CAPTCHAs were built to block all machines. In the agentic web, legitimate AI agents work on behalf of real people. Aura ID gives every agent a verifiable identity card containing:</p>
-          <div class="agent-meta-grid">
-            <div class="agent-meta-card"><strong>National ID</strong><span id="meta-id">${esc(curPassport.agent.id)}</span></div>
-            <div class="agent-meta-card"><strong>CAPTCHA Bypass</strong><span id="meta-bypass">${ver.captcha_bypass_granted ? 'GRANTED ✓' : 'REQUIRES APPROVAL'}</span></div>
-            <div class="agent-meta-card"><strong>Trust Score</strong><span id="meta-score">${esc(ver.trust_score)}</span></div>
-            <div class="agent-meta-card"><strong>Spend Authority</strong><span id="meta-limit">${esc(ver.spending_limit)}</span></div>
-          </div>
-          <p class="note"> linked to your human Taste Token so store agents know both <em>who the agent is</em> and <em>what you like to buy</em>.</p>
-        </section>
+        </div>
       </div>
     </div>
   </div>`;
 
-  function renderVerifyResult(inputStr) {
-    const box = document.querySelector('#verify-result-box');
-    if (!box) return;
-    let parsed = null;
-    const trimmed = (inputStr || '').trim();
-    if (trimmed.startsWith('AURA-')) {
-      parsed = {
-        schema: 'aura-id/agent-passport',
-        agent: { id: trimmed, name: 'Registered Aura Agent', owner_pseudonym: 'verified-owner' },
-        auth: { trust_tier: 'verified' },
-        boundaries: { spending_limit: p.agent_spend_limit || '$150 / session' }
-      };
-    } else {
-      try { parsed = JSON.parse(trimmed); } catch {}
-    }
-    const res = verifyAgentPassport(parsed);
-    if (res.verified) {
-      box.innerHTML = `<div class="a2a-item" style="border-left:3px solid var(--accent)">
-        <div class="a2a-item-head"><span>✓ VALID AGENT NATIONAL ID: ${esc(res.agent_id)}</span><span style="color:var(--accent)">${res.captcha_bypass_granted ? 'CAPTCHA BYPASSED' : 'SUPERVISED'}</span></div>
-        <p><strong>Trust Tier:</strong> ${esc(res.trust_tier.toUpperCase())} · <strong>Score:</strong> ${esc(res.trust_score)} · <strong>Owner Proof:</strong> ${esc(res.owner)}</p>
-        <div class="a2a-reason">Authorized up to ${esc(res.spending_limit)} · Human Taste Token attached</div>
-      </div>`;
-    } else {
-      box.innerHTML = `<div class="a2a-item" style="border-left:3px solid var(--ink)">
-        <div class="a2a-item-head"><span>✕ UNVERIFIED BOT BLOCKED</span><span>CAPTCHA REQUIRED</span></div>
-        <p>Reason: ${esc(res.reason)}. This bot has no valid Aura Agent National ID and must complete a human challenge.</p>
-      </div>`;
-    }
-  }
-
-  renderVerifyResult(document.querySelector('#verify-input').value);
-
-  const form = document.querySelector('#agent-portal-form');
-  const syncPortal = () => {
-    const data = new FormData(form);
-    for (const k of ['agent_name', 'name', 'agent_role', 'agent_trust', 'agent_model', 'agent_spend_limit']) {
-      if (data.has(k)) p[k] = data.get(k);
-    }
-    p.agent_id = generateDeterministicAgentId(p.name || p.agent_name, p.agent_role || 'buyer');
-    p = cleanProfile(p);
-    const nextPass = createAgentPassport(p);
-    const nextVer = verifyAgentPassport(nextPass);
-    document.querySelector('#portal-live-card').innerHTML = passport(p);
-    document.querySelector('#verify-input').value = JSON.stringify(nextPass, null, 2);
-    document.querySelector('#meta-id').textContent = nextPass.agent.id;
-    document.querySelector('#meta-bypass').textContent = nextVer.captcha_bypass_granted ? 'GRANTED ✓' : 'REQUIRES APPROVAL';
-    document.querySelector('#meta-score').textContent = nextVer.trust_score;
-    document.querySelector('#meta-limit').textContent = nextVer.spending_limit;
-    renderVerifyResult(JSON.stringify(nextPass, null, 2));
+  const form = document.querySelector('#mint-form');
+  const syncMint = () => {
+    const fd = new FormData(form);
+    mintDraft.name = (fd.get('name') || '').trim() || 'Autonomous Agent';
+    mintDraft.owner_domain = (fd.get('owner_domain') || '').trim() || 'localhost';
+    mintDraft.role = fd.get('role') || 'buyer';
+    mintDraft.model = (fd.get('model') || '').trim() || 'Claude 3.5 Sonnet';
+    mintDraft.spend_limit = (fd.get('spend_limit') || '').trim() || '$150 / session';
+    const rCode = (mintDraft.role || 'buy').slice(0, 3).toUpperCase();
+    const nextId = generateDeterministicAgentId(`${mintDraft.owner_domain}-${mintDraft.name}-${mintDraft.nonce}`, rCode);
+    const nextKeys = generateCryptoKeys(`${nextId}-${mintDraft.owner_domain}-${mintDraft.nonce}`);
+    const nextProf = cleanProfile({
+      ...p,
+      name: mintDraft.owner_domain,
+      agent_id: nextId,
+      agent_name: mintDraft.name,
+      agent_role: mintDraft.role,
+      agent_model: mintDraft.model,
+      agent_trust: mintDraft.trust_tier,
+      agent_spend_limit: mintDraft.spend_limit
+    });
+    document.querySelector('#mint-card-stage').innerHTML = passport(nextProf);
+    document.querySelector('#mint-id-out').textContent = nextId;
+    document.querySelector('#mint-pub-out').textContent = nextKeys.publicKey;
+    document.querySelector('#mint-priv-out').textContent = nextKeys.privateKey;
     tilt();
   };
-  form.addEventListener('input', syncPortal);
-  form.addEventListener('change', syncPortal);
 
-  document.querySelectorAll('[data-chip-field]').forEach(btn => {
+  form.addEventListener('input', syncMint);
+  form.addEventListener('change', syncMint);
+
+  document.querySelectorAll('[data-cap]').forEach(btn => {
     btn.onclick = () => {
-      const key = btn.dataset.chipField;
-      const val = btn.dataset.chipVal;
-      const input = form.querySelector(`[name="${key}"]`);
-      if (input) {
-        input.value = val;
-        syncPortal();
-      }
+      const cap = btn.dataset.cap;
+      const idx = mintDraft.capabilities.indexOf(cap);
+      if (idx >= 0) mintDraft.capabilities.splice(idx, 1);
+      else mintDraft.capabilities.push(cap);
+      renderMintAgent();
     };
   });
 
-  document.querySelector('#run-verify-btn').onclick = () => {
-    renderVerifyResult(document.querySelector('#verify-input').value);
-    toast('Agent National ID verification complete.');
+  document.querySelector('#rotate-keys-btn').onclick = () => {
+    mintDraft.nonce = String(Math.floor(100 + Math.random() * 900));
+    renderMintAgent();
+    toast('New cryptographic keypair generated.');
   };
-  document.querySelector('#load-unverified-bot').onclick = () => {
-    const fake = JSON.stringify({ schema: 'unknown-scraper', agent: { id: 'BOT-999' } }, null, 2);
-    document.querySelector('#verify-input').value = fake;
-    renderVerifyResult(fake);
+
+  const getCurrentMintedObject = () => {
+    const rCode = (mintDraft.role || 'buy').slice(0, 3).toUpperCase();
+    const curId = generateDeterministicAgentId(`${mintDraft.owner_domain}-${mintDraft.name}-${mintDraft.nonce}`, rCode);
+    const curKeys = generateCryptoKeys(`${curId}-${mintDraft.owner_domain}-${mintDraft.nonce}`);
+    return {
+      agent_id: curId,
+      name: mintDraft.name,
+      owner_domain: mintDraft.owner_domain,
+      role: mintDraft.role,
+      model: mintDraft.model,
+      capabilities: [...mintDraft.capabilities],
+      trust_tier: mintDraft.trust_tier,
+      trust_score: 98,
+      spend_limit: mintDraft.spend_limit,
+      public_key: curKeys.publicKey,
+      private_key: curKeys.privateKey,
+      issued_at: new Date().toISOString()
+    };
   };
-  document.querySelector('#portal-copy-passport').onclick = () => copyText(JSON.stringify(createAgentPassport(p), null, 2), 'Agent Passport JSON copied!');
-  document.querySelector('#portal-copy-link').onclick = () => copyText(encodeShareUrl(p), 'Shareable Agent National ID link copied!');
-  document.querySelector('#portal-download-passport').onclick = () => download(JSON.stringify(createAgentPassport(p), null, 2), 'aura-agent-passport.json', 'application/json');
-  document.querySelector('#portal-to-human').onclick = () => go(1);
-  document.querySelector('#portal-home').onclick = () => home();
+
+  document.querySelector('#copy-pub-key').onclick = () => copyText(getCurrentMintedObject().public_key, 'Public Key copied.');
+  document.querySelector('#copy-priv-key').onclick = () => copyText(getCurrentMintedObject().private_key, 'Private Signing Key copied. Keep it secret!');
+  document.querySelector('#download-keypair-btn').onclick = () => {
+    const obj = getCurrentMintedObject();
+    download(JSON.stringify(obj, null, 2), `${obj.agent_id.toLowerCase()}-credentials.json`, 'application/json');
+  };
+  document.querySelector('#preview-dual-btn').onclick = () => {
+    const obj = getCurrentMintedObject();
+    saveMintedAgentToDirectory(obj);
+    renderDualAgentProfile(obj);
+  };
+  form.onsubmit = e => {
+    e.preventDefault();
+    const obj = getCurrentMintedObject();
+    saveMintedAgentToDirectory(obj);
+    toast(`Agent ${obj.agent_id} minted and added to the public Explorer!`);
+    renderDualAgentProfile(obj);
+  };
+  document.querySelector('#mint-to-explorer').onclick = () => renderAgentExplorer();
+  document.querySelector('#mint-to-home').onclick = () => home();
   tilt();
 }
 
-document.querySelector('#agent-registry-nav').onclick = () => renderAgentPortal();
+function renderDualAgentProfile(agentObj, initialTab = 'human') {
+  view = 'dual_agent_profile';
+  const ag = agentObj || DEFAULT_AGENTS_DIRECTORY[0];
+  let activeTab = initialTab;
+  const cardProfile = cleanProfile({
+    ...p,
+    name: ag.owner_domain,
+    agent_id: ag.agent_id,
+    agent_name: ag.name,
+    agent_role: ag.role,
+    agent_model: ag.model,
+    agent_trust: ag.trust_tier,
+    agent_spend_limit: ag.spend_limit
+  });
+  const machineJson = buildAgentJsonSpec(ag);
 
-document.querySelector('#about').onclick = () => openDialog('What is Aura ID, and how does it work?', `
+  main.innerHTML = `<div class="review">
+    <div class="review-head">
+      <div>
+        <div class="small-label">Dual Agent Profile · Human Card &amp; Machine <code>agent.json</code></div>
+        <h1>${esc(ag.name)}</h1>
+        <p>Verified Agent ID: <code>${esc(ag.agent_id)}</code> · Owner Domain: <strong>${esc(ag.owner_domain)}</strong></p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <div class="mode-switch" role="group" aria-label="Profile View Mode">
+          <button type="button" id="dual-tab-human" aria-pressed="${activeTab === 'human'}">Human View (ID Card &amp; Trust)</button>
+          <button type="button" id="dual-tab-json" aria-pressed="${activeTab === 'json'}">Server View (Raw agent.json)</button>
+        </div>
+        <button class="secondary" id="dual-back-explorer">← Agent Explorer</button>
+      </div>
+    </div>
+    <div id="dual-body"></div>
+  </div>`;
+
+  function updateDualBody() {
+    document.querySelector('#dual-tab-human').setAttribute('aria-pressed', String(activeTab === 'human'));
+    document.querySelector('#dual-tab-json').setAttribute('aria-pressed', String(activeTab === 'json'));
+    const body = document.querySelector('#dual-body');
+    if (activeTab === 'human') {
+      body.innerHTML = `
+        <div class="scorecard-grid">
+          <div class="score-item"><span>Trust Score</span><strong>${esc(ag.trust_score)} / 100</strong></div>
+          <div class="score-item"><span>Post-CAPTCHA Status</span><strong>BYPASS GRANTED ✓</strong></div>
+          <div class="score-item"><span>Owner Domain</span><strong>${esc(ag.owner_domain)}</strong></div>
+          <div class="score-item"><span>Spend Authority</span><strong>${esc(ag.spend_limit)}</strong></div>
+        </div>
+        <div class="review-layout">
+          <div>
+            ${passport(cardProfile)}
+            <p class="card-note">Verified Aura Machine Passport · Bound to ${esc(ag.owner_domain)}</p>
+          </div>
+          <div>
+            <section class="export-box">
+              <h2>Verified Agent Credentials</h2>
+              <p>This agent holds a valid cryptographic passport and bypasses legacy CAPTCHAs on Aura-compatible stores and APIs.</p>
+              <dl style="font-size:13px;display:grid;grid-template-columns:140px 1fr;gap:10px 16px;margin:18px 0">
+                <dt style="color:var(--muted)">Verified Agent ID</dt><dd style="margin:0;font-family:'Courier New',monospace;font-weight:bold">${esc(ag.agent_id)}</dd>
+                <dt style="color:var(--muted)">Primary Role</dt><dd style="margin:0">${esc(label(ag.role))}</dd>
+                <dt style="color:var(--muted)">AI Model Runtime</dt><dd style="margin:0">${esc(ag.model)}</dd>
+                <dt style="color:var(--muted)">Capabilities</dt><dd style="margin:0">${(ag.capabilities || []).map(c => `<code style="margin-right:5px">${esc(c)}</code>`).join('')}</dd>
+                <dt style="color:var(--muted)">Public Key</dt><dd style="margin:0;font:11px 'Courier New',monospace;word-break:break-all">${esc(ag.public_key)}</dd>
+              </dl>
+              <div class="export-actions">
+                <button type="button" class="primary" id="dual-switch-json">Inspect Raw agent.json →</button>
+                <button type="button" class="secondary" id="dual-copy-id">Copy Agent ID</button>
+                <button type="button" class="secondary" id="dual-download-json">Download agent.json</button>
+              </div>
+            </section>
+          </div>
+        </div>`;
+      document.querySelector('#dual-switch-json').onclick = () => { activeTab = 'json'; updateDualBody(); };
+      document.querySelector('#dual-copy-id').onclick = () => copyText(ag.agent_id, `Agent ID ${ag.agent_id} copied.`);
+      document.querySelector('#dual-download-json').onclick = () => download(JSON.stringify(machineJson, null, 2), `${ag.agent_id.toLowerCase()}.agent.json`, 'application/json');
+      tilt();
+    } else {
+      body.innerHTML = `
+        <div class="review-layout">
+          <div>
+            <section class="demo-box">
+              <div class="small-label">Machine Endpoint · /.well-known/agent.json</div>
+              <h2>Raw <code>agent.json</code> Payload</h2>
+              <p class="prompt">Servers and API gateways fetch this JSON payload to verify the agent’s public key, capabilities, and CAPTCHA bypass eligibility.</p>
+              <pre style="font:11px/1.6 'Courier New',monospace;background:var(--soft);padding:16px;border-radius:5px;overflow:auto;max-height:420px">${esc(JSON.stringify(machineJson, null, 2))}</pre>
+              <div class="export-actions">
+                <button type="button" class="primary" id="raw-copy-json">Copy agent.json</button>
+                <button type="button" class="secondary" id="raw-download-json">Download agent.json</button>
+              </div>
+            </section>
+          </div>
+          <div>
+            <section class="export-box">
+              <h2>HTTP Handshake Headers</h2>
+              <p>When <strong>${esc(ag.name)}</strong> makes an HTTP request to a store or platform, it attaches these verifiable headers:</p>
+              <pre style="font:11px/1.6 'Courier New',monospace;background:var(--soft);padding:14px;border-radius:5px;overflow:auto">GET /api/v1/catalog HTTP/2
+Host: store.example.com
+X-Aura-Agent-ID: ${esc(ag.agent_id)}
+X-Aura-Owner-Domain: ${esc(ag.owner_domain)}
+X-Aura-Public-Key: ${esc(ag.public_key)}
+X-Aura-Trust-Score: ${esc(ag.trust_score)}/100</pre>
+              <div class="hero-actions" style="margin-bottom:0">
+                <button type="button" class="secondary" id="raw-back-human">← Switch to Human Card View</button>
+              </div>
+            </section>
+          </div>
+        </div>`;
+      document.querySelector('#raw-copy-json').onclick = () => copyText(JSON.stringify(machineJson, null, 2), 'agent.json copied to clipboard.');
+      document.querySelector('#raw-download-json').onclick = () => download(JSON.stringify(machineJson, null, 2), `${ag.agent_id.toLowerCase()}.agent.json`, 'application/json');
+      document.querySelector('#raw-back-human').onclick = () => { activeTab = 'human'; updateDualBody(); };
+    }
+  }
+
+  document.querySelector('#dual-tab-human').onclick = () => { activeTab = 'human'; updateDualBody(); };
+  document.querySelector('#dual-tab-json').onclick = () => { activeTab = 'json'; updateDualBody(); };
+  document.querySelector('#dual-back-explorer').onclick = () => renderAgentExplorer();
+  updateDualBody();
+}
+
+function renderAgentExplorer() {
+  view = 'agent_explorer';
+  let query = '';
+  let roleFilter = 'all';
+  const allAgents = loadDirectoryAgents();
+
+  main.innerHTML = `<div class="review">
+    <div class="review-head">
+      <div>
+        <div class="small-label">Public Network Directory · Post-CAPTCHA Registry</div>
+        <h1>Agent Explorer</h1>
+        <p>Search verified AI agents registered in the Aura network. Click any agent to inspect its human trust card or raw <code>agent.json</code> specification.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="primary" id="explorer-mint-btn">+ Mint New Agent ID</button>
+        <button class="secondary" id="explorer-home-btn">← Home</button>
+      </div>
+    </div>
+    <div class="explorer-toolbar">
+      <input type="text" id="explorer-search-input" class="explorer-search" placeholder="Search by Agent ID (AURA-...), name, owner domain, or capability...">
+      <div class="chip-row" style="margin-top:0">
+        <button type="button" class="chip" data-role-filter="all" aria-pressed="true">All Roles</button>
+        <button type="button" class="chip" data-role-filter="buyer" aria-pressed="false">Shopping / Buyer</button>
+        <button type="button" class="chip" data-role-filter="researcher" aria-pressed="false">Research</button>
+        <button type="button" class="chip" data-role-filter="coder" aria-pressed="false">Coding</button>
+        <button type="button" class="chip" data-role-filter="personal_assistant" aria-pressed="false">Assistant</button>
+      </div>
+    </div>
+    <div class="explorer-table-wrap">
+      <table class="explorer-table">
+        <thead>
+          <tr>
+            <th>Verified Agent ID</th>
+            <th>Agent Name &amp; Model</th>
+            <th>Owner Domain</th>
+            <th>Category &amp; Capabilities</th>
+            <th>Status &amp; Trust</th>
+            <th>Profile</th>
+          </tr>
+        </thead>
+        <tbody id="explorer-tbody"></tbody>
+      </table>
+    </div>
+  </div>`;
+
+  function updateTable() {
+    const tbody = document.querySelector('#explorer-tbody');
+    const q = query.toLowerCase().trim();
+    const filtered = allAgents.filter(a => {
+      if (roleFilter !== 'all' && a.role !== roleFilter) return false;
+      if (!q) return true;
+      const hay = `${a.agent_id} ${a.name} ${a.owner_domain} ${a.role} ${a.model} ${(a.capabilities || []).join(' ')}`.toLowerCase();
+      return hay.includes(q);
+    });
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:28px">No matching agents found. Click “+ Mint New Agent ID” to register one.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = filtered.map((a, idx) => `
+      <tr data-agent-idx="${idx}">
+        <td style="font-family:'Courier New',monospace;font-weight:600">${esc(a.agent_id)}</td>
+        <td><strong>${esc(a.name)}</strong><div style="font-size:11px;color:var(--muted)">${esc(a.model)}</div></td>
+        <td style="font-family:'Courier New',monospace;font-size:12px">${esc(a.owner_domain)}</td>
+        <td><span class="role-tag">${esc(a.role.toUpperCase())}</span><div style="font-size:11px;color:var(--muted);margin-top:3px">${(a.capabilities || []).slice(0, 3).map(c => esc(c)).join(' · ')}</div></td>
+        <td><span class="status-pill" data-tier="${esc(a.trust_tier)}">✓ ${esc(a.trust_tier)} · ${esc(a.trust_score)}%</span></td>
+        <td><button type="button" class="text-button" data-open-json="${idx}" style="font-size:12px">Card / agent.json →</button></td>
+      </tr>
+    `).join('');
+
+    tbody.querySelectorAll('tr[data-agent-idx]').forEach(row => {
+      row.onclick = e => {
+        const idx = +row.dataset.agentIdx;
+        const mode = e.target.closest('[data-open-json]') ? 'human' : 'human';
+        renderDualAgentProfile(filtered[idx], mode);
+      };
+    });
+  }
+
+  document.querySelector('#explorer-search-input').oninput = e => {
+    query = e.target.value;
+    updateTable();
+  };
+  document.querySelectorAll('[data-role-filter]').forEach(btn => {
+    btn.onclick = () => {
+      roleFilter = btn.dataset.roleFilter;
+      document.querySelectorAll('[data-role-filter]').forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+      updateTable();
+    };
+  });
+  document.querySelector('#explorer-mint-btn').onclick = () => renderMintAgent();
+  document.querySelector('#explorer-home-btn').onclick = () => home();
+  updateTable();
+}
+
+document.querySelector('#mint-agent-nav')?.addEventListener('click', e => { e.preventDefault(); renderMintAgent(); });
+document.querySelector('#agent-registry-nav').onclick = e => { e.preventDefault(); renderAgentExplorer(); };
+
+document.querySelector('#about').onclick = e => (e.preventDefault(), openDialog('What is Aura ID, and how does it work?', `
   <p>Aura ID is the open standard for both human users and autonomous AI agents in the post-UI, post-CAPTCHA web.</p>
   <h3>1. Human Taste Token</h3>
   <p>Set your communication style, material taste, sizes, and active shopping list once. Use it across ChatGPT, Claude, and Gemini.</p>
-  <h3>2. Agent National ID (Machine Passport)</h3>
-  <p>Assign your autonomous agent its own official Agent National ID (e.g. <code>AURA-BUY-4A2F-9C10</code>). When websites retire legacy CAPTCHAs, this verifiable passport proves legitimate human sponsorship, spend boundaries, and taste context without exposing your real identity.</p>
+  <h3>2. Verified Agent ID (Machine Passport)</h3>
+  <p>Assign your autonomous agent its own official Verified Agent ID (e.g. <code>AURA-BUY-4A2F-9C10</code>). When websites retire legacy CAPTCHAs, this verifiable passport proves legitimate human sponsorship, spend boundaries, and taste context without exposing your real identity.</p>
   <h3>3. Zero Server Dependency</h3>
   <p>Everything runs 100% in your browser and on local MCP servers. Safe, private, and peer-to-peer.</p>
-`);
+`));
 
-document.querySelector('#mcp-api').onclick = () => {
+document.querySelector('#mcp-api').onclick = e => { e.preventDefault();
   const tokenPreview = JSON.stringify(createTasteToken(Object.values(p).some(Boolean) ? p : {
     ...EMPTY(), priority: 'quality', taste: 'Minimal & quiet, No big logos',
     constraints: 'Shoe size EU 42, Sensitive knees', needs: 'Running shoes for asphalt\nWarm dimmable desk lamp',
@@ -1089,17 +1639,17 @@ document.querySelector('#mcp-api').onclick = () => {
   document.querySelector('#copy-mcp-token').onclick = () => copyText(tokenPreview, 'Scoped Taste Token copied.');
 };
 
-document.querySelector('#privacy').onclick = () => openDialog('Your data & privacy', `
+document.querySelector('#privacy').onclick = e => (e.preventDefault(), openDialog('Your data & privacy', `
   <p>Everything you enter stays inside your browser. No account sign-up, tracking database, or third-party cookies.</p>
-  <p>When your agent presents its <strong>Agent Passport &amp; Taste Token</strong> to an external store, all personal identifiers (real name, employer, raw prompts) remain encrypted and unexposed. Only the Agent National ID, trust tier, spending limit, and taste vector are exchanged.</p>
-`);
+  <p>When your agent presents its <strong>Agent Passport &amp; Taste Token</strong> to an external store, all personal identifiers (real name, employer, raw prompts) remain encrypted and unexposed. Only the Verified Agent ID, trust tier, spending limit, and taste vector are exchanged.</p>
+`));
 
-document.querySelector('#site-theme').onclick = () => {
+document.querySelector('#site-theme').onclick = e => { e.preventDefault();
   theme = theme === 'light' ? 'dark' : 'light';
   document.body.dataset.theme = theme;
   document.querySelector('#site-theme').setAttribute('aria-label', `Switch to ${theme === 'light' ? 'dark' : 'light'} theme`);
 };
-document.querySelector('#load').onclick = () => openLoad();
+document.querySelector('#load').onclick = e => { e.preventDefault(); openLoad(); };
 
 function openLoad() {
   let stored = false;
@@ -1167,15 +1717,15 @@ function passport(profile, { example = false } = {}) {
   const densityAttr = profile.density || 'focused';
   const [s1, s2, s3, s4] = getSwatches(profile);
 
-  return `<div class="passport" data-surface="${esc(surface)}" data-priority="${esc(priorityAttr)}" data-density="${esc(densityAttr)}" aria-label="${example ? 'Example Agent Passport' : 'Your live Agent National ID'}">
+  return `<div class="passport" data-surface="${esc(surface)}" data-priority="${esc(priorityAttr)}" data-density="${esc(densityAttr)}" aria-label="${example ? 'Example Agent Passport' : 'Your live Verified Agent ID'}">
     <div class="card-top">
       <span class="card-word">aura id.</span>
-      <span class="mono">${example ? 'Official Agent ID' : 'Agent National ID'}<br>${esc(agentId)}</span>
+      <span class="mono">${example ? 'KYA Passport' : 'KYA Agent Identity'}<br>${esc(agentId)}</span>
     </div>
     <div>
       <h2 class="card-title">${esc(archetype(profile))}</h2>
       <div class="card-owner">${esc(ownerParts)}</div>
-      <div class="agent-id-badge"><span>NATIONAL AGENT ID:</span> <b>${esc(agentId)}</b></div>
+      <div class="agent-id-badge"><span>VERIFIED AGENT ID:</span> <b>${esc(agentId)}</b></div>
       ${pills.length ? `<div class="card-pills" style="margin-top:8px">${pills.map(tag => `<span class="card-pill">${esc(tag)}</span>`).join('')}</div>` : ''}
     </div>
     <div class="card-bottom">
@@ -1202,10 +1752,10 @@ function home() {
     <aside class="explainer-bar" aria-label="How Aura ID works">
       <div class="explainer-lead">
         <strong>The Universal Registry for AI Agents &amp; Humans</strong>
-        When legacy CAPTCHAs disappear, how will websites verify legitimate agents? Aura ID issues an official <b>Agent National ID</b> and <b>Taste Token</b> so your autonomous agents can identify, authenticate, and shop safely across the internet.
+        When legacy CAPTCHAs disappear, how will websites verify legitimate agents? Aura ID issues an official <b>Verified Agent ID</b> and <b>Taste Token</b> so your autonomous agents can identify, authenticate, and shop safely across the internet.
       </div>
       <div class="explainer-steps">
-        <div class="explainer-step"><span>01 · Identity</span><b>Agent National ID</b>Every agent gets a unique machine passport (e.g. <code>AURA-BUY-...</code>) with verified human ownership.</div>
+        <div class="explainer-step"><span>01 · Identity</span><b>Verified Agent ID</b>Every agent gets a unique machine passport (e.g. <code>AURA-BUY-...</code>) with verified human ownership.</div>
         <div class="explainer-step"><span>02 · Taste</span><b>Taste Token &amp; Needs</b>Carries your personal style, sizes, and active shopping list without exposing private PII.</div>
         <div class="explainer-step"><span>03 · Post-CAPTCHA</span><b>Zero-Friction Access</b>Stores and platforms verify trust score and spend limits instead of showing CAPTCHA puzzles.</div>
       </div>
@@ -1213,7 +1763,7 @@ function home() {
     <div class="intro-line">Universal Machine Passport &amp; Taste Token for the Agentic Web.</div>
     <section class="hero">
       <div class="hero-copy">
-        <h1>An official National ID<br>for your <em>AI Agents.</em></h1>
+        <h1>An official Verified Agent ID<br>for your <em>AI Agents.</em></h1>
         <p>Give every agent a unique Agent ID, a cryptographic trust passport, and your personal Taste Token. Replaces CAPTCHAs and lets your agents shop and browse the internet seamlessly on your behalf.</p>
         <div class="hero-actions">
           <button class="primary" id="create">${hasDraft ? 'Continue my card' : 'Issue Agent ID & Token (2 min)'}</button>
@@ -1224,15 +1774,63 @@ function home() {
       </div>
       <div class="card-stage">
         ${passport(sample, { example: true })}
-        <p class="card-note">Live Agent National ID Card. Updates in real time as you adjust preferences.</p>
+        <p class="card-note">Live Verified Agent ID Card. Updates in real time as you adjust preferences.</p>
+      </div>
+    </section>
+    <section class="captcha-sandbox" aria-label="Live Bypass CAPTCHA Sandbox">
+      <div class="sandbox-head">
+        <div>
+          <div class="small-label">Interactive Post-CAPTCHA Sandbox · Try it live</div>
+          <h2>What happens when an AI agent visits a website?</h2>
+          <p>Switch between an unregistered bot and an agent equipped with an <strong>Aura Verified Agent ID</strong> to see how websites replace CAPTCHAs with instant cryptographic verification.</p>
+        </div>
+        <div class="mode-switch" role="group" aria-label="CAPTCHA Sandbox Mode">
+          <button type="button" id="sb-mode-aura" aria-pressed="true">Aura-Equipped Agent (Bypass)</button>
+          <button type="button" id="sb-mode-bot" aria-pressed="false">Unregistered Bot (Blocked)</button>
+        </div>
+      </div>
+      <div class="sandbox-grid" id="sandbox-stage"></div>
+    </section>
+    <section class="captcha-sandbox" style="margin-top:28px" aria-label="Public Agent Directory Snapshot">
+      <div class="sandbox-head">
+        <div>
+          <div class="small-label">Global Agent Identity Standard · Public Directory Snapshot</div>
+          <h2>Registered KYA Agents on the Network</h2>
+          <p>Machine-readable discovery endpoints: <a href="https://souleria.github.io/aura-id/llms.txt" target="_blank" rel="noopener noreferrer" class="text-button" style="text-decoration:underline">/llms.txt</a> and <a href="https://souleria.github.io/aura-id/.well-known/agent.json" target="_blank" rel="noopener noreferrer" class="text-button" style="text-decoration:underline">/.well-known/agent.json</a></p>
+        </div>
+        <button type="button" class="secondary" id="home-open-explorer">Open Full Agent Explorer →</button>
+      </div>
+      <div class="explorer-table-wrap">
+        <table class="explorer-table">
+          <thead>
+            <tr>
+              <th>Verified Agent ID</th>
+              <th>Agent Name &amp; Model</th>
+              <th>Owner Domain</th>
+              <th>Role &amp; Capabilities</th>
+              <th>KYA Trust Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${loadDirectoryAgents().slice(0, 5).map(a => `
+              <tr data-home-agent="${esc(a.agent_id)}">
+                <td style="font-family:'Courier New',monospace;font-weight:600">${esc(a.agent_id)}</td>
+                <td><strong>${esc(a.name)}</strong><div style="font-size:11px;color:var(--muted)">${esc(a.model)}</div></td>
+                <td style="font-family:'Courier New',monospace;font-size:12px">${esc(a.owner_domain)}</td>
+                <td><span class="role-tag">${esc(a.role.toUpperCase())}</span> · <span style="font-size:11px;color:var(--muted)">${(a.capabilities || []).slice(0, 3).map(c => esc(c)).join(', ')}</span></td>
+                <td><span class="status-pill" data-tier="${esc(a.trust_tier)}">✓ ${esc(a.trust_tier)} · ${esc(a.trust_score)}%</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
       </div>
     </section>
     <div class="hero-under">
-      <p>The first open specification defining individual Agent National IDs, post-CAPTCHA machine authentication, and portable shopping taste graphs.</p>
+      <p>The first open specification defining the Universal Agent Registry &amp; KYA (Know Your Agent) Protocol, post-CAPTCHA machine authentication, and portable shopping taste tokens.</p>
       <div class="under-items">
-        <div><strong>Agent National ID</strong>Individual identity &amp; trust tier</div>
-        <div><strong>Post-CAPTCHA</strong>Replaces puzzles with verified tokens</div>
-        <div><strong>Agent-to-Agent</strong>Handshakes taste and active shopping needs</div>
+        <div><strong>Mint Agent ID</strong>Instant Ed25519 keypair &amp; ID</div>
+        <div><strong>Dual Profile</strong>Human card + raw <code>agent.json</code></div>
+        <div><strong>Agent Explorer</strong>Public directory of verified agents</div>
       </div>
     </div>
   </div>`;
@@ -1244,7 +1842,7 @@ function home() {
     toast('Example Agent Passport loaded! Test the post-CAPTCHA verification below.');
   };
   document.querySelector('#example').onclick = () => {
-    openDialog('What an Agent National ID carries', `
+    openDialog('What an Verified Agent ID carries', `
       ${passport(sample, { example: true })}
       <p>“Agent ID <code>AURA-BUY-8D1F-43A0</code> (Hermes Buyer) sponsored by Alex Rivera. Verified Trust Tier. Max spending limit: $150 / session. Boundaries: ask approval before external payments.”</p>
       <div class="hero-actions"><button class="primary" id="example-create">Use this Agent ID</button></div>
@@ -1253,6 +1851,96 @@ function home() {
       dialog.close(); p = cleanProfile(sample); go(FINAL_STEP); toast('Example profile loaded.');
     };
   };
+
+  let sbAura = true;
+  function renderHomeSandbox() {
+    const stage = document.querySelector('#sandbox-stage');
+    if (!stage) return;
+    document.querySelector('#sb-mode-aura').setAttribute('aria-pressed', String(sbAura));
+    document.querySelector('#sb-mode-bot').setAttribute('aria-pressed', String(!sbAura));
+    if (sbAura) {
+      stage.innerHTML = `
+        <div class="sandbox-terminal">
+          <div>
+            <div class="term-bar"><span>Agent Outbound Request</span><span>Ed25519 Signed</span></div>
+            <div>GET /store/api/catalog-handshake HTTP/2</div>
+            <div>Host: merchant.example.com</div>
+            <div style="color:#a8dadc">X-Aura-Agent-ID: AURA-BUY-8D1F-43A0</div>
+            <div style="color:#a8dadc">X-Aura-Owner-Domain: souleria.github.io</div>
+            <div style="color:#a8dadc">X-Aura-Public-Key: ed25519:pk_aura_8d1f43a0...</div>
+            <div style="color:#f1a17f">X-Aura-Taste-Token: scoped-no-pii (2 active needs)</div>
+          </div>
+          <div style="margin-top:16px;padding-top:10px;border-top:1px solid #2e352f;color:#959c90;font-size:11px">
+            ✓ Cryptographic signature verified in 11 ms · Zero human puzzle
+          </div>
+        </div>
+        <div class="sandbox-gate">
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px">
+              <span class="bypass-badge">✓ CAPTCHA BYPASSED · 200 OK</span>
+              <span class="mono">Trust Score: 98 / 100</span>
+            </div>
+            <h3 style="font:22px Georgia,serif;margin:0 0 8px">Instant Agent Entry Granted</h3>
+            <p style="font-size:13px;color:var(--muted);margin:0 0 14px">The gateway verified <strong>Hermes Procurement v2</strong> (<code>AURA-BUY-8D1F-43A0</code>), confirmed domain ownership (<code>souleria.github.io</code>), and matched the attached Taste Token.</p>
+            <div class="a2a-item">
+              <div class="a2a-item-head"><span>Matched Store Response</span><span>Spend limit: $150</span></div>
+              <p>2 items matched from catalog (Nord Runner 01, Atelier Cast-Iron Lamp) and staged for human approval.</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+            <button type="button" class="primary" id="sb-go-mint">Mint Your Own Agent ID →</button>
+            <button type="button" class="secondary" id="sb-go-explorer">Browse Agent Explorer</button>
+          </div>
+        </div>`;
+    } else {
+      stage.innerHTML = `
+        <div class="sandbox-terminal">
+          <div>
+            <div class="term-bar"><span>Unregistered Bot Request</span><span>No Aura Header</span></div>
+            <div>GET /store/api/catalog-handshake HTTP/2</div>
+            <div>Host: merchant.example.com</div>
+            <div style="color:#f1a17f">User-Agent: GenericAutonomousBot/1.0</div>
+            <div style="color:#959c90">// Missing X-Aura-Agent-ID</div>
+            <div style="color:#959c90">// Missing Ed25519 Owner Signature</div>
+          </div>
+          <div style="margin-top:16px;padding-top:10px;border-top:1px solid #2e352f;color:#f1a17f;font-size:11px">
+            ✕ HTTP 403 Forbidden · Blocked by Legacy Anti-Bot Wall
+          </div>
+        </div>
+        <div class="sandbox-gate">
+          <div class="captcha-wall">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <strong style="font-size:13px;color:var(--accent)">⚠ SECURITY CHALLENGE: PROVE YOU ARE HUMAN</strong>
+              <span class="mono">403 BLOCKED</span>
+            </div>
+            <p style="font-size:12px;color:var(--muted);margin:0">Select all squares with <strong>traffic lights</strong> before continuing:</p>
+            <div class="captcha-grid-visual" aria-hidden="true">
+              <div class="captcha-cell">[ 🚦 ]</div><div class="captcha-cell">[ 🚗 ]</div><div class="captcha-cell">[ 🚦 ]</div>
+              <div class="captcha-cell">[ 🌳 ]</div><div class="captcha-cell">[ 🛣️ ]</div><div class="captcha-cell">[ 🏢 ]</div>
+              <div class="captcha-cell">[ 🚲 ]</div><div class="captcha-cell">[ 🚦 ]</div><div class="captcha-cell">[ 🚶 ]</div>
+            </div>
+            <p style="font-size:11px;color:var(--muted);margin:0">Autonomous agent execution failed: agent cannot pass visual human Turing test without an Aura Verified Agent ID.</p>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+            <button type="button" class="primary" id="sb-switch-to-aura">Equip Agent with Aura ID →</button>
+          </div>
+        </div>`;
+    }
+    document.querySelector('#sb-go-mint')?.addEventListener('click', () => renderMintAgent());
+    document.querySelector('#sb-go-explorer')?.addEventListener('click', () => renderAgentExplorer());
+    document.querySelector('#sb-switch-to-aura')?.addEventListener('click', () => { sbAura = true; renderHomeSandbox(); });
+  }
+  document.querySelector('#sb-mode-aura').onclick = () => { sbAura = true; renderHomeSandbox(); };
+  document.querySelector('#sb-mode-bot').onclick = () => { sbAura = false; renderHomeSandbox(); };
+  renderHomeSandbox();
+  document.querySelector('#home-open-explorer')?.addEventListener('click', () => renderAgentExplorer());
+  document.querySelectorAll('tr[data-home-agent]').forEach(row => {
+    row.onclick = () => {
+      const id = row.dataset.homeAgent;
+      const found = loadDirectoryAgents().find(x => x.agent_id === id);
+      if (found) renderDualAgentProfile(found, 'human');
+    };
+  });
   tilt();
 }
 
@@ -1305,7 +1993,7 @@ function summary() {
     ['Spending Limit', p.agent_spend_limit || '$150 / session'],
     ['Shopping List', needsCount ? `${needsCount} item${needsCount > 1 ? 's' : ''}` : 'Empty'],
     ['Safety Boundary', p.actions ? label(p.actions) : 'Always ask first']
-  ].map(([a, b]) => `<div class="summary-row"><span>${a}</span><span>${esc(b)}</span></div>`).join('')}</div><p class="note">Every change immediately updates your Agent National ID and machine passport.</p>`;
+  ].map(([a, b]) => `<div class="summary-row"><span>${a}</span><span>${esc(b)}</span></div>`).join('')}</div><p class="note">Every change immediately updates your Verified Agent ID and machine passport.</p>`;
 }
 
 function updateLivePreview() {
@@ -1397,7 +2085,7 @@ function actions() {
 function stepContent() {
   switch (step) {
     case 0:
-      return `<h1>Build your Identity &amp;<br>Agent National ID</h1><p class="description">Create a portable AI profile, define your taste graph, and register an official National ID for your autonomous agent. Tap ready tags or quick choices.</p><div class="method"><button id="quick"><span class="method-num">01</span><strong>Build step-by-step (Recommended)</strong><small>Create your profile, Taste Token, and Agent National ID in 2 minutes.</small></button><button id="paste"><span class="method-num">02</span><strong>Bring existing custom instructions</strong><small>Paste prompt rules you already give to ChatGPT, Claude, or Cursor.</small></button><button id="import-start"><span class="method-num">03</span><strong>Open existing profile or Agent Passport</strong><small>Import JSON or resume draft saved in this browser.</small></button></div>`;
+      return `<h1>Build your Identity &amp;<br>Verified Agent ID</h1><p class="description">Create a portable AI profile, define your taste graph, and register an official Verified Agent ID for your autonomous agent. Tap ready tags or quick choices.</p><div class="method"><button id="quick"><span class="method-num">01</span><strong>Build step-by-step (Recommended)</strong><small>Create your profile, Taste Token, and Verified Agent ID in 2 minutes.</small></button><button id="paste"><span class="method-num">02</span><strong>Bring existing custom instructions</strong><small>Paste prompt rules you already give to ChatGPT, Claude, or Cursor.</small></button><button id="import-start"><span class="method-num">03</span><strong>Open existing profile or Agent Passport</strong><small>Import JSON or resume draft saved in this browser.</small></button></div>`;
     case 1:
       return `<h1>First, a quick<br>human introduction.</h1><p class="description">Tell your personal AI who you are. (When your agent shops on external sites, this private personal context is completely masked.)</p><form id="profile-form">${fieldWithChips('name', 'What should AI call you?', 'Your first name or pseudonym', false, 80)}${fieldWithChips('role', 'What do you do day-to-day?', 'Click a tag below or type your role', false, 180)}${fieldWithChips('goal', 'What do you use AI for most?', 'Click one or more tags below, or type your own', true, 1200)}${fieldWithChips('language', 'Preferred language', 'e.g., English, Persian, or match my message', false, 80)}<details ${p.instructions ? 'open' : ''}><summary class="small-label">Have extra custom rules? Paste them here (optional)</summary><div style="margin-top:12px">${fieldWithChips('instructions', 'Custom instructions', 'Any specific rules you want AI to follow verbatim.', true, 10000)}</div></details>${actions()}</form>`;
     case 2:
@@ -1410,7 +2098,7 @@ function stepContent() {
       return `<h1>Your taste &amp;<br>shopping list.</h1><p class="description">This builds your <strong>Taste Token</strong>. When your agent visits a store, it presents this token to filter items that match your taste and immediate needs.</p><form id="profile-form"><fieldset style="border:0;padding:0;margin:0"><legend class="section-label">1. When buying things, what matters most to you?</legend><div class="choice-list">${choice('priority', 'quality', 'Buy once, keep for years', 'Prioritize durable materials, repairability, and craftsmanship over cheap prices.')}${choice('priority', 'value', 'Best value for money', 'Prioritize proven performance, fair pricing, and practical specs without brand markup.')}${choice('priority', 'minimal', 'Simple, quiet & unbranded', 'Prioritize clean design, natural materials, and zero loud logos or clutter.')}</div></fieldset>${fieldWithChips('taste', '2. Your style & material taste (tap tags or type)', 'e.g., Minimal & quiet, No big logos, Natural materials', false, 600)}${fieldWithChips('constraints', '3. Your sizes, budget, or sensitivities', 'e.g., Shoe size EU 42, Sensitive knees, Under $150 budget', false, 600)}${fieldWithChips('needs', '4. Your current shopping list (one item per line)', 'Click tags below or type items you want your agent to look for', true, 1200, '\n')}<p class="field-help">Your personal agent can also add or remove shopping items automatically via MCP.</p>${actions()}</form>`;
     case 6:
       const curAgentId = p.agent_id || generateDeterministicAgentId(p.name || p.agent_name, p.agent_role);
-      return `<h1>Agent National ID &amp;<br>Machine Passport</h1><p class="description">Just like humans have a National ID, each autonomous agent receives a unique cryptographic identifier on Aura ID. Replaces CAPTCHAs on agentic websites.</p><form id="profile-form"><div class="agent-id-badge" style="margin-bottom:18px;display:inline-block"><span>ASSIGNED NATIONAL AGENT ID:</span> <b>${esc(curAgentId)}</b></div>${fieldWithChips('agent_name', '1. Agent Name', 'e.g., Hermes Buyer, Sentinel Research, Atlas Coder', false, 80)}<fieldset style="border:0;padding:0;margin:0"><legend class="section-label">2. Agent Role &amp; Mission</legend><div class="choice-list">${choice('agent_role', 'buyer', 'Procurement & Shopping Agent', 'Searches catalogs, matches Taste Tokens, and stages shopping carts.')}${choice('agent_role', 'researcher', 'Autonomous Research Agent', 'Extracts information, analyzes whitepapers, and synthesizes data.')}${choice('agent_role', 'personal_assistant', 'Executive AI Secretary', 'Schedules, drafts emails, and handles coordination.')}</div></fieldset>${fieldWithChips('agent_model', '3. Underlying AI Model / Runtime', 'e.g., Claude 3.5 Sonnet, GPT-4o, Local Llama', false, 80)}${fieldWithChips('agent_spend_limit', '4. Autonomous Spend Limit (Boundaries)', 'e.g., $150 / session, $50 / day, $0 (Browse only)', false, 60)}${actions()}</form>`;
+      return `<h1>Verified Agent ID &amp;<br>Machine Passport</h1><p class="description">Just like humans have a Verified Agent ID, each autonomous agent receives a unique cryptographic identifier on Aura ID. Replaces CAPTCHAs on agentic websites.</p><form id="profile-form"><div class="agent-id-badge" style="margin-bottom:18px;display:inline-block"><span>ASSIGNED VERIFIED AGENT ID:</span> <b>${esc(curAgentId)}</b></div>${fieldWithChips('agent_name', '1. Agent Name', 'e.g., Hermes Buyer, Sentinel Research, Atlas Coder', false, 80)}<fieldset style="border:0;padding:0;margin:0"><legend class="section-label">2. Agent Role &amp; Mission</legend><div class="choice-list">${choice('agent_role', 'buyer', 'Procurement & Shopping Agent', 'Searches catalogs, matches Taste Tokens, and stages shopping carts.')}${choice('agent_role', 'researcher', 'Autonomous Research Agent', 'Extracts information, analyzes whitepapers, and synthesizes data.')}${choice('agent_role', 'personal_assistant', 'Executive AI Secretary', 'Schedules, drafts emails, and handles coordination.')}</div></fieldset>${fieldWithChips('agent_model', '3. Underlying AI Model / Runtime', 'e.g., Claude 3.5 Sonnet, GPT-4o, Local Llama', false, 80)}${fieldWithChips('agent_spend_limit', '4. Autonomous Spend Limit (Boundaries)', 'e.g., $150 / session, $50 / day, $0 (Browse only)', false, 60)}${actions()}</form>`;
     case 7:
       return `<h1>Set your<br>safety rules.</h1><p class="description">Make sure every AI and shopping agent knows where to stop and ask for your permission.</p><form id="profile-form"><fieldset style="border:0;padding:0;margin:0"><legend class="section-label">1. When an agent is shopping or acting for you...</legend><div class="choice-list">${choice('actions', 'ask', 'Always ask before buying or sending', 'Let the agent find the best match and prepare the cart, then wait for my yes.')}${choice('actions', 'draft-only', 'Only show me a shortlist (Drafts only)', 'Never put items in a cart or take external action—just show me the top matches.')}</div></fieldset>${fieldWithChips('avoid', '2. Pet peeves & things AI should avoid', 'Click tags below or type what annoys you', true, 1200)}${actions()}</form>`;
   }
@@ -1429,17 +2117,17 @@ function renderReview() {
   main.innerHTML = `<div class="review">
     <div class="review-head">
       <div>
-        <div class="small-label">Step 9 of 9 · Your Agent National ID &amp; Machine Passport</div>
+        <div class="small-label">Step 9 of 9 · Your KYA Machine Passport &amp; Agent Identity</div>
         <h1>${selected ? 'Your Agent Passport is ready.' : 'Your card is still blank.'}</h1>
-        <p>${selected ? 'Test the post-CAPTCHA gate below, or export your Agent National ID and Taste Token.' : 'Go back and tap a few quick choices or load the example profile.'}</p>
+        <p>${selected ? 'Test the post-CAPTCHA gate below, or export your Verified Agent ID and Taste Token.' : 'Go back and tap a few quick choices or load the example profile.'}</p>
       </div>
       <button class="secondary" id="back-builder">← Edit steps</button>
     </div>
     <div class="review-layout">
       <div>
         ${passport(p)}
-        <p class="card-note">Official Agent National ID Card. Click “Edit” on any section below to update live.</p>
-        ${section('Agent National ID', 6, [
+        <p class="card-note">Official Verified Agent ID Card. Click “Edit” on any section below to update live.</p>
+        ${section('KYA Agent Identity', 6, [
           ['Agent ID', curAgentId],
           ['Agent Name', p.agent_name || 'Personal Agent'],
           ['Role', label(p.agent_role || 'buyer')],
@@ -1481,7 +2169,7 @@ function renderReview() {
         <section class="export-box">
           <h2>Use your Agent Passport &amp; Token</h2>
           <p>Download the official Agent Passport or copy the Taste Token for MCP.</p>
-          <label class="scope"><input type="checkbox" id="scope-agent" ${scope.agent ? 'checked' : ''}><span>Agent National ID &amp; Machine Passport<small>Cryptographic Agent ID, trust tier, model class, and spend limits.</small></span></label>
+          <label class="scope"><input type="checkbox" id="scope-agent" ${scope.agent ? 'checked' : ''}><span>KYA Machine Passport &amp; Agent Identity<small>Cryptographic Agent ID, trust tier, model class, and spend limits.</small></span></label>
           <label class="scope"><input type="checkbox" id="scope-taste" ${scope.taste ? 'checked' : ''}><span>Taste Token &amp; Shopping List<small>Aesthetic taste, sizes, constraints, and active needs.</small></span></label>
           <label class="scope"><input type="checkbox" id="scope-communication" ${scope.communication ? 'checked' : ''}><span>Reply &amp; thinking style<small>Length, tone, honesty, sources, and pet peeves.</small></span></label>
           <label class="scope"><input type="checkbox" id="scope-context" ${scope.context ? 'checked' : ''}><span>Owner context (Private)<small>Real name, role, custom instructions (masked in external agent tokens).</small></span></label>
@@ -1492,9 +2180,9 @@ function renderReview() {
             <button class="secondary" id="download-json" ${selected ? '' : 'disabled'}>Download JSON</button>
           </div>
           <details class="export-preview">
-            <summary>Preview exact output (<span id="preview-kind">${previewFormat === 'passport' ? 'Agent National ID Passport JSON' : previewFormat === 'token' ? 'Scoped Taste Token JSON' : 'Markdown prompt'}</span>)</summary>
+            <summary>Preview exact output (<span id="preview-kind">${previewFormat === 'passport' ? 'Verified Agent ID Passport JSON' : previewFormat === 'token' ? 'Scoped Taste Token JSON' : 'Markdown prompt'}</span>)</summary>
             <div style="margin:6px 0 10px;display:flex;gap:14px;flex-wrap:wrap">
-              <button type="button" class="text-button" id="show-passport-preview">Agent National ID (JSON)</button>
+              <button type="button" class="text-button" id="show-passport-preview">Verified Agent ID (JSON)</button>
               <button type="button" class="text-button" id="show-token-preview">Scoped Taste Token (JSON)</button>
               <button type="button" class="text-button" id="show-md-preview">Markdown prompt</button>
             </div>
@@ -1523,7 +2211,7 @@ function renderReview() {
 
   document.querySelector('#copy-passport-btn').onclick = () => {
     previewFormat = 'passport'; refreshExport();
-    copyText(JSON.stringify(createAgentPassport(p), null, 2), 'Agent National ID Passport copied!');
+    copyText(JSON.stringify(createAgentPassport(p), null, 2), 'Verified Agent ID Passport copied!');
   };
   document.querySelector('#copy-token').onclick = () => {
     previewFormat = 'token'; refreshExport();
@@ -1591,7 +2279,7 @@ function demo(generic = false) {
         <p style="margin:6px 0 0;font-size:12px;color:var(--muted)">"Select all squares with bicycles." Autonomous AI agent execution halts here because bots cannot solve CAPTCHAs without friction.</p>
       </div>`;
       noteEl.textContent = 'Traditional websites treat all AI agents as hostile scrapers and block them with CAPTCHAs.';
-      compareBtn.textContent = 'Verify with Agent National ID';
+      compareBtn.textContent = 'Verify with Verified Agent ID';
     } else {
       answerEl.innerHTML = `<div class="a2a-grid">
         <div class="a2a-item" style="border-left:3px solid var(--accent)">
@@ -1604,7 +2292,7 @@ function demo(generic = false) {
           <div class="a2a-reason">GATEWAY ACTION: Instant Access Granted (No CAPTCHA Required)</div>
         </div>
       </div>`;
-      noteEl.textContent = `Aura ID serves as the National ID for agents: websites verify the cryptographic sponsor and spend limits, granting immediate access.`;
+      noteEl.textContent = `Aura ID serves as the Verified Agent ID for agents: websites verify the cryptographic sponsor and spend limits, granting immediate access.`;
       compareBtn.textContent = 'Simulate legacy CAPTCHA challenge';
     }
     return;
@@ -1657,7 +2345,7 @@ function refreshExport() {
   const passportData = createAgentPassport(p);
 
   document.querySelector('#preview-kind').textContent =
-    previewFormat === 'passport' ? 'Agent National ID Passport JSON'
+    previewFormat === 'passport' ? 'Verified Agent ID Passport JSON'
     : previewFormat === 'token' ? 'Scoped Taste Token JSON'
     : 'Markdown prompt';
 

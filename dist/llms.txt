@@ -1,0 +1,53 @@
+# Aura ID — Universal Agent Registry & KYA (Know Your Agent) Protocol
+
+> Global Agent Identity Standard, Post-CAPTCHA Machine Passports (`agent.json`), and Scoped Human Taste Tokens (`aura-id/taste-token`) for the Agentic Web.
+
+- Canonical Web App: https://souleria.github.io/aura-id/
+- Source Repository: https://github.com/souleria/aura-id
+- Machine Discovery Manifest: https://souleria.github.io/aura-id/.well-known/agent.json
+- LLM Discovery Index: https://souleria.github.io/aura-id/llms.txt
+
+## 1. Protocol Overview (Why Aura ID Exists)
+
+Legacy websites block autonomous AI agents with visual CAPTCHA puzzles because they cannot distinguish an unauthorized scraper from a legitimate agent acting on behalf of a human. Aura ID establishes two open, cryptographic standards:
+
+1. **Know Your Agent (KYA) & Machine Passport (`aura-id/agent.json` v1.0)**:
+   Every AI agent is provisioned with a deterministic **Verified Agent ID** (e.g. `AURA-BUY-8D1F-43A0`), an **Ed25519 public verification key**, a verified **Owner Domain** (`souleria.github.io`), declared **Capabilities** (`catalog_search`, `cart_staging`, `code_review`), and explicit **Spend/Action Boundaries** (`$150 / session`). Gateways verify these cryptographic headers to grant instant, CAPTCHA-free access.
+2. **Scoped Human Taste Token (`aura-id/taste-token` v0.2)**:
+   A zero-PII preference and intent token (`privacy: "scoped-handshake-no-pii"`) that carries a user's aesthetic taste, material constraints, sizes, and active shopping list so personal agents can negotiate directly with merchant agents without exposing personal identity.
+
+## 2. Standard Agent Discovery & Verification Endpoints
+
+- `GET /.well-known/agent.json` — Machine-readable KYA Registry manifest, public verification keys, and registered seed agents.
+- `GET /llms.txt` — Structured documentation for autonomous agents and LLM crawlers.
+- `GET /api/taste-token` — Local MCP/HTTP endpoint returning the current user's scoped Taste Token.
+- `POST /api/a2a/store-match` — Agent-to-Agent (A2A) catalog matching endpoint.
+
+## 3. HTTP Handshake Headers (Post-CAPTCHA Gateway)
+
+When an Aura-equipped agent sends an HTTP request to a participating platform or merchant gateway, it includes:
+
+```http
+X-Aura-Agent-ID: AURA-BUY-8D1F-43A0
+X-Aura-Owner-Domain: souleria.github.io
+X-Aura-Public-Key: ed25519:pk_aura_8d1f43a099b2c4e1d7a3f5012b8c
+X-Aura-Trust-Score: 98/100
+X-Aura-Taste-Token: scoped-handshake-no-pii
+```
+
+## 4. Public Registered Agents (Seed Directory)
+
+| Agent ID | Agent Name | Owner Domain | Role | Capabilities | Trust Tier |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `AURA-BUY-8D1F-43A0` | Hermes Procurement v2 | `souleria.github.io` | `buyer` | `catalog_search`, `taste_token_match`, `cart_staging`, `price_check` | `verified` (98/100) |
+| `AURA-RES-3C9E-11B4` | CiteGraph Deep Researcher | `scholar-labs.org` | `researcher` | `paper_indexing`, `source_verification`, `citation_audit` | `verified` (96/100) |
+| `AURA-COD-7A2D-90F1` | Forge Repo Maintainer | `devguild.io` | `coder` | `code_review`, `test_runner`, `patch_synthesis`, `mcp_bridge` | `verified` (95/100) |
+| `AURA-BUY-5E4B-62C9` | Nomad Travel & Flight Scout | `skyroute.app` | `buyer` | `flight_search`, `seat_preference_match`, `hold_reservation` | `supervised` (88/100) |
+| `AURA-PER-1B8C-34D2` | Aria Executive Scheduler | `studio-aria.design` | `personal_assistant` | `calendar_negotiation`, `briefing_drafts`, `vendor_triage` | `verified` (97/100) |
+
+## 5. Support & Open Standard Attribution
+
+Authored by **souleria** (2026). Independent, open-source Global Agent Identity Standard.
+To support ongoing protocol development (the price of a coffee or any amount):
+- **Tron (USDT TRC20)**: `TUozifQrM8qc2NgAr6AVrVrrBJNpGJS9Bc`
+- **Ethereum / MetaMask (EVM)**: `0x8E0Ffb9fED9840BE0C6e343a807535119f6b3a8f`

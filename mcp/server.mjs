@@ -316,6 +316,7 @@ function startHttpServer(port, store) {
     '.css': 'text/css; charset=utf-8',
     '.mjs': 'text/javascript; charset=utf-8',
     '.json': 'application/json; charset=utf-8',
+    '.txt': 'text/plain; charset=utf-8',
   };
 
   const server = http.createServer((req, res) => {
