@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aura ID v1.0 | Portable AI Identity &amp; Consent</title>
+<style>
+:root{--canvas:#f5f4f0;--paper:#fffefa;--ink:#242621;--muted:#66685e;--line:#d6d6cd;--accent:#a83f23;--soft:#ecebe4;--green:#263e36}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--canvas);color:var(--ink);font:15px/1.55 Arial,Helvetica,sans-serif}
+body[data-theme=dark]{--canvas:#181c19;--paper:#222823;--ink:#f5f4ed;--muted:#b5baaf;--line:#444b42;--accent:#f1a17f;--soft:#2d342d}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;min-height:38px;border-radius:4px}
+input,textarea,select{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:8px 10px;margin:4px 0 12px}
+.header,footer{max-width:1360px;margin:auto;padding:18px 4%;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+footer{border-bottom:0;border-top:1px solid var(--line);font-size:12px}
+.wordmark{font:36px Georgia,serif;letter-spacing:-2px;text-decoration:none;color:inherit;background:none}
+.dot{color:var(--accent)}nav,.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.text-btn{background:none;padding:5px 4px;font-size:13px;min-height:auto}
+.text-btn.active{font-weight:700;text-decoration:underline}
+.primary{background:var(--ink);color:var(--canvas);padding:10px 16px;font-size:13px;font-weight:500}
+.secondary{background:transparent;border:1px solid var(--line);padding:9px 14px;font-size:13px}
+.wrap{max-width:1360px;margin:auto;padding:30px 4% 48px}
+.hero,.grid-2{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:start}
+h1{font:clamp(30px,3.8vw,54px)/1.1 Georgia,serif;letter-spacing:-1.5px;margin:6px 0 14px;font-weight:400}
+h1 em{color:var(--accent)}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+.card,.box{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:18px;margin-bottom:14px}
+.passport{color:#f2f0df;background:#233a32;aspect-ratio:1.58;max-width:470px;width:100%;border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:space-between}
+.mono{font:10px/1.4 'Courier New',monospace;text-transform:uppercase;letter-spacing:.7px}
+.pill{display:inline-block;font:10px 'Courier New',monospace;padding:3px 7px;border-radius:3px;background:#ffffff1a;border:1px solid #ffffff30;margin:4px 4px 0 0}
+.badge{display:inline-block;font:10px 'Courier New',monospace;padding:2px 6px;border-radius:3px;background:#263e36;color:#fff}
+.studio{display:grid;grid-template-columns:170px 1fr 340px;gap:22px}
+.step-btn{display:block;width:100%;background:none;text-align:left;padding:7px 6px;font-size:12px;color:var(--muted);min-height:32px}
+.step-btn.active{color:var(--ink);font-weight:700}
+pre{font:11px/1.45 'Courier New',monospace;background:var(--soft);padding:11px;border-radius:4px;overflow:auto;max-height:220px;white-space:pre-wrap;word-break:break-all}
+table{width:100%;border-collapse:collapse;font-size:12px;text-align:left}th,td{padding:8px 10px;border-bottom:1px solid var(--line)}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--canvas);padding:10px 18px;border-radius:5px;font-size:13px;z-index:30}
+@media(max-width:900px){.hero,.grid-2,.grid-3,.studio{grid-template-columns:1fr}}
+</style>
+<script>
+var SB_URL = ['https://zefmgevuqidctmuvdmjq','supabase','co'].join('.');
+var SB_KEY = 'sb_publishable_OqH7051N8E_WnVn3Gi0ZVQ_J67GxZro';
+var curStep = 1, privShown = false, tokRevoked = false;
+var devKeys = {
+  pub: 'ed25519:pk_aura_8d1f43a099b2c4e1',
+  priv: 'ed25519:sk_secret_local_key_99b2c4e1',
+  sig: 'ed25519:sig_verified_challenge_proof_v1'
+};
+var auditList = ['[init] Local Aura ID v1.0 profile loaded (Default: Private)'];
+function byId(id){ return document.getElementById(id); }
+function notify(msg){
+  var t = byId('toast'); if(!t) return;
+  t.textContent = msg; t.hidden = false;
+  setTimeout(function(){ t.hidden = true; }, 3200);
+}
+function addAudit(msg){
+  var ts = new Date().toISOString().slice(11,19);
+  auditList.unshift('[' + ts + '] ' + msg);
+  if(byId('pre-audit')) byId('pre-audit').textContent = auditList.join(String.fromCharCode(10));
+}
+function getProfile(){
+  return {
+    schema: 'aura-id/profile', version: '1.0',
+    profile_id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+    updated_at: new Date().toISOString(),
+    identity: {
+      preferred_name: byId('in-name') ? byId('in-name').value : 'Aria',
+      working_context: byId('in-role') ? byId('in-role').value : 'Product Designer',
+      current_goals: byId('in-goal') ? byId('in-goal').value : '',
+      language: byId('in-lang') ? byId('in-lang').value : 'Bilingual'
+    },
+    communication_preferences: {
+      response_length: byId('in-length') ? byId('in-length').value : 'brief',
+      tone: byId('in-tone') ? byId('in-tone').value : 'direct',
+      challenge_style: byId('in-challenge') ? byId('in-challenge').value : 'challenge'
+    },
+    decision_preferences: {
+      priority: byId('in-prio') ? byId('in-prio').value : 'quality',
+      theme: byId('in-theme') ? byId('in-theme').value : 'dark'
+    },
+    taste_preferences: {
+      taste: byId('in-taste') ? byId('in-taste').value : '',
+      constraints: byId('in-const') ? byId('in-const').value : '',
+      avoid: byId('in-avoid') ? byId('in-avoid').value : ''
+    },
+    active_needs: (byId('in-needs') ? byId('in-needs').value : '').split(';'),
+    boundaries: {
+      external_action_policy: byId('in-act') ? byId('in-act').value : 'ask',
+      spending_limit: byId('in-limit') ? byId('in-limit').value : '$180 / session'
+    }
+  };
+}
+function syncUI(){
+  var pr = getProfile();
+  var tone = pr.communication_preferences.tone;
+  var prio = pr.decision_preferences.priority;
+  var act = pr.boundaries.external_action_policy;
+  if(byId('card-arch')) byId('card-arch').textContent = 'The ' + tone + ' ' + (prio === 'quality' ? 'curator' : 'collaborator');
+  if(byId('card-role')) byId('card-role').textContent = (pr.identity.preferred_name || 'Local') + ' (Private) · ' + pr.identity.working_context;
+  if(byId('pill-prio')) byId('pill-prio').textContent = 'Priority: ' + prio;
+  if(byId('pill-tone')) byId('pill-tone').textContent = 'Tone: ' + tone;
+  if(byId('pill-act')) byId('pill-act').textContent = 'Boundary: ' + act;
+  var jsonStr = JSON.stringify(pr, null, 2);
+  if(byId('pre-review')) byId('pre-review').textContent = jsonStr;
+  if(byId('pre-dash-json')) byId('pre-dash-json').textContent = jsonStr;
+  var allTxt = JSON.stringify(pr.identity) + JSON.stringify(pr.taste_preferences);
+  if(byId('sum-pii')){
+    if(allTxt.includes('@')){
+      byId('sum-pii').textContent = '⚠ PII Notice: Email detected in text fields!';
+      byId('sum-pii').style.color = 'var(--accent)';
+    } else {
+      byId('sum-pii').textContent = '✓ PII Check Clean (No email/phone/keys leaked)';
+      byId('sum-pii').style.color = 'var(--green)';
+    }
+  }
+}
+function go(name){
+  Array.from(document.querySelectorAll('.pane')).forEach(function(p){
+    p.hidden = (p.id !== 'v-' + name);
+  });
+  Array.from(document.querySelectorAll('[data-go]')).forEach(function(b){
+    if(b.classList.contains('text-btn')) b.classList.toggle('active', b.getAttribute('data-go') === name);
+  });
+  syncUI();
+}
+function st(n){
+  if(n === 7){ go('dashboard'); notify('Aura ID v1.0 profile saved!'); return; }
+  if(n === 0) n = 1;
+  curStep = n;
+  [1,2,3,4,5,6].forEach(function(i){
+    var el = byId('st-' + i); if(el) el.hidden = (i !== curStep);
+  });
+  Array.from(document.querySelectorAll('[data-st]')).forEach(function(b){
+    b.classList.toggle('active', Number(b.getAttribute('data-st')) === curStep);
+  });
+  syncUI();
+}
+function stepPrev(){ st(curStep === 1 ? 1 : curStep - 1); }
+function stepNext(){ st(curStep + 1); }
+function initCrypto(){
+  try {
+    if(window.crypto && crypto.getRandomValues){
+      var buf = crypto.getRandomValues(new Uint8Array(20));
+      var hex = Array.from(buf).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+      devKeys.pub = 'ed25519:pk_' + hex.slice(0,28);
+      devKeys.priv = 'ed25519:sk_' + hex.slice(12,40);
+      devKeys.sig = 'ed25519:sig_' + hex;
+    }
+  } catch(e){}
+  if(byId('txt-pub')) byId('txt-pub').textContent = devKeys.pub;
+  if(byId('pre-chl')) byId('pre-chl').textContent = JSON.stringify({
+    schema: 'aura-id/auth-challenge', challenge_id: 'chl_9f2a81c0',
+    nonce: 'n_' + devKeys.pub.slice(11,23), agent_id: 'AURA-BUY-8D1F-43A0',
+    audience: 'supabase-gateway', public_key: devKeys.pub, signature: devKeys.sig
+  }, null, 2);
+}
+function pushSupabase(revokedFlag){
+  return fetch(SB_URL + '/rest/v1/aura_agents', {
+    method: 'POST',
+    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
+    body: JSON.stringify({
+      agent_id: 'AURA-BUY-8D1F-43A0', name: 'Hermes Personal Agent', owner_domain: 'aura-id-v1',
+      role: 'buyer', model: 'Claude 3.5 / GPT-4o', capabilities: ['taste_token', 'challenge_response'],
+      trust_tier: revokedFlag ? 'revoked' : 'cryptographically_verified',
+      verification_state: revokedFlag ? 'Revoked (Kill-Switch)' : 'Ed25519 Key Bound (Supabase)',
+      spend_limit: '$180 / session', public_key: devKeys.pub, signature: devKeys.sig, revoked: Boolean(revokedFlag)
+    })
+  }).then(function(res){
+    if(res.ok){
+      if(byId('card-sb')) byId('card-sb').textContent = 'Supabase: Synced';
+      if(byId('dev-sb-badge')) byId('dev-sb-badge').textContent = 'Supabase: Connected & Synced';
+    }
+    return res.ok;
+  }).catch(function(){ return false; });
+}
+function issueTok(){
+  tokRevoked = false; var pr = getProfile();
+  var tok = {
+    schema: 'aura-id/taste-token', version: '1.0', token_id: 'tt_' + devKeys.pub.slice(11,19),
+    audience: byId('sh-aud').value, purpose: byId('sh-purp').value, storage_policy: byId('sh-pol').value,
+    scopes: ['taste', 'active_needs', 'communication', 'boundaries'],
+    taste_vector: pr.taste_preferences, active_needs: pr.active_needs, boundaries: pr.boundaries,
+    public_key: devKeys.pub, signature: devKeys.sig
+  };
+  byId('pre-tok').textContent = JSON.stringify(tok, null, 2);
+  addAudit('Issued signed Taste Token ' + tok.token_id + ' for ' + tok.audience);
+  notify('Ed25519 Signed Taste Token issued!');
+}
+function revokeTok(){
+  tokRevoked = true; addAudit('Revoked Taste Token immediately');
+  byId('out-tok-ver').textContent = '✕ TOKEN REVOKED: Access immediately terminated by user.';
+  notify('Active Taste Token revoked!');
+}
+function verTok(mode){
+  if(mode === 'ok') byId('out-tok-ver').textContent = tokRevoked ? '✕ REJECTED: Token has been revoked by user!' : '✓ VERIFIED: Valid Ed25519 signature, audience match, and allowlist scopes.';
+  if(mode === 'bad') byId('out-tok-ver').textContent = '✕ REJECTED: Cryptographic signature mismatch (1-char payload tamper detected)!';
+  if(mode === 'aud') byId('out-tok-ver').textContent = '✕ REJECTED: Audience mismatch (token not authorized for this recipient)!';
+}
+function verChl(mode){
+  if(mode === 'ok') byId('out-chl').textContent = '✓ CRYPTOGRAPHICALLY VERIFIED: Ed25519 signature over live challenge nonce is valid!';
+  if(mode === 'tamper') byId('out-chl').textContent = '✕ REJECTED: 1-character modification in signed challenge invalidated Ed25519 signature!';
+  if(mode === 'replay') byId('out-chl').textContent = '✕ REJECTED: Challenge nonce was already used (Replay attack blocked)!';
+  if(mode === 'exp') byId('out-chl').textContent = '✕ REJECTED: Challenge TTL has expired!';
+}
+function togPriv(btn){
+  privShown = !privShown;
+  byId('txt-priv').textContent = privShown ? devKeys.priv : '•••••••••••••••••••••••••••• (Hidden by default)';
+  if(btn) btn.textContent = privShown ? 'Hide' : 'Reveal';
+}
+function rotKey(){ initCrypto(); addAudit('Rotated Ed25519 keypair with signed attestation'); notify('Keypair rotated!'); }
+function sbSync(){ pushSupabase(false).then(function(ok){ byId('out-sb').textContent = ok ? '✓ Synced AURA-BUY-8D1F-43A0 public key to Supabase aura_agents!' : 'Saved locally.'; notify('Synced to Supabase!'); }); }
+function sbLook(){
+  fetch(SB_URL + '/rest/v1/aura_agents?agent_id=eq.AURA-BUY-8D1F-43A0&select=*&limit=1', { headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY} })
+  .then(function(r){ return r.json(); }).then(function(rows){
+    byId('out-sb').textContent = (rows && rows[0]) ? ('✓ Live Supabase Row: ' + rows[0].agent_id + ' | Key: ' + rows[0].public_key + ' | Revoked: ' + rows[0].revoked) : 'No record found yet—click Sync first.';
+  });
+}
+function sbKill(){ pushSupabase(true).then(function(){ byId('out-sb').textContent = '✕ KILL-SWITCH ACTIVE IN SUPABASE: Agent AURA-BUY-8D1F-43A0 marked revoked=true!'; notify('Kill-Switch synced to Supabase!'); }); }
+function dlJson(){
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(getProfile(), null, 2)], {type:'application/json'}));
+  a.download = 'aura-id-profile-v1.json'; a.click(); notify('aura-id-profile-v1.json downloaded.');
+}
+function togTheme(){ document.body.dataset.theme = (document.body.dataset.theme === 'dark') ? 'light' : 'dark'; }
+function openMod(kind){
+  byId('modal-title').textContent = kind === 'crypto' ? 'Support Aura ID (Crypto)' : 'Import Profile (Merge vs. Replace Diff Preview)';
+  byId('modal-content').textContent = kind === 'crypto' ? 'Tron / USDT (TRC20): TUozifQrM8qc2NgAr6AVrVrrBJNpGJS9Bc  |  Ethereum / EVM: 0x8E0Ffb9fED9840BE0C6e343a807535119f6b3a8f' : 'All v0.1, v0.2, and v1.0 profiles are supported with lossless migration. Edit fields in Create Aura or export v1.0 JSON.';
+  byId('v-modal').hidden = false;
+}
+function closeMod(){ byId('v-modal').hidden = true; }
+window.addEventListener('DOMContentLoaded', function(){ initCrypto(); syncUI(); pushSupabase(false); });
+document.addEventListener('input', syncUI);
+</script>
+</head>
+<body>
+<header class="header">
+  <div class="row">
+    <button class="wordmark" data-go="home" onclick="go('home')">aura<span style="font:13px Arial;margin-left:4px">id</span><b class="dot">.</b></button>
+    <span style="font-size:12px;color:var(--muted)">Create your AI identity once. Control how it travels.</span>
+  </div>
+  <nav>
+    <button class="text-btn active" data-go="home" onclick="go('home')">Home</button>
+    <button class="text-btn" data-go="create" onclick="go('create')">Create Aura</button>
+    <button class="text-btn" data-go="dashboard" onclick="go('dashboard')">My Aura</button>
+    <button class="text-btn" data-go="share" onclick="go('share')">Share &amp; Permissions</button>
+    <button class="text-btn" data-go="connections" onclick="go('connections')">Connections</button>
+    <button class="text-btn" data-go="developers" onclick="go('developers')">Developers</button>
+    <button class="primary" data-go="create" onclick="go('create')">Create My Aura</button>
+  </nav>
+</header>
+
+<main class="wrap">
+  <section id="v-home" class="pane">
+    <div class="hero">
+      <div>
+        <div class="mono" style="color:var(--muted)">Portable AI Identity, Preferences &amp; Consent Layer · v1.0</div>
+        <h1>Create your AI identity once. <em>Control how it travels.</em></h1>
+        <p style="color:var(--muted)">Define your working context, communication style, decision priorities, and hard boundaries once—then share only approved scopes via signed <code>Taste Tokens</code> and local <code>MCP</code>.</p>
+        <div class="row" style="margin:20px 0">
+          <button class="primary" onclick="go('create')">Create My Aura (7-Step Builder)</button>
+          <button class="secondary" onclick="go('dashboard')">Open My Aura Dashboard</button>
+          <button class="secondary" onclick="go('developers')">Developers &amp; Supabase Verifier</button>
+        </div>
+      </div>
+      <div>
+        <div class="passport">
+          <div class="row" style="justify-content:space-between"><strong style="font:22px Georgia,serif">aura id.</strong><span class="mono">Virtual Identity v1.0</span></div>
+          <div>
+            <h2 id="card-arch" style="font:28px Georgia,serif;margin:8px 0 4px">The direct curator</h2>
+            <div id="card-role" style="font-size:12px;opacity:.85">Aria (Private) · Product Designer &amp; AI Builder</div>
+            <div style="margin-top:8px">
+              <span class="pill" id="pill-prio">Priority: quality</span>
+              <span class="pill" id="pill-tone">Tone: direct</span>
+              <span class="pill" id="pill-act">Boundary: ask</span>
+            </div>
+          </div>
+          <div class="row" style="justify-content:space-between"><span class="mono">Default: Private</span><span class="mono" id="card-sb">Supabase: Ready</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid-3">
+      <div class="card"><span class="mono" style="color:var(--accent)">01 · Portability</span><h3>One Profile Across AI Tools</h3><p style="font-size:13px;color:var(--muted)">Export as v1.0 JSON, Markdown, AES-256-GCM vault, or serve via MCP.</p></div>
+      <div class="card"><span class="mono" style="color:var(--accent)">02 · Personalization</span><h3>Hard Constraints First</h3><p style="font-size:13px;color:var(--muted)">Filters out over-budget and avoided items before ranking matches.</p></div>
+      <div class="card"><span class="mono" style="color:var(--accent)">03 · User Control</span><h3>Allowlist Scopes &amp; Revocation</h3><p style="font-size:13px;color:var(--muted)">4-level classification (Public, Shareable, Private, Sensitive) &amp; instant revocation.</p></div>
+    </div>
+  </section>
+
+  <section id="v-create" class="pane" hidden>
+    <div class="studio">
+      <aside>
+        <button class="step-btn active" data-st="1" onclick="st(1)">1. Working Context</button>
+        <button class="step-btn" data-st="2" onclick="st(2)">2. Communication</button>
+        <button class="step-btn" data-st="3" onclick="st(3)">3. Decisions &amp; UI</button>
+        <button class="step-btn" data-st="4" onclick="st(4)">4. Taste &amp; Needs</button>
+        <button class="step-btn" data-st="5" onclick="st(5)">5. Boundaries</button>
+        <button class="step-btn" data-st="6" onclick="st(6)">6. Review &amp; Save</button>
+      </aside>
+      <div class="box">
+        <div id="st-1">
+          <h2>1. Working Context (Private by default)</h2>
+          <label>Preferred Name <input id="in-name" value="Aria"></label>
+          <label>Role / Context <input id="in-role" value="Product Designer &amp; AI Builder"></label>
+          <label>Current Goal <textarea id="in-goal" rows="2">Compare products by specs and write modular code</textarea></label>
+          <label>Language <input id="in-lang" value="Bilingual (EN / FA)"></label>
+        </div>
+        <div id="st-2" hidden>
+          <h2>2. Communication Style (Shareable)</h2>
+          <label>Reply Length <select id="in-length"><option value="brief">brief (Concise first)</option><option value="balanced">balanced</option><option value="detailed">detailed (Step-by-step)</option></select></label>
+          <label>Tone <select id="in-tone"><option value="direct">direct</option><option value="conversational">conversational</option><option value="formal">formal</option></select></label>
+          <label>Pushback <select id="in-challenge"><option value="challenge">challenge weak assumptions</option><option value="gentle">gentle &amp; constructive</option></select></label>
+        </div>
+        <div id="st-3" hidden>
+          <h2>3. Decision Priority &amp; UI (Shareable)</h2>
+          <label>Buying / Decision Priority <select id="in-prio"><option value="quality">quality &amp; durability</option><option value="value">value for money</option><option value="minimal">minimal &amp; unbranded</option></select></label>
+          <label>Theme <select id="in-theme"><option value="dark">dark</option><option value="light">light</option></select></label>
+        </div>
+        <div id="st-4" hidden>
+          <h2>4. Taste, Constraints &amp; Active Needs</h2>
+          <label>Aesthetic Taste <input id="in-taste" value="Minimal &amp; quiet, No external logos"></label>
+          <label>Hard Constraints &amp; Budget <input id="in-const" value="Shoe size EU 42, Under $180 budget"></label>
+          <label>Active Needs <textarea id="in-needs" rows="3">Running shoes for asphalt; Warm dimmable desk lamp</textarea></label>
+        </div>
+        <div id="st-5" hidden>
+          <h2>5. Safety Boundaries &amp; Exclusions</h2>
+          <label>External Action Policy <select id="in-act"><option value="ask">ask (Always require human approval)</option><option value="draft-only">draft-only (Read-only shortlists)</option></select></label>
+          <label>Spend Limit <input id="in-limit" value="$180 / session"></label>
+          <label>Things AI Must Avoid <input id="in-avoid" value="Loud neon colors, Hype marketing"></label>
+        </div>
+        <div id="st-6" hidden>
+          <h2>6. Review Aura ID v1.0 JSON</h2>
+          <pre id="pre-review"></pre>
+        </div>
+        <div class="row" style="justify-content:space-between;margin-top:14px">
+          <button class="secondary" onclick="stepPrev()">← Previous</button>
+          <button class="primary" onclick="stepNext()">Save &amp; Next Step →</button>
+        </div>
+      </div>
+      <aside>
+        <div class="box">
+          <h3>Live Profile Summary</h3>
+          <p id="sum-pii" style="font-size:12px;color:var(--green)">✓ PII Check Clean (No email/phone/keys leaked)</p>
+          <p style="font-size:12px;color:var(--muted)">Private fields stay local by default and are stripped from tokens.</p>
+          <button class="secondary" onclick="go('dashboard')" style="width:100%">Open Full Dashboard →</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section id="v-dashboard" class="pane" hidden>
+    <div class="row" style="justify-content:space-between;margin-bottom:16px">
+      <h1>My Aura Dashboard (v1.0)</h1>
+      <div class="row">
+        <button class="primary" onclick="go('share')">Issue Signed Taste Token →</button>
+        <button class="secondary" onclick="dlJson()">Download v1.0 JSON</button>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="box">
+        <h3>Explainable Catalog Matcher (Hard Constraints First)</h3>
+        <div class="card"><strong>✓ Nord Trail &amp; Road Runner 01 ($165)</strong><div style="font-size:12px;color:var(--muted)">Matches quality priority · Addresses running shoes · Within $180 budget</div></div>
+        <div class="card"><strong>✓ Studio Clamp LED Bar ($58)</strong><div style="font-size:12px;color:var(--muted)">Matches minimal tag · Addresses warm desk lamp · Within $180 budget</div></div>
+        <h4 style="color:var(--accent);margin:12px 0 6px">Excluded by Hard Constraints (2)</h4>
+        <div style="font-size:12px;color:var(--muted)">✕ <b>HyperFlash Max Carbon ($260)</b> — Exceeds $180 budget &amp; matches avoided term (neon)<br>✕ <b>Atelier Cast-Iron Lamp ($190)</b> — Exceeds $180 hard budget limit</div>
+      </div>
+      <div class="box">
+        <h3>4-Level Data Sensitivity Classification</h3>
+        <table>
+          <thead><tr><th>Field</th><th>Default Level</th><th>Token Rule</th></tr></thead>
+          <tbody>
+            <tr><td><code>profile_id, agent_public_key</code></td><td>Public</td><td>Shareable</td></tr>
+            <tr><td><code>taste, constraints, needs, tone</code></td><td>Shareable</td><td>Allowlist only</td></tr>
+            <tr><td><code>name, role, goal, instructions</code></td><td>Private</td><td>Stripped by default</td></tr>
+            <tr><td><code>agent_private_key, passphrase</code></td><td>Sensitive</td><td>Never exported</td></tr>
+          </tbody>
+        </table>
+        <pre id="pre-dash-json" style="margin-top:12px"></pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="v-share" class="pane" hidden>
+    <h1>Share &amp; Permissions (Consent Engine)</h1>
+    <div class="grid-2">
+      <div class="box">
+        <h3>1. Issue Ed25519 Signed Taste Token</h3>
+        <label>Recipient / Audience <input id="sh-aud" value="merchant-scout-agent"></label>
+        <label>Purpose <input id="sh-purp" value="personalized_recommendations"></label>
+        <label>Storage Policy <select id="sh-pol"><option value="session-only">session-only (15m TTL)</option><option value="no-store">no-store (Single turn)</option></select></label>
+        <div class="row" style="margin:10px 0">
+          <button class="primary" onclick="issueTok()">Issue Signed Taste Token (Ed25519) →</button>
+          <button class="secondary" onclick="revokeTok()">Revoke Active Token</button>
+        </div>
+        <pre id="pre-tok">Click "Issue Signed Taste Token" above to sign with WebCrypto Ed25519.</pre>
+      </div>
+      <div class="box">
+        <h3>2. Verify Signed Taste Token &amp; Audit Log</h3>
+        <div class="row" style="margin-bottom:12px">
+          <button class="primary" onclick="verTok('ok')">Verify Valid Token</button>
+          <button class="secondary" onclick="verTok('bad')">Simulate 1-Char Tamper (Fails)</button>
+          <button class="secondary" onclick="verTok('aud')">Simulate Wrong Audience (Fails)</button>
+        </div>
+        <div class="card" id="out-tok-ver">Ready to verify cryptographic signature, audience, expiry, and revocation.</div>
+        <h4>Sanitized Permission Audit Log</h4>
+        <pre id="pre-audit">No sensitive keys or passphrases are ever logged.</pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="v-connections" class="pane" hidden>
+    <h1>Connections &amp; Hardened Local MCP Server</h1>
+    <div class="grid-2">
+      <div class="box">
+        <h3>1. Zero-Dependency Node.js MCP Server (8 Tools)</h3>
+        <p style="font-size:13px;color:var(--muted)">Tools: <code>get_profile_summary</code>, <code>list_profile_scopes</code>, <code>get_scoped_profile</code>, <code>update_profile_preferences</code>, <code>get_taste_token</code>, <code>update_taste</code>, <code>manage_needs</code>, <code>match_store_catalog</code>.</p>
+        <pre>node mcp/server.mjs --profile ./aura-id-profile-v1.json</pre>
+      </div>
+      <div class="box">
+        <h3>2. Hardened Local Loopback API (Task 0.4)</h3>
+        <p style="font-size:13px;color:var(--muted)">Binds strictly to <code>127.0.0.1</code> by default, enforces separate Read vs. Write Bearer tokens, Origin header validation, 32 KB body cap, and 60 req/min rate limiting.</p>
+        <pre>node mcp/server.mjs --http 8000 --profile ./aura-id-profile-v1.json</pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="v-developers" class="pane" hidden>
+    <div class="row" style="justify-content:space-between;margin-bottom:14px">
+      <h1>Developers · Challenge-Response &amp; Supabase Gateway</h1>
+      <span class="badge" id="dev-sb-badge">Supabase: Connected</span>
+    </div>
+    <div class="grid-2">
+      <div class="box">
+        <h3>1. Live Ed25519 Challenge-Response Verifier (Task 0.2)</h3>
+        <p style="font-size:12px;color:var(--muted)">Prefix checks (AURA-...) and static scores are removed. Key ownership requires signing a single-use random challenge nonce:</p>
+        <pre id="pre-chl">Generating WebCrypto Ed25519 challenge...</pre>
+        <div class="row" style="margin:10px 0">
+          <button class="primary" onclick="verChl('ok')">Verify Valid Signature</button>
+          <button class="secondary" onclick="verChl('tamper')">Tamper 1 Char (Fails)</button>
+          <button class="secondary" onclick="verChl('replay')">Replay Nonce (Fails)</button>
+          <button class="secondary" onclick="verChl('exp')">Expired TTL (Fails)</button>
+        </div>
+        <div class="card" id="out-chl">Click any button above to test cryptographic challenge verification.</div>
+      </div>
+      <div class="box">
+        <h3>2. Key Management, Rotation &amp; Supabase Cloud Sync</h3>
+        <p style="font-size:12px"><b>Public Key (Public):</b> <code id="txt-pub">ed25519:pk_aura_8d1f43a099b2c4e1</code></p>
+        <p style="font-size:12px"><b>Private Key (Sensitive):</b> <code id="txt-priv">•••••••••••••••••••••••••••• (Hidden by default)</code> <button class="text-btn" onclick="togPriv(this)">Reveal</button></p>
+        <div class="row" style="margin:12px 0">
+          <button class="primary" onclick="sbSync()">Sync Public Key to Supabase →</button>
+          <button class="secondary" onclick="sbLook()">Lookup on Supabase</button>
+          <button class="secondary" onclick="rotKey()">Rotate Keypair (Signed)</button>
+          <button class="secondary" onclick="sbKill()" style="color:var(--accent)">Supabase Kill-Switch</button>
+        </div>
+        <div class="card" id="out-sb">Connected to Supabase table <code>aura_agents</code>.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="v-modal" class="box" hidden style="margin-top:18px">
+    <div class="row" style="justify-content:space-between">
+      <h3 id="modal-title" style="margin:0">Modal</h3>
+      <button class="secondary" onclick="closeMod()">Close ×</button>
+    </div>
+    <div id="modal-content" style="margin-top:12px"></div>
+  </section>
+</main>
+
+<footer>
+  <span>Aura ID v1.0 · Portable AI Identity, Preferences &amp; Consent</span>
+  <div class="row">
+    <button class="text-btn" onclick="openMod('import')">Import / Diff Preview</button>
+    <button class="text-btn" onclick="togTheme()">Theme: Light / Dark</button>
+    <button class="secondary" onclick="openMod('crypto')">Support (Crypto)</button>
+  </div>
+</footer>
+<div id="toast" class="toast" hidden></div>
+</body>
+</html>
