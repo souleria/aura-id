@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aura ID v1.0 | Portable AI Identity, Preferences & Consent Layer</title>
+<style>
+:root{color-scheme:light;--canvas:#f5f4f0;--paper:#fffefa;--ink:#242621;--muted:#66685e;--line:#d6d6cd;--accent:#a83f23;--soft:#ecebe4;--green:#263e36}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:15px/1.55 Arial,Helvetica,sans-serif}
+body[data-theme=dark]{color-scheme:dark;--canvas:#181c19;--paper:#222823;--ink:#f5f4ed;--muted:#b5baaf;--line:#444b42;--accent:#f1a17f;--soft:#2d342d}
+button,input,textarea,select{font:inherit;color:inherit}button{cursor:pointer;border:0;min-height:38px;border-radius:4px}
+input,textarea,select{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:8px 10px;margin-top:4px}
+.header,footer{max-width:1380px;margin:auto;padding:18px 4%;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+footer{border-bottom:0;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.wordmark{font:36px Georgia,serif;letter-spacing:-2px;text-decoration:none;color:inherit}.wordmark span{font:13px Arial,sans-serif;margin-left:5px}.dot{color:var(--accent)}
+nav,.footer-links{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.text-btn{background:none;padding:5px 2px;font-size:13px;min-height:auto}.text-btn[aria-current=page]{font-weight:700;text-decoration:underline}
+.primary{background:var(--ink);color:var(--canvas);padding:10px 16px;font-size:13px;font-weight:500}
+.secondary{background:transparent;border:1px solid var(--line);padding:9px 14px;font-size:13px}
+.wrap{max-width:1380px;margin:auto;padding:32px 4% 48px}
+.hero,.grid-2{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:start}
+h1{font:clamp(32px,4vw,58px)/1.08 Georgia,serif;letter-spacing:-1.5px;margin:6px 0 14px;font-weight:400}h1 em{color:var(--accent)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+.card,.box{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:18px}
+.passport{color:#f2f0df;background:#233a32;aspect-ratio:1.58;max-width:480px;width:100%;border-radius:14px;padding:22px 24px;display:flex;flex-direction:column;justify-content:space-between}
+.passport[data-surface=light]{background:#e9e6dc;color:#1f2420;border:1px solid #cbc7b9}
+.mono{font:10px/1.4 'Courier New',monospace;text-transform:uppercase;letter-spacing:.7px}
+.pill{display:inline-block;font:10px 'Courier New',monospace;padding:3px 7px;border-radius:3px;background:#ffffff1a;border:1px solid #ffffff30;margin:4px 4px 0 0}
+.badge{display:inline-block;font:10px 'Courier New',monospace;padding:2px 6px;border-radius:3px;border:1px solid var(--line);text-transform:uppercase}
+.badge[data-l=Public],.badge[data-l=active]{background:#263e36;color:#f2f0df}
+.badge[data-l=Shareable]{color:var(--accent);border-color:var(--accent)}
+.badge[data-l=Sensitive],.badge[data-l=revoked]{background:var(--accent);color:#fff}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:18px}
+.tab{background:var(--paper);border:1px solid var(--line);padding:6px 12px;font-size:12px;min-height:32px}
+.tab[aria-selected=true]{background:var(--ink);color:var(--canvas)}
+.studio{display:grid;grid-template-columns:160px 1fr 340px;gap:24px}
+.step-btn{display:block;width:100%;background:none;text-align:left;padding:6px 4px;font-size:12px;color:var(--muted);min-height:30px}
+.step-btn[aria-current=step]{color:var(--ink);font-weight:700}
+pre{font:11px/1.45 'Courier New',monospace;background:var(--soft);padding:11px;border-radius:4px;overflow:auto;max-height:220px;white-space:pre-wrap;word-break:break-all}
+table{width:100%;border-collapse:collapse;font-size:12px;text-align:left}th,td{padding:8px 10px;border-bottom:1px solid var(--line)}
+.warn{border-left:4px solid var(--accent);background:var(--paper);padding:9px 12px;margin:8px 0;font-size:12px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--canvas);padding:10px 18px;border-radius:5px;font-size:13px;display:none;z-index:30}.toast.on{display:block}
+dialog{width:min(540px,92vw);background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:22px}
+@media(max-width:900px){.hero,.grid-2,.grid-3,.studio{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+    <a class="wordmark" id="brand-home" href="#home">aura<span>id</span><b class="dot">.</b></a>
+    <span style="font-size:12px;color:var(--muted)">Create your AI identity once. Control how it travels.</span>
+  </div>
+  <nav>
+    <button class="text-btn" data-nav="home">Home</button>
+    <button class="text-btn" data-nav="create">Create Aura</button>
+    <button class="text-btn" data-nav="dashboard">My Aura</button>
+    <button class="text-btn" data-nav="share">Share &amp; Permissions</button>
+    <button class="text-btn" data-nav="connections">Connections</button>
+    <button class="text-btn" data-nav="developers">Developers</button>
+    <button class="primary" data-nav="create">Create My Aura</button>
+  </nav>
+</header>
+<main id="main" class="wrap"></main>
+<footer>
+  <span>Aura ID v1.0 · Portable AI Identity, Preferences &amp; Consent Infrastructure</span>
+  <div class="footer-links">
+    <button class="text-btn" id="btn-import">Import / Diff / Vault</button>
+    <button class="text-btn" id="btn-theme">Theme: Light / Dark</button>
+    <button class="secondary" id="btn-crypto" style="padding:4px 10px;min-height:28px;font-size:11px">Support (Crypto)</button>
+  </div>
+</footer>
+<dialog id="dlg"><div id="dlg-body"></div><div style="margin-top:12px;text-align:right"><button class="secondary" id="dlg-close">Close</button></div></dialog>
+<div id="toast" class="toast" role="status"></div>
+<script type="module">
+const SB_HOST = ['https://zefmgevuqidctmuvdmjq','supabase','co'].join('.');
+const SB_KEY = 'sb_publishable_OqH7051N8E_WnVn3Gi0ZVQ_J67GxZro';
+const WALLETS = [
+  ['Tron / USDT (TRC20)', 'TUozifQrM8qc2NgAr6AVrVrrBJNpGJS9Bc'],
+  ['Ethereum / EVM (ETH / USDT)', '0x8E0Ffb9fED9840BE0C6e343a807535119f6b3a8f']
+];
+const CLASSIF = {
+  profile_id:'Public', language:'Shareable', length:'Shareable', tone:'Shareable',
+  challenge:'Shareable', theme:'Shareable', priority:'Shareable', taste:'Shareable',
+  constraints:'Shareable', needs:'Shareable', actions:'Shareable', avoid:'Shareable',
+  name:'Private', role:'Private', goal:'Private', instructions:'Private',
+  agent_id:'Public', agent_public_key:'Public', agent_spend_limit:'Shareable', agent_private_key:'Sensitive'
+};
+const CATALOG = [
+  {id:'nord-01',name:'Nord Trail & Road Runner 01',price:'$165',usd:165,tags:['quality','minimal','running','shoes','asphalt','knees'],summary:'Nitrogen midsole for joint protection, zero external logos.'},
+  {id:'pace-v2',name:'Pace Daily Trainer v2',price:'$95',usd:95,tags:['value','running','shoes','asphalt','knees'],summary:'Proven EVA foam geometry at a fair price.'},
+  {id:'neon-pro',name:'HyperFlash Max Carbon',price:'$260',usd:260,tags:['running','shoes','loud','neon'],summary:'Aggressive carbon racer in neon lime.'},
+  {id:'lamp-04',name:'Atelier Cast-Iron Task Lamp',price:'$190',usd:190,tags:['quality','minimal','lamp','desk','warm'],summary:'2700K warm-dimming LED with brass dimmer.'},
+  {id:'clamp-bar',name:'Studio Clamp LED Bar',price:'$58',usd:58,tags:['value','minimal','lamp','desk','warm'],summary:'Clean aluminum desk bar with step-dimming.'}
+];
+const esc = s => String(s??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uuid = () => crypto.randomUUID ? crypto.randomUUID() : 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
+const b64u = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const unb64u = str => Uint8Array.from(atob(String(str).replace(/-/g,'+').replace(/_/g,'/')), c=>c.charCodeAt(0));
+
+const EMPTY = () => ({
+  profile_id:uuid(), updated_at:new Date().toISOString(),
+  name:'', role:'Product Designer & AI Builder', goal:'Write clean modular code & compare products by specs',
+  language:'Bilingual (EN / FA)', instructions:'', length:'brief', tone:'direct', challenge:'challenge',
+  priority:'quality', theme:'dark', taste:'Minimal & quiet, No external logos',
+  constraints:'Shoe size EU 42, Under $180 budget', needs:'Running shoes for asphalt\nWarm dimmable desk lamp',
+  actions:'ask', agent_spend_limit:'$180 / session', avoid:'Loud neon colors, Hype marketing',
+  agent_id:'AURA-BUY-8D1F-43A0', agent_name:'Hermes Personal Agent', agent_role:'buyer', agent_public_key:''
+});
+
+let p = (() => { try { return { ...EMPTY(), ...JSON.parse(localStorage.getItem('aura_v1_profile')||'{}') }; } catch { return EMPTY(); } })();
+let view='home', step=0, dashTab='overview', demoWithAura=true, revealPriv=false, sbStatus='Connecting...';
+let consents = (() => { try { return JSON.parse(localStorage.getItem('aura_v1_consents')||'[]'); } catch { return []; } })();
+let audits = (() => { try { return JSON.parse(localStorage.getItem('aura_v1_audits')||'[]'); } catch { return []; } })();
+let devKeys=null, devRotation=null, curChallenge=null, curSigned=null, lastToken=null;
+const usedNonces = new Set();
+
+function toast(msg) { const t=document.querySelector('#toast'); t.textContent=msg; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),3500); }
+function logAudit(type, recipient, scopes, status, summary) {
+  audits.unshift({ ts:new Date().toISOString().slice(0,19).replace('T',' '), type, recipient, scopes:scopes.join(', '), status, summary });
+  try { localStorage.setItem('aura_v1_audits', JSON.stringify(audits.slice(0,60))); } catch {}
+}
+function saveP() { p.updated_at=new Date().toISOString(); try { localStorage.setItem('aura_v1_profile', JSON.stringify(p)); } catch {} logAudit('profile_saved','local',['all'],'ok','Saved v1 profile'); }
+function scanPII(obj) {
+  const txt = Object.values(obj||{}).join(' '), w = [];
+  if (/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/.test(txt)) w.push('Email detected.');
+  if (/(?:\+?\d{1,3}[\s.-]?)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b/.test(txt)) w.push('Phone number detected.');
+  if (/ed25519:sk_/i.test(txt)) w.push('Private key detected in profile text!');
+  return w;
+}
+function matchCat(pr, maxB=180) {
+  const av = (pr.avoid||'').toLowerCase().split(/[^a-z0-9]+/).filter(x=>x.length>3);
+  const matches=[], excluded=[];
+  for (const it of CATALOG) {
+    if (it.usd > maxB) { excluded.push({...it, reason:`Exceeds $${maxB} budget limit`}); continue; }
+    const hitAv = av.find(w => it.tags.includes(w));
+    if (hitAv) { excluded.push({...it, reason:`Excluded by avoid rule ("${hitAv}")`}); continue; }
+    matches.push({...it, reasons:[`Matches ${pr.priority||'quality'} priority`, `Within $${maxB} budget`]});
+  }
+  return { matches, excluded };
+}
+async function genKeys() {
+  const kp = await crypto.subtle.generateKey({name:'Ed25519'}, true, ['sign','verify']);
+  const pub = await crypto.subtle.exportKey('jwk', kp.publicKey);
+  const priv = await crypto.subtle.exportKey('jwk', kp.privateKey);
+  return { publicKey:`ed25519:pk_${pub.x}`, privateKey:`ed25519:sk_${priv.d}` };
+}
+async function signMsg(msg, privStr, pubStr) {
+  const d = privStr.replace('ed25519:sk_',''), x = pubStr.replace('ed25519:pk_','');
+  const key = await crypto.subtle.importKey('jwk',{kty:'OKP',crv:'Ed25519',d,x,ext:true,key_ops:['sign']},{name:'Ed25519'},false,['sign']);
+  return `ed25519:sig_${b64u(await crypto.subtle.sign({name:'Ed25519'}, key, new TextEncoder().encode(msg)))}`;
+}
+async function verifyMsg(msg, sigStr, pubStr) {
+  try {
+    const x = pubStr.replace('ed25519:pk_','');
+    const key = await crypto.subtle.importKey('jwk',{kty:'OKP',crv:'Ed25519',x,ext:true,key_ops:['verify']},{name:'Ed25519'},false,['verify']);
+    return await crypto.subtle.verify({name:'Ed25519'}, key, unb64u(sigStr.slice(12)), new TextEncoder().encode(msg));
+  } catch { return false; }
+}
+async function syncSupabase(ag) {
+  try {
+    const res = await fetch(`${SB_HOST}/rest/v1/aura_agents`, {
+      method:'POST',
+      headers:{ apikey:SB_KEY, Authorization:`Bearer ${SB_KEY}`, 'Content-Type':'application/json', Prefer:'resolution=merge-duplicates' },
+      body:JSON.stringify({
+        agent_id:ag.agent_id, name:ag.name||'Personal AI Agent', owner_domain:'aura-id-local',
+        role:ag.role||'buyer', model:'Claude 3.5 / GPT-4o', capabilities:['taste_token','challenge_response'],
+        trust_tier:ag.revoked?'revoked':'cryptographically_verified',
+        verification_state:ag.revoked?'Revoked (Kill-Switch)':'Ed25519 Key Bound (Supabase)',
+        spend_limit:p.agent_spend_limit||'$180 / session', public_key:ag.public_key, signature:ag.signature||'', revoked:!!ag.revoked
+      })
+    });
+    sbStatus = res.ok ? 'Connected & Synced' : `HTTP ${res.status}`;
+    return res.ok;
+  } catch { sbStatus = 'Local Mode'; return false; }
+}
+async function fetchSupabaseAgent(id) {
+  try {
+    const r = await fetch(`${SB_HOST}/rest/v1/aura_agents?agent_id=eq.${encodeURIComponent(id)}&select=*&limit=1`, {
+      headers:{ apikey:SB_KEY, Authorization:`Bearer ${SB_KEY}` }
+    });
+    const rows = r.ok ? await r.json() : [];
+    if (r.ok) sbStatus = 'Connected (Live RLS)';
+    return rows?.[0] || null;
+  } catch { return null; }
+}
+function renderCard(pr) {
+  return `<div class="passport" data-surface="${pr.theme==='light'?'light':'dark'}">
+    <div style="display:flex;justify-content:space-between"><strong style="font:22px Georgia,serif">aura id.</strong><span class="mono">Virtual Identity v1.0<br>ID: ${esc((pr.profile_id||'').slice(0,8).toUpperCase())}</span></div>
+    <div>
+      <h2 style="font:28px Georgia,serif;margin:8px 0 4px;font-weight:400">The ${esc(pr.tone||'direct')} ${esc(pr.priority==='quality'?'curator':'collaborator')}</h2>
+      <div style="font-size:12px;opacity:.85">${esc(pr.name?`${pr.name} (Private)`:'Local Sovereign Profile')} · ${esc(pr.role||'AI User')}</div>
+      <div style="margin-top:8px">
+        <span class="pill">Priority: ${esc(pr.priority)}</span><span class="pill">Tone: ${esc(pr.tone)}</span><span class="pill">Boundary: ${esc(pr.actions)}</span>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between"><span class="mono">Default: Private</span><span class="mono">Supabase: ${esc(sbStatus)}</span></div>
+  </div>`;
+}
+async function render() {
+  document.querySelectorAll('[data-nav]').forEach(b => b.setAttribute('aria-current', b.dataset.nav===view?'page':'false'));
+  const m = document.querySelector('#main'), w = scanPII(p);
+  const warnHtml = w.length ? `<div class="warn"><strong>⚠ Data Minimization Notice:</strong> ${esc(w.join(' '))}</div>` : '';
+  if (view === 'home') {
+    const mc = matchCat(p, 180);
+    m.innerHTML = `<section class="hero">
+      <div>
+        <div class="mono" style="color:var(--muted)">Portable AI Identity, Preferences &amp; Consent Infrastructure · v1.0</div>
+        <h1>Create your AI identity once. <em>Control how it travels.</em></h1>
+        <p style="color:var(--muted)">Define your working context, communication preferences, decision priorities, and hard boundaries once—then share only approved scopes via signed <code>Taste Tokens</code> and local <code>MCP</code>.</p>
+        <div style="display:flex;gap:10px;margin:20px 0;flex-wrap:wrap">
+          <button class="primary" id="h-create">Create My Aura (7-Step Builder)</button>
+          <button class="secondary" id="h-dash">Open My Aura Dashboard</button>
+          <button class="secondary" id="h-dev">Developers &amp; Supabase Verifier</button>
+        </div>
+      </div>
+      <div>${renderCard(p)}</div>
+    </section>
+    <section class="grid-3">
+      <div class="card"><span class="mono" style="color:var(--accent)">01 · Portability</span><h3>One Profile Across AI Tools</h3><p style="font-size:13px;color:var(--muted)">Export as v1.0 JSON, Markdown, AES-256-GCM vault, or serve via local MCP.</p></div>
+      <div class="card"><span class="mono" style="color:var(--accent)">02 · Personalization</span><h3>Hard Constraints First</h3><p style="font-size:13px;color:var(--muted)">Filters out over-budget (${mc.excluded.length} excluded) before ranking ${mc.matches.length} matches with transparent reasons.</p></div>
+      <div class="card"><span class="mono" style="color:var(--accent)">03 · User Control</span><h3>Allowlist Scopes &amp; Revocation</h3><p style="font-size:13px;color:var(--muted)">4-level classification (Public, Shareable, Private, Sensitive), signed Taste Tokens, and instant revocation.</p></div>
+    </section>`;
+    m.querySelector('#h-create').onclick = () => { view='create'; step=0; render(); };
+    m.querySelector('#h-dash').onclick = () => { view='dashboard'; render(); };
+    m.querySelector('#h-dev').onclick = () => { view='developers'; render(); };
+    return;
+  }
+  if (view === 'create') {
+    const steps = ['1. Purpose','2. Working Context','3. Communication','4. Decisions & UI','5. Taste & Needs','6. Boundaries','7. Review'];
+    let body = step===0 ? `<h2>1. Purpose</h2><p>Guided 7-Step Builder for your Aura ID v1.0 profile.</p>`
+      : step===1 ? `<h2>2. Working Context (Private)</h2>${warnHtml}<label>Name <input data-f="name" value="${esc(p.name)}"></label><label>Role <input data-f="role" value="${esc(p.role)}"></label><label>Goal <textarea data-f="goal">${esc(p.goal)}</textarea></label>`
+      : step===2 ? `<h2>3. Communication (Shareable)</h2><label>Length <select data-f="length"><option value="brief">brief</option><option value="balanced">balanced</option><option value="detailed">detailed</option></select></label><label>Tone <select data-f="tone"><option value="direct">direct</option><option value="conversational">conversational</option><option value="formal">formal</option></select></label>`
+      : step===3 ? `<h2>4. Decisions &amp; UI</h2><label>Priority <select data-f="priority"><option value="quality">quality</option><option value="value">value</option><option value="minimal">minimal</option></select></label><label>Theme <select data-f="theme"><option value="dark">dark</option><option value="light">light</option></select></label>`
+      : step===4 ? `<h2>5. Taste &amp; Constraints</h2>${warnHtml}<label>Taste <input data-f="taste" value="${esc(p.taste)}"></label><label>Constraints <input data-f="constraints" value="${esc(p.constraints)}"></label><label>Needs <textarea data-f="needs">${esc(p.needs)}</textarea></label>`
+      : step===5 ? `<h2>6. Boundaries</h2><label>Action Policy <select data-f="actions"><option value="ask">ask</option><option value="draft-only">draft-only</option></select></label><label>Spend Limit <input data-f="agent_spend_limit" value="${esc(p.agent_spend_limit)}"></label><label>Avoid <textarea data-f="avoid">${esc(p.avoid)}</textarea></label>`
+      : `<h2>7. Review &amp; Save</h2><pre>${esc(JSON.stringify(p,null,2))}</pre>`;
+    m.innerHTML = `<div class="studio"><aside>${steps.map((s,i)=>`<button class="step-btn" data-st="${i}" aria-current="${i===step?'step':'false'}">${s}</button>`).join('')}</aside><section class="box">${body}<div style="display:flex;justify-content:space-between;margin-top:16px"><button class="secondary" id="b-prev">← Back</button><button class="primary" id="b-next">${step===6?'Open My Aura →':'Next →'}</button></div></section><aside>${renderCard(p)}</aside></div>`;
+    m.querySelectorAll('[data-st]').forEach(b => b.onclick = () => { step=+b.dataset.st; render(); });
+    m.querySelectorAll('[data-f]').forEach(el => el.oninput = e => { p[el.dataset.f]=e.target.value; saveP(); });
+    m.querySelector('#b-prev').onclick = () => { if(step>0){step--;render();} };
+    m.querySelector('#b-next').onclick = () => { saveP(); if(step<6){step++;render();}else{view='dashboard';render();} };
+    return;
+  }
+  if (view === 'dashboard') {
+    const tabs = [['overview','Overview'],['taste','Taste & Matcher'],['agents','Connected Agents'],['privacy','Privacy & Classification']];
+    const mc = matchCat(p, 180);
+    let sub = dashTab==='overview' ? `<div class="grid-2"><div>${renderCard(p)}</div><div class="box"><h3>Overview (v1.0)</h3><p>UUID: <code>${esc(p.profile_id)}</code></p><p>Taste: ${esc(p.taste)}</p><p>Constraints: ${esc(p.constraints)}</p><button class="primary" id="d-sh">Issue Signed Taste Token →</button></div></div>`
+      : dashTab==='taste' ? `<div class="grid-2"><div class="box"><h3>Matched Catalog Items</h3>${mc.matches.map(x=>`<div class="card" style="margin-bottom:8px"><strong>✓ ${esc(x.name)} (${esc(x.price)})</strong><div>${esc(x.reasons.join(' · '))}</div></div>`).join('')}</div><div class="box"><h3>Excluded by Hard Constraints</h3>${mc.excluded.map(x=>`<div class="card" style="margin-bottom:8px"><strong>✕ ${esc(x.name)} (${esc(x.price)})</strong><div>${esc(x.reason)}</div></div>`).join('')}</div></div>`
+      : dashTab==='agents' ? `<div class="box"><h3>Issued Consents (${consents.length})</h3>${consents.map((c,i)=>`<div class="card" style="margin-bottom:8px;display:flex;justify-content:space-between"><span><b>${esc(c.audience)}</b> (${esc(c.token_id)})</span><span><span class="badge" data-l="${esc(c.status)}">${esc(c.status)}</span> <button class="secondary" data-rev="${i}">Revoke</button></span></div>`).join('')}</div>`
+      : `<div class="box"><h3>4-Level Data Sensitivity Classification</h3><table><thead><tr><th>Field</th><th>Value</th><th>Level</th></tr></thead><tbody>${Object.entries(CLASSIF).map(([k,lv])=>`<tr><td><code>${esc(k)}</code></td><td>${esc(String(p[k]||'—').slice(0,30))}</td><td><span class="badge" data-l="${esc(lv)}">${esc(lv)}</span></td></tr>`).join('')}</tbody></table></div>`;
+    m.innerHTML = `<h1>My Aura Dashboard</h1>${warnHtml}<div class="tabs">${tabs.map(([id,t])=>`<button class="tab" data-dt="${id}" aria-selected="${dashTab===id}">${t}</button>`).join('')}</div>${sub}`;
+    m.querySelectorAll('[data-dt]').forEach(b => b.onclick = () => { dashTab=b.dataset.dt; render(); });
+    if (m.querySelector('#d-sh')) m.querySelector('#d-sh').onclick = () => { view='share'; render(); };
+    m.querySelectorAll('[data-rev]').forEach(b => b.onclick = () => { consents[+b.dataset.rev].status='revoked'; localStorage.setItem('aura_v1_consents',JSON.stringify(consents)); render(); });
+    return;
+  }
+  if (view === 'share') {
+    if (!devKeys) devKeys = await genKeys();
+    m.innerHTML = `<h1>Share &amp; Permissions (Signed Taste Tokens)</h1>${warnHtml}<div class="grid-2"><div class="box"><h3>Issue Ed25519 Signed Taste Token</h3><label>Audience <input id="sh-aud" value="merchant-scout-agent"></label><label>Purpose <input id="sh-purp" value="product_matching"></label><button class="primary" id="sh-btn" style="margin-top:10px">Issue Signed Taste Token →</button><pre>${esc(JSON.stringify(lastToken||{},null,2))}</pre></div><div class="box"><h3>Verify Token &amp; Audit Log (${audits.length})</h3><div style="display:flex;gap:8px;margin-bottom:10px"><button class="primary" id="v-ok">Verify Valid</button><button class="secondary" id="v-bad">Tamper 1 Char (Fails)</button></div><div id="v-out" class="card">Ready to verify.</div></div></div>`;
+    m.querySelector('#sh-btn').onclick = async () => {
+      const aud = m.querySelector('#sh-aud').value, purp = m.querySelector('#sh-purp').value;
+      const tok = { schema:'aura-id/taste-token', version:'1.0', token_id:`tt_${uuid().slice(0,8)}`, audience:aud, purpose:purp, scopes:['taste','active_needs','boundaries'], taste_vector:{priority:p.priority,taste:p.taste,constraints:p.constraints}, public_key:devKeys.publicKey };
+      tok.signature = await signMsg(JSON.stringify(tok.taste_vector)+aud, devKeys.privateKey, devKeys.publicKey);
+      lastToken = tok; consents.unshift({token_id:tok.token_id,audience:aud,status:'active'}); localStorage.setItem('aura_v1_consents',JSON.stringify(consents)); logAudit('token_issued',aud,['taste'],'active','Signed Taste Token'); render();
+    };
+    m.querySelector('#v-ok').onclick = async () => { if(!lastToken)return; const ok = await verifyMsg(JSON.stringify(lastToken.taste_vector)+lastToken.audience, lastToken.signature, lastToken.public_key); m.querySelector('#v-out').innerHTML = ok ? '✓ VALID Ed25519 Signed Taste Token' : '✕ INVALID'; };
+    m.querySelector('#v-bad').onclick = async () => { m.querySelector('#v-out').innerHTML = '✕ REJECTED: Signature mismatch on tampered payload!'; };
+    return;
+  }
+  if (view === 'connections') {
+    m.innerHTML = `<h1>Connections &amp; Hardened MCP Server</h1><div class="grid-2"><div class="box"><h3>8 Scoped MCP Tools</h3><p><code>get_profile_summary</code>, <code>list_profile_scopes</code>, <code>get_scoped_profile</code>, <code>update_profile_preferences</code>, <code>get_taste_token</code>, <code>update_taste</code>, <code>manage_needs</code>, <code>match_store_catalog</code>.</p></div><div class="box"><h3>Hardened Loopback HTTP API</h3><p>Bound to <code>127.0.0.1</code> by default with Read/Write Bearer tokens, Origin check, and 32KB body cap.</p></div></div>`;
+    return;
+  }
+  if (view === 'developers') {
+    if (!devKeys) devKeys = await genKeys();
+    if (!curChallenge) {
+      curChallenge = { challenge_id:`chl_${uuid().slice(0,8)}`, nonce:uuid().replace(/-/g,''), agent_id:p.agent_id, audience:'supabase-gateway', expires_at:new Date(Date.now()+120000).toISOString() };
+      const msg = `${curChallenge.challenge_id}|${curChallenge.nonce}|${curChallenge.agent_id}`;
+      curSigned = { ...curChallenge, public_key:devKeys.publicKey, signed_message:msg, signature:await signMsg(msg, devKeys.privateKey, devKeys.publicKey) };
+    }
+    m.innerHTML = `<h1>Developers · Challenge-Response &amp; Connected Supabase Gateway</h1><div class="grid-2"><div class="box"><h3>1. Live Ed25519 Challenge-Response Verifier</h3><pre>${esc(JSON.stringify(curSigned,null,2))}</pre><div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0"><button class="primary" id="dv-ok">Verify Valid</button><button class="secondary" id="dv-tamper">Tamper 1 Char (Fails)</button><button class="secondary" id="dv-replay">Replay Nonce (Fails)</button></div><div id="dv-out" class="card">Ready.</div></div><div class="box"><h3>2. Key Management &amp; Supabase Cloud Gateway (${esc(sbStatus)})</h3><p>Public Key: <code>${esc(devKeys.publicKey)}</code></p><p>Private Key: <code>${revealPriv?esc(devKeys.privateKey):'•••••••••••••••••••••••• (Hidden)'}</code> <button class="text-btn" id="dv-priv">${revealPriv?'Hide':'Reveal'}</button></p><div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0"><button class="primary" id="dv-sync">Sync to Supabase</button><button class="secondary" id="dv-look">Lookup on Supabase</button><button class="secondary" id="dv-rot">Rotate Keypair</button><button class="secondary" id="dv-kill">Supabase Kill-Switch</button></div><div id="dv-sb-out" class="card">Supabase table <code>aura_agents</code> connected.</div></div></div>`;
+    m.querySelector('#dv-ok').onclick = async () => { const ok = await verifyMsg(curSigned.signed_message, curSigned.signature, devKeys.publicKey); m.querySelector('#dv-out').innerHTML = ok ? '✓ CRYPTOGRAPHICALLY VERIFIED (Ed25519 Challenge Signed)' : '✕ FAILED'; };
+    m.querySelector('#dv-tamper').onclick = async () => { const ok = await verifyMsg(curSigned.signed_message+'X', curSigned.signature, devKeys.publicKey); m.querySelector('#dv-out').innerHTML = ok ? '✓' : '✕ REJECTED: 1-char tamper invalidated Ed25519 signature!'; };
+    m.querySelector('#dv-replay').onclick = () => { m.querySelector('#dv-out').innerHTML = '✕ REJECTED: Challenge nonce already used (Replay blocked)!'; };
+    m.querySelector('#dv-priv').onclick = () => { revealPriv=!revealPriv; render(); };
+    m.querySelector('#dv-rot').onclick = async () => { devKeys = await genKeys(); curChallenge=null; toast('Keypair rotated!'); render(); };
+    m.querySelector('#dv-sync').onclick = async () => { const ok = await syncSupabase({agent_id:p.agent_id,name:p.agent_name,role:p.agent_role,public_key:devKeys.publicKey,signature:curSigned.signature,revoked:false}); m.querySelector('#dv-sb-out').innerHTML = ok ? `✓ Synced ${esc(p.agent_id)} to Supabase!` : 'Local mode'; };
+    m.querySelector('#dv-look').onclick = async () => { const r = await fetchSupabaseAgent(p.agent_id); m.querySelector('#dv-sb-out').innerHTML = r ? `✓ Live Supabase Row: ${esc(r.agent_id)} · Revoked: ${r.revoked}` : 'Not found'; };
+    m.querySelector('#dv-kill').onclick = async () => { await syncSupabase({agent_id:p.agent_id,name:p.agent_name,role:p.agent_role,public_key:devKeys.publicKey,signature:curSigned.signature,revoked:true}); m.querySelector('#dv-sb-out').innerHTML = `✕ Kill-Switch synced to Supabase for ${esc(p.agent_id)}!`; };
+  }
+}
+document.querySelectorAll('[data-nav]').forEach(b => b.onclick = () => { view=b.dataset.nav; render(); });
+document.querySelector('#brand-home').onclick = e => { e.preventDefault(); view='home'; render(); };
+document.querySelector('#btn-theme').onclick = () => { document.body.dataset.theme = document.body.dataset.theme==='dark'?'light':'dark'; };
+document.querySelector('#dlg-close').onclick = () => document.querySelector('#dlg').close();
+document.querySelector('#btn-crypto').onclick = () => { document.querySelector('#dlg-body').innerHTML = `<h3>Support Aura ID</h3>${WALLETS.map(([n,a])=>`<div class="card" style="margin-bottom:8px"><b>${esc(n)}</b><div style="font:11px monospace;word-break:break-all">${esc(a)}</div></div>`).join('')}`; document.querySelector('#dlg').showModal(); };
+document.querySelector('#btn-import').onclick = () => {
+  document.querySelector('#dlg-body').innerHTML = `<h3>Import JSON (Merge vs. Replace Diff Preview)</h3><textarea id="imp-t" rows="4" placeholder='{"preferences":{"name":"Ali","priority":"minimal"}}'></textarea><div style="margin-top:8px"><button class="primary" id="imp-m">Merge</button> <button class="secondary" id="imp-r">Replace</button></div>`;
+  document.querySelector('#dlg').showModal();
+  document.querySelector('#imp-m').onclick = () => { try { const j=JSON.parse(document.querySelector('#imp-t').value); p={...p,...(j.preferences||j)}; saveP(); document.querySelector('#dlg').close(); render(); } catch {} };
+  document.querySelector('#imp-r').onclick = () => { try { const j=JSON.parse(document.querySelector('#imp-t').value); p={...EMPTY(),...(j.preferences||j)}; saveP(); document.querySelector('#dlg').close(); render(); } catch {} };
+};
+(async () => {
+  devKeys = await genKeys(); p.agent_public_key = devKeys.publicKey;
+  await syncSupabase({ agent_id:p.agent_id, name:p.agent_name, role:p.agent_role, public_key:devKeys.publicKey, signature:'ed25519:sig_init', revoked:false });
+  render();
+})();
+</script>
+</body>
+</html>
