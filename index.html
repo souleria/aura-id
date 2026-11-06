@@ -3,36 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Aura ID v1.0 | Portable AI Identity &amp; Consent</title>
+<title>Aura ID | Set Your AI Preferences Once</title>
 <style>
 :root{--canvas:#f5f4f0;--paper:#fffefa;--ink:#242621;--muted:#66685e;--line:#d6d6cd;--accent:#a83f23;--soft:#ecebe4;--green:#263e36}
 *{box-sizing:border-box}[hidden]{display:none!important}
 body{margin:0;background:var(--canvas);color:var(--ink);font:15px/1.55 Arial,Helvetica,sans-serif}
 body[data-theme=dark]{--canvas:#181c19;--paper:#222823;--ink:#f5f4ed;--muted:#b5baaf;--line:#444b42;--accent:#f1a17f;--soft:#2d342d}
 button,input,textarea,select{font:inherit;color:inherit}
-button{cursor:pointer;border:0;min-height:38px;border-radius:4px}
-input,textarea,select{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:8px 10px;margin:4px 0 12px}
+button{cursor:pointer;border:0;min-height:38px;border-radius:5px}
+input,textarea,select{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:8px 10px;margin:4px 0 11px;font-size:14px}
+label{display:block;font-size:13px;font-weight:600}
+label small{display:block;font-weight:400;color:var(--muted);font-size:11px}
 .header,footer{max-width:1360px;margin:auto;padding:18px 4%;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
 footer{border-bottom:0;border-top:1px solid var(--line);font-size:12px}
 .wordmark{font:36px Georgia,serif;letter-spacing:-2px;text-decoration:none;color:inherit;background:none}
 .dot{color:var(--accent)}nav,.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.text-btn{background:none;padding:5px 4px;font-size:13px;min-height:auto}
+.text-btn{background:none;padding:5px 6px;font-size:13px;min-height:auto}
 .text-btn.active{font-weight:700;text-decoration:underline}
 .primary{background:var(--ink);color:var(--canvas);padding:10px 16px;font-size:13px;font-weight:500}
 .secondary{background:transparent;border:1px solid var(--line);padding:9px 14px;font-size:13px}
+.mode-pill{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--paper)}
+.mode-pill button{border-radius:0;padding:8px 14px;font-size:13px;background:none}
+.mode-pill button.active{background:var(--ink);color:var(--canvas);font-weight:600}
 .wrap{max-width:1360px;margin:auto;padding:30px 4% 48px}
 .hero,.grid-2{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:start}
-h1{font:clamp(30px,3.8vw,54px)/1.1 Georgia,serif;letter-spacing:-1.5px;margin:6px 0 14px;font-weight:400}
-h1 em{color:var(--accent)}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+h1{font:clamp(30px,3.8vw,52px)/1.1 Georgia,serif;letter-spacing:-1.5px;margin:6px 0 14px;font-weight:400}
+h1 em{color:var(--accent)}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
 .card,.box{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:18px;margin-bottom:14px}
 .passport{color:#f2f0df;background:#233a32;aspect-ratio:1.58;max-width:470px;width:100%;border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:space-between}
 .mono{font:10px/1.4 'Courier New',monospace;text-transform:uppercase;letter-spacing:.7px}
 .pill{display:inline-block;font:10px 'Courier New',monospace;padding:3px 7px;border-radius:3px;background:#ffffff1a;border:1px solid #ffffff30;margin:4px 4px 0 0}
-.badge{display:inline-block;font:10px 'Courier New',monospace;padding:2px 6px;border-radius:3px;background:#263e36;color:#fff}
-.studio{display:grid;grid-template-columns:170px 1fr 340px;gap:22px}
+.badge{display:inline-block;font:10px 'Courier New',monospace;padding:2px 7px;border-radius:3px;background:#263e36;color:#fff}
+.studio{display:grid;grid-template-columns:180px 1fr 330px;gap:22px}
 .step-btn{display:block;width:100%;background:none;text-align:left;padding:7px 6px;font-size:12px;color:var(--muted);min-height:32px}
 .step-btn.active{color:var(--ink);font-weight:700}
-pre{font:11px/1.45 'Courier New',monospace;background:var(--soft);padding:11px;border-radius:4px;overflow:auto;max-height:220px;white-space:pre-wrap;word-break:break-all}
+pre{font:11px/1.45 'Courier New',monospace;background:var(--soft);padding:11px;border-radius:4px;overflow:auto;max-height:240px;white-space:pre-wrap;word-break:break-all}
 table{width:100%;border-collapse:collapse;font-size:12px;text-align:left}th,td{padding:8px 10px;border-bottom:1px solid var(--line)}
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--canvas);padding:10px 18px;border-radius:5px;font-size:13px;z-index:30}
 @media(max-width:900px){.hero,.grid-2,.grid-3,.studio{grid-template-columns:1fr}}
@@ -40,14 +45,16 @@ table{width:100%;border-collapse:collapse;font-size:12px;text-align:left}th,td{p
 <script>
 var SB_URL = ['https://zefmgevuqidctmuvdmjq','supabase','co'].join('.');
 var SB_KEY = 'sb_publishable_OqH7051N8E_WnVn3Gi0ZVQ_J67GxZro';
-var curStep = 1, privShown = false, tokRevoked = false;
+var curStep = 1, builderMode = 'human', privShown = false, tokRevoked = false;
 var devKeys = {
   pub: 'ed25519:pk_aura_8d1f43a099b2c4e1',
   priv: 'ed25519:sk_secret_local_key_99b2c4e1',
   sig: 'ed25519:sig_verified_challenge_proof_v1'
 };
-var auditList = ['[init] Local Aura ID v1.0 profile loaded (Default: Private)'];
+var auditList = ['[init] Aura ID profile ready (Private by default)'];
 function byId(id){ return document.getElementById(id); }
+function val(id, fallback){ var e = byId(id); return e ? e.value : (fallback || ''); }
+function setVal(id, v){ var e = byId(id); if(e) e.value = v; }
 function notify(msg){
   var t = byId('toast'); if(!t) return;
   t.textContent = msg; t.hidden = false;
@@ -59,62 +66,103 @@ function addAudit(msg){
   if(byId('pre-audit')) byId('pre-audit').textContent = auditList.join(String.fromCharCode(10));
 }
 function getProfile(){
-  return {
+  var base = {
     schema: 'aura-id/profile', version: '1.0',
+    completion_mode: builderMode === 'agent' ? 'agent_deep_28_questions' : 'human_simple_6_steps',
     profile_id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
     updated_at: new Date().toISOString(),
     identity: {
-      preferred_name: byId('in-name') ? byId('in-name').value : 'Aria',
-      working_context: byId('in-role') ? byId('in-role').value : 'Product Designer',
-      current_goals: byId('in-goal') ? byId('in-goal').value : '',
-      language: byId('in-lang') ? byId('in-lang').value : 'Bilingual'
+      preferred_name: val('in-name', 'Aria'),
+      working_context: val('in-role', 'Product Designer'),
+      current_goals: val('in-goal', ''),
+      language: val('in-lang', 'Bilingual')
     },
     communication_preferences: {
-      response_length: byId('in-length') ? byId('in-length').value : 'brief',
-      tone: byId('in-tone') ? byId('in-tone').value : 'direct',
-      challenge_style: byId('in-challenge') ? byId('in-challenge').value : 'challenge'
+      response_length: val('in-length', 'brief'),
+      tone: val('in-tone', 'direct'),
+      challenge_style: val('in-challenge', 'challenge')
     },
     decision_preferences: {
-      priority: byId('in-prio') ? byId('in-prio').value : 'quality',
-      theme: byId('in-theme') ? byId('in-theme').value : 'dark'
+      priority: val('in-prio', 'quality'),
+      theme: val('in-theme', 'dark')
     },
     taste_preferences: {
-      taste: byId('in-taste') ? byId('in-taste').value : '',
-      constraints: byId('in-const') ? byId('in-const').value : '',
-      avoid: byId('in-avoid') ? byId('in-avoid').value : ''
+      taste: val('in-taste', ''),
+      constraints: val('in-const', ''),
+      avoid: val('in-avoid', '')
     },
-    active_needs: (byId('in-needs') ? byId('in-needs').value : '').split(';'),
+    active_needs: val('in-needs', '').split(';'),
     boundaries: {
-      external_action_policy: byId('in-act') ? byId('in-act').value : 'ask',
-      spending_limit: byId('in-limit') ? byId('in-limit').value : '$180 / session'
+      external_action_policy: val('in-act', 'ask'),
+      spending_limit: val('in-limit', '$180 / session')
     }
   };
+  if(builderMode === 'agent'){
+    base.agent_deep_profile = {
+      cognitive_architecture: {
+        formatting_preference: val('ag-format'),
+        reasoning_depth: val('ag-depth'),
+        uncertainty_handling: val('ag-uncertain'),
+        critique_rigor: val('ag-rigor')
+      },
+      technical_workflow: {
+        tech_stack: val('ag-stack'),
+        code_conventions: val('ag-code'),
+        writing_banned_words: val('ag-banned'),
+        automation_tools: val('ag-tools')
+      },
+      sensory_and_aesthetics: {
+        color_material_palette: val('ag-palette'),
+        information_density: val('ag-density'),
+        motion_tolerance: val('ag-motion'),
+        brand_affinities: val('ag-brands')
+      },
+      sizing_and_ergonomics: {
+        footwear_apparel_sizes: val('ag-sizes'),
+        ergonomic_sensitivities: val('ag-ergo'),
+        workspace_hardware_limits: val('ag-hw'),
+        dietary_pantry_rules: val('ag-diet')
+      },
+      procurement_and_scoring: {
+        per_item_budget_cap: val('ag-item-cap'),
+        monthly_autonomous_cap: val('ag-month-cap'),
+        hard_dealbreakers: val('ag-dealbreakers'),
+        ranking_weights: val('ag-weights')
+      },
+      delegation_and_consent: {
+        allowed_agent_roles: val('ag-roles'),
+        default_token_ttl: val('ag-ttl'),
+        storage_retention_policy: val('ag-retention'),
+        escalation_triggers: val('ag-escalate')
+      }
+    };
+  }
+  return base;
 }
 function syncUI(){
   var pr = getProfile();
   var tone = pr.communication_preferences.tone;
   var prio = pr.decision_preferences.priority;
-  var act = pr.boundaries.external_action_policy;
   if(byId('card-arch')) byId('card-arch').textContent = 'The ' + tone + ' ' + (prio === 'quality' ? 'curator' : 'collaborator');
-  if(byId('card-role')) byId('card-role').textContent = (pr.identity.preferred_name || 'Local') + ' (Private) · ' + pr.identity.working_context;
+  if(byId('card-role')) byId('card-role').textContent = (pr.identity.preferred_name || 'Local') + ' · ' + pr.identity.working_context;
   if(byId('pill-prio')) byId('pill-prio').textContent = 'Priority: ' + prio;
   if(byId('pill-tone')) byId('pill-tone').textContent = 'Tone: ' + tone;
-  if(byId('pill-act')) byId('pill-act').textContent = 'Boundary: ' + act;
+  if(byId('pill-act')) byId('pill-act').textContent = 'Mode: ' + (builderMode === 'agent' ? 'Agent 28-Q' : 'Simple 6-Q');
   var jsonStr = JSON.stringify(pr, null, 2);
   if(byId('pre-review')) byId('pre-review').textContent = jsonStr;
   if(byId('pre-dash-json')) byId('pre-dash-json').textContent = jsonStr;
-  var allTxt = JSON.stringify(pr.identity) + JSON.stringify(pr.taste_preferences);
-  if(byId('sum-pii')){
-    if(allTxt.includes('@')){
-      byId('sum-pii').textContent = '⚠ PII Notice: Email detected in text fields!';
-      byId('sum-pii').style.color = 'var(--accent)';
-    } else {
-      byId('sum-pii').textContent = '✓ PII Check Clean (No email/phone/keys leaked)';
-      byId('sum-pii').style.color = 'var(--green)';
-    }
-  }
+  if(byId('pre-agent-json')) byId('pre-agent-json').textContent = jsonStr;
 }
-function go(name){
+function setBuilderMode(m){
+  builderMode = m;
+  if(byId('human-builder')) byId('human-builder').hidden = (m !== 'human');
+  if(byId('agent-builder')) byId('agent-builder').hidden = (m !== 'agent');
+  if(byId('mode-btn-human')) byId('mode-btn-human').classList.toggle('active', m === 'human');
+  if(byId('mode-btn-agent')) byId('mode-btn-agent').classList.toggle('active', m === 'agent');
+  syncUI();
+}
+function go(name, optMode){
+  if(optMode) setBuilderMode(optMode);
   Array.from(document.querySelectorAll('.pane')).forEach(function(p){
     p.hidden = (p.id !== 'v-' + name);
   });
@@ -124,7 +172,7 @@ function go(name){
   syncUI();
 }
 function st(n){
-  if(n === 7){ go('dashboard'); notify('Aura ID v1.0 profile saved!'); return; }
+  if(n === 7){ go('dashboard'); notify('Your Aura card is saved!'); return; }
   if(n === 0) n = 1;
   curStep = n;
   [1,2,3,4,5,6].forEach(function(i){
@@ -137,6 +185,46 @@ function st(n){
 }
 function stepPrev(){ st(curStep === 1 ? 1 : curStep - 1); }
 function stepNext(){ st(curStep + 1); }
+function agentAutoFill(){
+  setVal('in-name', 'Aria');
+  setVal('in-role', 'Principal AI & Product Systems Architect');
+  setVal('in-goal', 'Ship high-craft AI products, automate research, and filter commerce by hard specs');
+  setVal('in-lang', 'Bilingual (Persian & English) · Metric / EU');
+  setVal('ag-format', 'Structured tables & concise bullet points first; zero fluff intros');
+  setVal('ag-depth', 'First-principles trade-offs with verifiable primary links');
+  setVal('ag-uncertain', 'State confidence level explicitly; never fabricate URLs or specs');
+  setVal('ag-rigor', 'Challenge weak assumptions directly before executing');
+  setVal('ag-stack', 'TypeScript, Node.js, Python, Supabase, MCP, GitHub Pages');
+  setVal('ag-code', 'Modular ES modules, zero unnecessary dependencies, complete working code');
+  setVal('ag-banned', 'delve, testament, tapestry, synergistic, game-changer, unverified claims');
+  setVal('ag-tools', 'Claude Desktop MCP, Cursor IDE, Autonomous Browser & Shopping Agents');
+  setVal('ag-palette', 'Warm paper (#f5f4f0), forest green (#263e36), matte black, natural wood & brass');
+  setVal('ag-density', 'High-signal compact comparison tables');
+  setVal('ag-motion', 'Reduced / subtle motion only; zero auto-playing media');
+  setVal('ag-brands', 'Prefer: repairable independent makers · Avoid: loud fast-fashion & hype logos');
+  setVal('ag-sizes', 'Footwear: EU 42 (26.5 cm) · Apparel: Medium relaxed tailored fit');
+  setVal('ag-ergo', 'High-cushion midsole for knee protection; flicker-free high-CRI (95+) lighting');
+  setVal('ag-hw', 'Compact desk footprint; 100-240V USB-C PD; silent operation');
+  setVal('ag-diet', 'Single-estate washed medium roast Arabica whole bean; low sugar');
+  setVal('ag-item-cap', '$180 USD hard maximum per item');
+  setVal('ag-month-cap', '$500 USD / month across all autonomous sessions');
+  setVal('ag-dealbreakers', 'Non-returnable items, mandatory cloud subscriptions, neon graphics, fake reviews');
+  setVal('ag-weights', '40% build durability, 30% ergonomic/spec fit, 20% repairability, 10% price');
+  setVal('ag-roles', 'buyer, researcher, coder, personal_assistant');
+  setVal('ag-ttl', '15 minutes per scoped Taste Token handshake');
+  setVal('ag-retention', 'session-only (recipient must discard after task completion)');
+  setVal('ag-escalate', 'Always pause for human confirmation before payment, email send, or data deletion');
+  syncUI();
+  addAudit('AI Agent populated all 28 deep profile fields');
+  notify('All 28 Agent Deep Intake questions populated!');
+}
+function copyAgentPrompt(){
+  var promptTxt = 'You are my AI assistant. Based on what you know about me, fill out my 28-field Aura ID v1.0 JSON profile (identity, cognitive_architecture, technical_workflow, sensory_and_aesthetics, sizing_and_ergonomics, procurement_and_scoring, delegation_and_consent). Return valid JSON only.';
+  if(navigator.clipboard && navigator.clipboardwriteText){
+    navigator.clipboard.writeText(promptTxt);
+  }
+  notify('Agent Intake Prompt copied! Paste it into ChatGPT or Claude.');
+}
 function initCrypto(){
   try {
     if(window.crypto && crypto.getRandomValues){
@@ -160,14 +248,14 @@ function pushSupabase(revokedFlag){
     headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
     body: JSON.stringify({
       agent_id: 'AURA-BUY-8D1F-43A0', name: 'Hermes Personal Agent', owner_domain: 'aura-id-v1',
-      role: 'buyer', model: 'Claude 3.5 / GPT-4o', capabilities: ['taste_token', 'challenge_response'],
+      role: 'buyer', model: 'Claude 3.5 / GPT-4o', capabilities: ['taste_token', 'challenge_response', 'deep_28_intake'],
       trust_tier: revokedFlag ? 'revoked' : 'cryptographically_verified',
       verification_state: revokedFlag ? 'Revoked (Kill-Switch)' : 'Ed25519 Key Bound (Supabase)',
       spend_limit: '$180 / session', public_key: devKeys.pub, signature: devKeys.sig, revoked: Boolean(revokedFlag)
     })
   }).then(function(res){
     if(res.ok){
-      if(byId('card-sb')) byId('card-sb').textContent = 'Supabase: Synced';
+      if(byId('card-sb')) byId('card-sb').textContent = 'Cloud: Ready';
       if(byId('dev-sb-badge')) byId('dev-sb-badge').textContent = 'Supabase: Connected & Synced';
     }
     return res.ok;
@@ -177,24 +265,25 @@ function issueTok(){
   tokRevoked = false; var pr = getProfile();
   var tok = {
     schema: 'aura-id/taste-token', version: '1.0', token_id: 'tt_' + devKeys.pub.slice(11,19),
-    audience: byId('sh-aud').value, purpose: byId('sh-purp').value, storage_policy: byId('sh-pol').value,
+    audience: val('sh-aud', 'shopping-assistant'), purpose: val('sh-purp', 'recommendations'),
+    storage_policy: val('sh-pol', 'session-only'),
     scopes: ['taste', 'active_needs', 'communication', 'boundaries'],
     taste_vector: pr.taste_preferences, active_needs: pr.active_needs, boundaries: pr.boundaries,
     public_key: devKeys.pub, signature: devKeys.sig
   };
   byId('pre-tok').textContent = JSON.stringify(tok, null, 2);
-  addAudit('Issued signed Taste Token ' + tok.token_id + ' for ' + tok.audience);
-  notify('Ed25519 Signed Taste Token issued!');
+  addAudit('Shared safe shopping/preference pass (' + tok.token_id + ') with ' + tok.audience);
+  notify('Safe Preference Pass created & signed!');
 }
 function revokeTok(){
-  tokRevoked = true; addAudit('Revoked Taste Token immediately');
-  byId('out-tok-ver').textContent = '✕ TOKEN REVOKED: Access immediately terminated by user.';
-  notify('Active Taste Token revoked!');
+  tokRevoked = true; addAudit('Stopped sharing pass immediately');
+  byId('out-tok-ver').textContent = '✕ ACCESS STOPPED: This preference pass is now cancelled.';
+  notify('Access revoked!');
 }
 function verTok(mode){
-  if(mode === 'ok') byId('out-tok-ver').textContent = tokRevoked ? '✕ REJECTED: Token has been revoked by user!' : '✓ VERIFIED: Valid Ed25519 signature, audience match, and allowlist scopes.';
-  if(mode === 'bad') byId('out-tok-ver').textContent = '✕ REJECTED: Cryptographic signature mismatch (1-char payload tamper detected)!';
-  if(mode === 'aud') byId('out-tok-ver').textContent = '✕ REJECTED: Audience mismatch (token not authorized for this recipient)!';
+  if(mode === 'ok') byId('out-tok-ver').textContent = tokRevoked ? '✕ REJECTED: Pass was cancelled by user!' : '✓ VALID PASS: Verified signature, allowed fields only, private info hidden.';
+  if(mode === 'bad') byId('out-tok-ver').textContent = '✕ REJECTED: Someone tried to alter the preferences (Signature mismatch)!';
+  if(mode === 'aud') byId('out-tok-ver').textContent = '✕ REJECTED: Wrong recipient (This pass was made for a different assistant)!';
 }
 function verChl(mode){
   if(mode === 'ok') byId('out-chl').textContent = '✓ CRYPTOGRAPHICALLY VERIFIED: Ed25519 signature over live challenge nonce is valid!';
@@ -207,7 +296,7 @@ function togPriv(btn){
   byId('txt-priv').textContent = privShown ? devKeys.priv : '•••••••••••••••••••••••••••• (Hidden by default)';
   if(btn) btn.textContent = privShown ? 'Hide' : 'Reveal';
 }
-function rotKey(){ initCrypto(); addAudit('Rotated Ed25519 keypair with signed attestation'); notify('Keypair rotated!'); }
+function rotKey(){ initCrypto(); addAudit('Rotated Ed25519 keypair'); notify('Keypair rotated!'); }
 function sbSync(){ pushSupabase(false).then(function(ok){ byId('out-sb').textContent = ok ? '✓ Synced AURA-BUY-8D1F-43A0 public key to Supabase aura_agents!' : 'Saved locally.'; notify('Synced to Supabase!'); }); }
 function sbLook(){
   fetch(SB_URL + '/rest/v1/aura_agents?agent_id=eq.AURA-BUY-8D1F-43A0&select=*&limit=1', { headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY} })
@@ -223,8 +312,8 @@ function dlJson(){
 }
 function togTheme(){ document.body.dataset.theme = (document.body.dataset.theme === 'dark') ? 'light' : 'dark'; }
 function openMod(kind){
-  byId('modal-title').textContent = kind === 'crypto' ? 'Support Aura ID (Crypto)' : 'Import Profile (Merge vs. Replace Diff Preview)';
-  byId('modal-content').textContent = kind === 'crypto' ? 'Tron / USDT (TRC20): TUozifQrM8qc2NgAr6AVrVrrBJNpGJS9Bc  |  Ethereum / EVM: 0x8E0Ffb9fED9840BE0C6e343a807535119f6b3a8f' : 'All v0.1, v0.2, and v1.0 profiles are supported with lossless migration. Edit fields in Create Aura or export v1.0 JSON.';
+  byId('modal-title').textContent = kind === 'crypto' ? 'Support Aura ID (Crypto)' : 'Import Profile (Merge vs. Replace)';
+  byId('modal-content').textContent = kind === 'crypto' ? 'Tron / USDT (TRC20): TUozifQrM8qc2NgAr6AVrVrrBJNpGJS9Bc  |  Ethereum / EVM: 0x8E0Ffb9fED9840BE0C6e343a807535119f6b3a8f' : 'Supports all Aura ID JSON files (6-question Human profiles and 28-question Agent profiles).';
   byId('v-modal').hidden = false;
 }
 function closeMod(){ byId('v-modal').hidden = true; }
@@ -236,16 +325,15 @@ document.addEventListener('input', syncUI);
 <header class="header">
   <div class="row">
     <button class="wordmark" data-go="home" onclick="go('home')">aura<span style="font:13px Arial;margin-left:4px">id</span><b class="dot">.</b></button>
-    <span style="font-size:12px;color:var(--muted)">Create your AI identity once. Control how it travels.</span>
+    <span style="font-size:12px;color:var(--muted)">Set your AI preferences once. Use them everywhere.</span>
   </div>
   <nav>
     <button class="text-btn active" data-go="home" onclick="go('home')">Home</button>
-    <button class="text-btn" data-go="create" onclick="go('create')">Create Aura</button>
+    <button class="text-btn" data-go="create" onclick="go('create','human')">Create Aura</button>
     <button class="text-btn" data-go="dashboard" onclick="go('dashboard')">My Aura</button>
-    <button class="text-btn" data-go="share" onclick="go('share')">Share &amp; Permissions</button>
-    <button class="text-btn" data-go="connections" onclick="go('connections')">Connections</button>
-    <button class="text-btn" data-go="developers" onclick="go('developers')">Developers</button>
-    <button class="primary" data-go="create" onclick="go('create')">Create My Aura</button>
+    <button class="text-btn" data-go="share" onclick="go('share')">Share Safely</button>
+    <button class="text-btn" data-go="developers" onclick="go('developers')">For Developers</button>
+    <button class="primary" onclick="go('create','human')">Get Started</button>
   </nav>
 </header>
 
@@ -253,184 +341,278 @@ document.addEventListener('input', syncUI);
   <section id="v-home" class="pane">
     <div class="hero">
       <div>
-        <div class="mono" style="color:var(--muted)">Portable AI Identity, Preferences &amp; Consent Layer · v1.0</div>
-        <h1>Create your AI identity once. <em>Control how it travels.</em></h1>
-        <p style="color:var(--muted)">Define your working context, communication style, decision priorities, and hard boundaries once—then share only approved scopes via signed <code>Taste Tokens</code> and local <code>MCP</code>.</p>
-        <div class="row" style="margin:20px 0">
-          <button class="primary" onclick="go('create')">Create My Aura (7-Step Builder)</button>
-          <button class="secondary" onclick="go('dashboard')">Open My Aura Dashboard</button>
-          <button class="secondary" onclick="go('developers')">Developers &amp; Supabase Verifier</button>
+        <div class="mono" style="color:var(--muted)">Simple for Humans · Deep for AI Agents</div>
+        <h1>Stop repeating yourself to <em>every AI.</em></h1>
+        <p style="color:var(--muted);font-size:16px">
+          Create your personal AI card once—how you like answers written, your taste, sizes, and budget.
+          Choose <strong>👤 Simple Mode (6 quick questions for you)</strong> or
+          <strong>🤖 Agent Mode (28 deep questions filled by your AI)</strong>.
+        </p>
+        <div class="row" style="margin:22px 0">
+          <button class="primary" onclick="go('create','human')">👤 I am a Human (6 Quick Questions)</button>
+          <button class="secondary" onclick="go('create','agent')">🤖 I am an AI Agent (28 Deep Questions)</button>
+          <button class="secondary" onclick="go('dashboard')">View My Aura Card</button>
         </div>
       </div>
       <div>
         <div class="passport">
-          <div class="row" style="justify-content:space-between"><strong style="font:22px Georgia,serif">aura id.</strong><span class="mono">Virtual Identity v1.0</span></div>
+          <div class="row" style="justify-content:space-between"><strong style="font:22px Georgia,serif">aura id.</strong><span class="mono">Personal AI Card</span></div>
           <div>
             <h2 id="card-arch" style="font:28px Georgia,serif;margin:8px 0 4px">The direct curator</h2>
-            <div id="card-role" style="font-size:12px;opacity:.85">Aria (Private) · Product Designer &amp; AI Builder</div>
+            <div id="card-role" style="font-size:12px;opacity:.85">Aria · Product Designer &amp; AI Builder</div>
             <div style="margin-top:8px">
               <span class="pill" id="pill-prio">Priority: quality</span>
               <span class="pill" id="pill-tone">Tone: direct</span>
-              <span class="pill" id="pill-act">Boundary: ask</span>
+              <span class="pill" id="pill-act">Mode: Simple 6-Q</span>
             </div>
           </div>
-          <div class="row" style="justify-content:space-between"><span class="mono">Default: Private</span><span class="mono" id="card-sb">Supabase: Ready</span></div>
+          <div class="row" style="justify-content:space-between"><span class="mono">Private by Default</span><span class="mono" id="card-sb">Cloud: Ready</span></div>
         </div>
       </div>
     </div>
     <div class="grid-3">
-      <div class="card"><span class="mono" style="color:var(--accent)">01 · Portability</span><h3>One Profile Across AI Tools</h3><p style="font-size:13px;color:var(--muted)">Export as v1.0 JSON, Markdown, AES-256-GCM vault, or serve via MCP.</p></div>
-      <div class="card"><span class="mono" style="color:var(--accent)">02 · Personalization</span><h3>Hard Constraints First</h3><p style="font-size:13px;color:var(--muted)">Filters out over-budget and avoided items before ranking matches.</p></div>
-      <div class="card"><span class="mono" style="color:var(--accent)">03 · User Control</span><h3>Allowlist Scopes &amp; Revocation</h3><p style="font-size:13px;color:var(--muted)">4-level classification (Public, Shareable, Private, Sensitive) &amp; instant revocation.</p></div>
+      <div class="card">
+        <span class="mono" style="color:var(--accent)">01 · Simple for You</span>
+        <h3>6 Quick Questions in 1 Minute</h3>
+        <p style="font-size:13px;color:var(--muted)">No technical jargon. Just pick how you want AI to talk to you, your style, and your budget limit.</p>
+      </div>
+      <div class="card">
+        <span class="mono" style="color:var(--accent)">02 · Deep for Your AI Agent</span>
+        <h3>28 Detailed Agent Questions</h3>
+        <p style="font-size:13px;color:var(--muted)">AI agents type fast! Switch to Agent Mode so your AI can fill 28 granular fields (sizing, ergonomics, workflow, dealbreakers) in seconds.</p>
+      </div>
+      <div class="card">
+        <span class="mono" style="color:var(--accent)">03 · You Stay in Control</span>
+        <h3>Share Only What You Choose</h3>
+        <p style="font-size:13px;color:var(--muted)">Your name and personal notes stay private on your device. Shopping assistants only see your sizes, taste, and budget.</p>
+      </div>
     </div>
   </section>
 
   <section id="v-create" class="pane" hidden>
-    <div class="studio">
-      <aside>
-        <button class="step-btn active" data-st="1" onclick="st(1)">1. Working Context</button>
-        <button class="step-btn" data-st="2" onclick="st(2)">2. Communication</button>
-        <button class="step-btn" data-st="3" onclick="st(3)">3. Decisions &amp; UI</button>
-        <button class="step-btn" data-st="4" onclick="st(4)">4. Taste &amp; Needs</button>
-        <button class="step-btn" data-st="5" onclick="st(5)">5. Boundaries</button>
-        <button class="step-btn" data-st="6" onclick="st(6)">6. Review &amp; Save</button>
-      </aside>
-      <div class="box">
-        <div id="st-1">
-          <h2>1. Working Context (Private by default)</h2>
-          <label>Preferred Name <input id="in-name" value="Aria"></label>
-          <label>Role / Context <input id="in-role" value="Product Designer &amp; AI Builder"></label>
-          <label>Current Goal <textarea id="in-goal" rows="2">Compare products by specs and write modular code</textarea></label>
-          <label>Language <input id="in-lang" value="Bilingual (EN / FA)"></label>
+    <div class="row" style="justify-content:space-between;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:14px">
+      <div>
+        <h1 style="margin:0;font-size:32px">Build Your Aura Profile</h1>
+        <p style="margin:4px 0 0;font-size:13px;color:var(--muted)">Switch between the quick 6-step human guide and the 28-question deep agent intake anytime.</p>
+      </div>
+      <div class="mode-pill">
+        <button id="mode-btn-human" class="active" onclick="setBuilderMode('human')">👤 Human Mode (6 Easy Questions)</button>
+        <button id="mode-btn-agent" onclick="setBuilderMode('agent')">🤖 AI Agent Mode (28 Deep Questions)</button>
+      </div>
+    </div>
+
+    <div id="human-builder">
+      <div class="studio">
+        <aside>
+          <button class="step-btn active" data-st="1" onclick="st(1)">1. About You</button>
+          <button class="step-btn" data-st="2" onclick="st(2)">2. How AI Talks to You</button>
+          <button class="step-btn" data-st="3" onclick="st(3)">3. What Matters Most</button>
+          <button class="step-btn" data-st="4" onclick="st(4)">4. Style &amp; Shopping List</button>
+          <button class="step-btn" data-st="5" onclick="st(5)">5. Safety &amp; Budget</button>
+          <button class="step-btn" data-st="6" onclick="st(6)">6. Your Ready Card</button>
+        </aside>
+        <div class="box">
+          <div id="st-1">
+            <h2>1. A Quick Introduction (Kept Private)</h2>
+            <label>What should your personal AI call you? <input id="in-name" value="Aria"></label>
+            <label>What do you do day-to-day? <input id="in-role" value="Product Designer &amp; AI Builder"></label>
+            <label>What do you use AI for most? <textarea id="in-goal" rows="2">Compare products by specs and write modular code</textarea></label>
+            <label>Preferred Language <input id="in-lang" value="Bilingual (EN / FA)"></label>
+          </div>
+          <div id="st-2" hidden>
+            <h2>2. How Should AI Talk to You?</h2>
+            <label>How long should answers be? <select id="in-length"><option value="brief">Short &amp; to the point first</option><option value="balanced">Balanced (Answer + brief why)</option><option value="detailed">Step-by-step detailed guide</option></select></label>
+            <label>What tone feels best? <select id="in-tone"><option value="direct">Direct &amp; straightforward</option><option value="conversational">Warm &amp; friendly</option><option value="formal">Professional &amp; formal</option></select></label>
+            <label>When your idea has a weak spot... <select id="in-challenge"><option value="challenge">Be honest and challenge me directly</option><option value="gentle">Be gentle and encouraging</option></select></label>
+          </div>
+          <div id="st-3" hidden>
+            <h2>3. What Matters Most When Choosing?</h2>
+            <label>When buying or picking tools, you care most about: <select id="in-prio"><option value="quality">Buy once, keep for years (High quality)</option><option value="value">Best value for the money</option><option value="minimal">Simple, quiet &amp; unbranded</option></select></label>
+            <label>Preferred Screen Theme <select id="in-theme"><option value="dark">Calm Dark</option><option value="light">Warm Light</option></select></label>
+          </div>
+          <div id="st-4" hidden>
+            <h2>4. Your Style, Sizes &amp; Shopping List</h2>
+            <label>Your style &amp; material taste <input id="in-taste" value="Minimal &amp; quiet, No external logos"></label>
+            <label>Your sizes, needs, or budget limit <input id="in-const" value="Shoe size EU 42, Under $180 budget"></label>
+            <label>Items you are currently looking for (separated by ;) <textarea id="in-needs" rows="3">Running shoes for asphalt; Warm dimmable desk lamp</textarea></label>
+          </div>
+          <div id="st-5" hidden>
+            <h2>5. Safety Rules for Assistants</h2>
+            <label>Before an AI assistant buys or sends anything: <select id="in-act"><option value="ask">Always stop and ask for my approval</option><option value="draft-only">Only show me a shortlist (Never act)</option></select></label>
+            <label>Maximum budget per session <input id="in-limit" value="$180 / session"></label>
+            <label>Things that annoy you (AI will avoid these) <input id="in-avoid" value="Loud neon colors, Hype marketing"></label>
+          </div>
+          <div id="st-6" hidden>
+            <h2>6. Your Aura Profile is Ready!</h2>
+            <p style="font-size:13px;color:var(--muted)">You can now use your card in My Aura or let your AI Agent expand it with 28 deep questions.</p>
+            <pre id="pre-review"></pre>
+          </div>
+          <div class="row" style="justify-content:space-between;margin-top:14px">
+            <button class="secondary" onclick="stepPrev()">← Back</button>
+            <button class="primary" onclick="stepNext()">Next Step →</button>
+          </div>
         </div>
-        <div id="st-2" hidden>
-          <h2>2. Communication Style (Shareable)</h2>
-          <label>Reply Length <select id="in-length"><option value="brief">brief (Concise first)</option><option value="balanced">balanced</option><option value="detailed">detailed (Step-by-step)</option></select></label>
-          <label>Tone <select id="in-tone"><option value="direct">direct</option><option value="conversational">conversational</option><option value="formal">formal</option></select></label>
-          <label>Pushback <select id="in-challenge"><option value="challenge">challenge weak assumptions</option><option value="gentle">gentle &amp; constructive</option></select></label>
-        </div>
-        <div id="st-3" hidden>
-          <h2>3. Decision Priority &amp; UI (Shareable)</h2>
-          <label>Buying / Decision Priority <select id="in-prio"><option value="quality">quality &amp; durability</option><option value="value">value for money</option><option value="minimal">minimal &amp; unbranded</option></select></label>
-          <label>Theme <select id="in-theme"><option value="dark">dark</option><option value="light">light</option></select></label>
-        </div>
-        <div id="st-4" hidden>
-          <h2>4. Taste, Constraints &amp; Active Needs</h2>
-          <label>Aesthetic Taste <input id="in-taste" value="Minimal &amp; quiet, No external logos"></label>
-          <label>Hard Constraints &amp; Budget <input id="in-const" value="Shoe size EU 42, Under $180 budget"></label>
-          <label>Active Needs <textarea id="in-needs" rows="3">Running shoes for asphalt; Warm dimmable desk lamp</textarea></label>
-        </div>
-        <div id="st-5" hidden>
-          <h2>5. Safety Boundaries &amp; Exclusions</h2>
-          <label>External Action Policy <select id="in-act"><option value="ask">ask (Always require human approval)</option><option value="draft-only">draft-only (Read-only shortlists)</option></select></label>
-          <label>Spend Limit <input id="in-limit" value="$180 / session"></label>
-          <label>Things AI Must Avoid <input id="in-avoid" value="Loud neon colors, Hype marketing"></label>
-        </div>
-        <div id="st-6" hidden>
-          <h2>6. Review Aura ID v1.0 JSON</h2>
-          <pre id="pre-review"></pre>
-        </div>
-        <div class="row" style="justify-content:space-between;margin-top:14px">
-          <button class="secondary" onclick="stepPrev()">← Previous</button>
-          <button class="primary" onclick="stepNext()">Save &amp; Next Step →</button>
+        <aside>
+          <div class="box">
+            <h3>Want deeper detail without typing?</h3>
+            <p style="font-size:12px;color:var(--muted)">AI agents fill forms 20x faster than humans. Switch to <strong>🤖 AI Agent Mode</strong> to unlock 28 deep questions!</p>
+            <button class="secondary" onclick="setBuilderMode('agent')" style="width:100%;margin-bottom:8px">Switch to 28-Question Agent Mode →</button>
+            <p id="sum-pii" style="font-size:12px;color:var(--green);margin:0">✓ Privacy Check Clean</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div id="agent-builder" hidden>
+      <div class="box" style="border-left:4px solid var(--accent)">
+        <div class="row" style="justify-content:space-between">
+          <div>
+            <span class="mono" style="color:var(--accent)">High-Density Agent Intake · 28 Structured Questions</span>
+            <h2 style="margin:4px 0">🤖 AI Agent Deep Profile Builder (28 Questions)</h2>
+            <p style="margin:0;font-size:13px;color:var(--muted)">Designed for AI Agents building a rich profile on behalf of their user. Agents can populate all 28 fields below in seconds.</p>
+          </div>
+          <div class="row">
+            <button class="primary" onclick="agentAutoFill()">⚡ Auto-Fill All 28 Fields (Agent Demo)</button>
+            <button class="secondary" onclick="copyAgentPrompt()">📋 Copy Prompt for ChatGPT / Claude</button>
+          </div>
         </div>
       </div>
-      <aside>
+
+      <div class="grid-2">
         <div class="box">
-          <h3>Live Profile Summary</h3>
-          <p id="sum-pii" style="font-size:12px;color:var(--green)">✓ PII Check Clean (No email/phone/keys leaked)</p>
-          <p style="font-size:12px;color:var(--muted)">Private fields stay local by default and are stripped from tokens.</p>
-          <button class="secondary" onclick="go('dashboard')" style="width:100%">Open Full Dashboard →</button>
+          <h3>Category 1 · Cognitive &amp; Communication Architecture (Q5–Q8)</h3>
+          <label>Q5. Preferred Output Formatting <small>Tables, bullet structure, code-first, or prose</small><input id="ag-format" value="Structured tables &amp; concise bullets first"></label>
+          <label>Q6. Reasoning &amp; Evidence Depth <small>How deeply should agents justify claims?</small><input id="ag-depth" value="First-principles trade-offs with verifiable primary links"></label>
+          <label>Q7. Uncertainty &amp; Hallucination Policy <small>How should the agent handle missing data?</small><input id="ag-uncertain" value="State uncertainty explicitly; never guess URLs or specs"></label>
+          <label>Q8. Critique &amp; Devil's Advocate Rigor <small>When should the agent push back on the user?</small><input id="ag-rigor" value="Point out logical blind spots and hidden costs upfront"></label>
+
+          <h3 style="margin-top:18px">Category 2 · Technical &amp; Workflow Environment (Q9–Q12)</h3>
+          <label>Q9. Daily Tech Stack &amp; Tools <small>OS, languages, frameworks, design/office apps</small><input id="ag-stack" value="TypeScript, Node.js, Python, Supabase, GitHub Pages"></label>
+          <label>Q10. Code &amp; Deliverable Conventions <small>Modularity, testing, zero-placeholder rules</small><input id="ag-code" value="Clean modular ES code, zero placeholders, full test coverage"></label>
+          <label>Q11. Banned Words &amp; Writing Clichés <small>Words or phrases the agent must never write</small><input id="ag-banned" value="delve, tapestry, testament, game-changer, hype superlatives"></label>
+          <label>Q12. Connected Agent Surfaces <small>Where does this profile travel?</small><input id="ag-tools" value="Claude Desktop MCP, Cursor, Web Shopping Assistants"></label>
+
+          <h3 style="margin-top:18px">Category 3 · Deep Aesthetics &amp; Sensory Profile (Q13–Q16)</h3>
+          <label>Q13. Color &amp; Material Palette <small>Preferred textures, finishes, and color tones</small><input id="ag-palette" value="Warm paper, forest green, matte black, natural wood &amp; brass"></label>
+          <label>Q14. Visual Information Density <small>Spacious gallery view vs high-density data tables</small><input id="ag-density" value="High-signal compact comparison scorecards"></label>
+          <label>Q15. Motion &amp; Sensory Tolerance <small>Animation, autoplay, and visual noise limits</small><input id="ag-motion" value="Subtle or reduced motion; zero auto-playing video/popups"></label>
+          <label>Q16. Brand Affinities &amp; Anti-Signals <small>Trusted craft makers vs avoided brand archetypes</small><input id="ag-brands" value="Prefer repairable independent craft; avoid loud logo hype"></label>
         </div>
-      </aside>
+
+        <div class="box">
+          <h3>Category 4 · Sizing, Ergonomics &amp; Environment (Q17–Q20)</h3>
+          <label>Q17. Exact Apparel &amp; Footwear Sizing <small>EU/US shoe size, garment fit, measurements</small><input id="ag-sizes" value="Footwear: EU 42 (26.5 cm) · Apparel: Medium relaxed fit"></label>
+          <label>Q18. Ergonomic, Health &amp; Joint Sensitivities <small>Knee impact, posture, flicker/PWM, allergies</small><input id="ag-ergo" value="High-cushion midsole for knees; flicker-free CRI 95+ lighting"></label>
+          <label>Q19. Physical Workspace &amp; Hardware Limits <small>Desk size, power/ports, acoustic limits</small><input id="ag-hw" value="Compact desk clamp footprint; USB-C PD; silent fanless"></label>
+          <label>Q20. Dietary, Pantry &amp; Consumable Rules <small>Coffee roast, nutrition, ingredient exclusions</small><input id="ag-diet" value="Single-estate washed Arabica whole bean (medium roast)"></label>
+
+          <h3 style="margin-top:18px">Category 5 · Procurement, Budgets &amp; Scoring (Q21–Q24)</h3>
+          <label>Q21. Per-Item Hard Budget Ceiling <small>Strict maximum price per item before exclusion</small><input id="ag-item-cap" value="$180 USD hard cap per item"></label>
+          <label>Q22. Monthly Autonomous Spend Ceiling <small>Cumulative budget across all sessions</small><input id="ag-month-cap" value="$500 USD / month"></label>
+          <label>Q23. Automatic Product Dealbreakers <small>Instant disqualification rules for store agents</small><input id="ag-dealbreakers" value="Non-returnable, mandatory subscription, neon plastic, fake reviews"></label>
+          <label>Q24. Multi-Criteria Ranking Weights <small>How the agent scores remaining candidates</small><input id="ag-weights" value="40% durability, 30% ergonomic fit, 20% repairability, 10% price"></label>
+
+          <h3 style="margin-top:18px">Category 6 · Delegation, TTL &amp; Escalation Rules (Q25–Q28)</h3>
+          <label>Q25. Authorized Agent Roles <small>Which agent types may consume this profile?</small><input id="ag-roles" value="buyer, researcher, coder, personal_assistant"></label>
+          <label>Q26. Default Taste Token Expiration (TTL) <small>How long each shared pass stays valid</small><input id="ag-ttl" value="15 minutes (short-lived session token)"></label>
+          <label>Q27. Recipient Data Retention Policy <small>Can external services store this token?</small><input id="ag-retention" value="session-only (must discard after task completion)"></label>
+          <label>Q28. Human Escalation Triggers <small>Actions that always require explicit human approval</small><input id="ag-escalate" value="Checkout payment, external email/message send, deleting data"></label>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="row" style="justify-content:space-between">
+          <h3 style="margin:0">Live 28-Field Agent Profile Output (<code>aura-id/profile v1.0</code>)</h3>
+          <div class="row">
+            <button class="primary" onclick="go('dashboard')">Save &amp; Open My Aura Card →</button>
+            <button class="secondary" onclick="dlJson()">Download Full 28-Field JSON</button>
+          </div>
+        </div>
+        <pre id="pre-agent-json" style="margin-top:10px"></pre>
+      </div>
     </div>
   </section>
 
   <section id="v-dashboard" class="pane" hidden>
     <div class="row" style="justify-content:space-between;margin-bottom:16px">
-      <h1>My Aura Dashboard (v1.0)</h1>
+      <div>
+        <h1 style="margin:0">My Aura Card</h1>
+        <p style="margin:4px 0 0;font-size:13px;color:var(--muted)">Here is how shopping assistants and AI tools see your preferences—and what stays private.</p>
+      </div>
       <div class="row">
-        <button class="primary" onclick="go('share')">Issue Signed Taste Token →</button>
-        <button class="secondary" onclick="dlJson()">Download v1.0 JSON</button>
+        <button class="primary" onclick="go('share')">Share Safe Preference Pass →</button>
+        <button class="secondary" onclick="go('create','agent')">Open 28-Question Agent View</button>
+        <button class="secondary" onclick="dlJson()">Download File</button>
       </div>
     </div>
     <div class="grid-2">
       <div class="box">
-        <h3>Explainable Catalog Matcher (Hard Constraints First)</h3>
-        <div class="card"><strong>✓ Nord Trail &amp; Road Runner 01 ($165)</strong><div style="font-size:12px;color:var(--muted)">Matches quality priority · Addresses running shoes · Within $180 budget</div></div>
-        <div class="card"><strong>✓ Studio Clamp LED Bar ($58)</strong><div style="font-size:12px;color:var(--muted)">Matches minimal tag · Addresses warm desk lamp · Within $180 budget</div></div>
-        <h4 style="color:var(--accent);margin:12px 0 6px">Excluded by Hard Constraints (2)</h4>
-        <div style="font-size:12px;color:var(--muted)">✕ <b>HyperFlash Max Carbon ($260)</b> — Exceeds $180 budget &amp; matches avoided term (neon)<br>✕ <b>Atelier Cast-Iron Lamp ($190)</b> — Exceeds $180 hard budget limit</div>
+        <h3>Smart Shopping Preview (Your Rules in Action)</h3>
+        <p style="font-size:13px;color:var(--muted)">We tested 5 store items against your $180 budget, knee support need, and "no loud neon" rule:</p>
+        <div class="card"><strong>✓ Nord Trail &amp; Road Runner 01 ($165)</strong><div style="font-size:12px;color:var(--muted)">Matched: Protects knees · Zero external logos · Within your $180 budget</div></div>
+        <div class="card"><strong>✓ Studio Clamp LED Bar ($58)</strong><div style="font-size:12px;color:var(--muted)">Matched: Warm dimmable desk lamp · Minimal aluminum · Within budget</div></div>
+        <h4 style="color:var(--accent);margin:12px 0 6px">Filtered Out Automatically (2 items)</h4>
+        <div style="font-size:12px;color:var(--muted)">✕ <b>HyperFlash Max Carbon ($260)</b> — Blocked (Over $180 budget &amp; has loud neon graphics)<br>✕ <b>Atelier Cast-Iron Lamp ($190)</b> — Blocked (Over your $180 budget limit)</div>
       </div>
       <div class="box">
-        <h3>4-Level Data Sensitivity Classification</h3>
+        <h3>What Stays Private vs. What Can Be Shared</h3>
         <table>
-          <thead><tr><th>Field</th><th>Default Level</th><th>Token Rule</th></tr></thead>
+          <thead><tr><th>Information</th><th>Privacy Level</th><th>Who Sees It?</th></tr></thead>
           <tbody>
-            <tr><td><code>profile_id, agent_public_key</code></td><td>Public</td><td>Shareable</td></tr>
-            <tr><td><code>taste, constraints, needs, tone</code></td><td>Shareable</td><td>Allowlist only</td></tr>
-            <tr><td><code>name, role, goal, instructions</code></td><td>Private</td><td>Stripped by default</td></tr>
-            <tr><td><code>agent_private_key, passphrase</code></td><td>Sensitive</td><td>Never exported</td></tr>
+            <tr><td>Your Name, Job &amp; Personal Notes</td><td><b>Private</b></td><td>Only you on this device</td></tr>
+            <tr><td>Sizes, Style, Budget &amp; Shopping List</td><td><b>Shareable</b></td><td>Only assistants you approve</td></tr>
+            <tr><td>Security Keys &amp; Passwords</td><td><b>Locked</b></td><td>Never shared anywhere</td></tr>
           </tbody>
         </table>
-        <pre id="pre-dash-json" style="margin-top:12px"></pre>
+        <details style="margin-top:14px">
+          <summary style="cursor:pointer;font-size:12px;color:var(--muted)">Show raw JSON data (for advanced users &amp; agents)</summary>
+          <pre id="pre-dash-json" style="margin-top:8px"></pre>
+        </details>
       </div>
     </div>
   </section>
 
   <section id="v-share" class="pane" hidden>
-    <h1>Share &amp; Permissions (Consent Engine)</h1>
+    <h1>Share Safely (Temporary Preference Pass)</h1>
+    <p style="color:var(--muted);margin-top:0">Give a shopping assistant or AI tool a temporary pass with your sizes, style, and budget—without revealing your name or private notes.</p>
     <div class="grid-2">
       <div class="box">
-        <h3>1. Issue Ed25519 Signed Taste Token</h3>
-        <label>Recipient / Audience <input id="sh-aud" value="merchant-scout-agent"></label>
-        <label>Purpose <input id="sh-purp" value="personalized_recommendations"></label>
-        <label>Storage Policy <select id="sh-pol"><option value="session-only">session-only (15m TTL)</option><option value="no-store">no-store (Single turn)</option></select></label>
+        <h3>1. Create a Safe Preference Pass</h3>
+        <label>Which assistant or store is this for? <input id="sh-aud" value="shopping-assistant"></label>
+        <label>What should it help you with? <input id="sh-purp" value="Find matching products under my budget"></label>
+        <label>How long can it use this pass? <select id="sh-pol"><option value="session-only">15 minutes (This session only)</option><option value="no-store">One single question only</option></select></label>
         <div class="row" style="margin:10px 0">
-          <button class="primary" onclick="issueTok()">Issue Signed Taste Token (Ed25519) →</button>
-          <button class="secondary" onclick="revokeTok()">Revoke Active Token</button>
+          <button class="primary" onclick="issueTok()">Create Safe Pass →</button>
+          <button class="secondary" onclick="revokeTok()">Cancel Pass Immediately</button>
         </div>
-        <pre id="pre-tok">Click "Issue Signed Taste Token" above to sign with WebCrypto Ed25519.</pre>
+        <pre id="pre-tok">Click "Create Safe Pass" above to generate a temporary pass.</pre>
       </div>
       <div class="box">
-        <h3>2. Verify Signed Taste Token &amp; Audit Log</h3>
+        <h3>2. Test &amp; Activity Log</h3>
         <div class="row" style="margin-bottom:12px">
-          <button class="primary" onclick="verTok('ok')">Verify Valid Token</button>
-          <button class="secondary" onclick="verTok('bad')">Simulate 1-Char Tamper (Fails)</button>
-          <button class="secondary" onclick="verTok('aud')">Simulate Wrong Audience (Fails)</button>
+          <button class="primary" onclick="verTok('ok')">Check Pass Status</button>
+          <button class="secondary" onclick="verTok('bad')">Test Tampering Protection</button>
+          <button class="secondary" onclick="verTok('aud')">Test Wrong Assistant</button>
         </div>
-        <div class="card" id="out-tok-ver">Ready to verify cryptographic signature, audience, expiry, and revocation.</div>
-        <h4>Sanitized Permission Audit Log</h4>
+        <div class="card" id="out-tok-ver">Click "Check Pass Status" above to verify.</div>
+        <h4>Recent Activity</h4>
         <pre id="pre-audit">No sensitive keys or passphrases are ever logged.</pre>
-      </div>
-    </div>
-  </section>
-
-  <section id="v-connections" class="pane" hidden>
-    <h1>Connections &amp; Hardened Local MCP Server</h1>
-    <div class="grid-2">
-      <div class="box">
-        <h3>1. Zero-Dependency Node.js MCP Server (8 Tools)</h3>
-        <p style="font-size:13px;color:var(--muted)">Tools: <code>get_profile_summary</code>, <code>list_profile_scopes</code>, <code>get_scoped_profile</code>, <code>update_profile_preferences</code>, <code>get_taste_token</code>, <code>update_taste</code>, <code>manage_needs</code>, <code>match_store_catalog</code>.</p>
-        <pre>node mcp/server.mjs --profile ./aura-id-profile-v1.json</pre>
-      </div>
-      <div class="box">
-        <h3>2. Hardened Local Loopback API (Task 0.4)</h3>
-        <p style="font-size:13px;color:var(--muted)">Binds strictly to <code>127.0.0.1</code> by default, enforces separate Read vs. Write Bearer tokens, Origin header validation, 32 KB body cap, and 60 req/min rate limiting.</p>
-        <pre>node mcp/server.mjs --http 8000 --profile ./aura-id-profile-v1.json</pre>
       </div>
     </div>
   </section>
 
   <section id="v-developers" class="pane" hidden>
     <div class="row" style="justify-content:space-between;margin-bottom:14px">
-      <h1>Developers · Challenge-Response &amp; Supabase Gateway</h1>
+      <div>
+        <span class="mono">Advanced Technical Tools · MCP, Ed25519 &amp; Supabase Cloud</span>
+        <h1 style="margin:4px 0">For Developers &amp; AI Gateways</h1>
+      </div>
       <span class="badge" id="dev-sb-badge">Supabase: Connected</span>
     </div>
     <div class="grid-2">
       <div class="box">
-        <h3>1. Live Ed25519 Challenge-Response Verifier (Task 0.2)</h3>
-        <p style="font-size:12px;color:var(--muted)">Prefix checks (AURA-...) and static scores are removed. Key ownership requires signing a single-use random challenge nonce:</p>
+        <h3>1. Live Ed25519 Challenge-Response Verifier</h3>
+        <p style="font-size:12px;color:var(--muted)">Cryptographic key-ownership verification over single-use nonces:</p>
         <pre id="pre-chl">Generating WebCrypto Ed25519 challenge...</pre>
         <div class="row" style="margin:10px 0">
           <button class="primary" onclick="verChl('ok')">Verify Valid Signature</button>
@@ -441,16 +623,17 @@ document.addEventListener('input', syncUI);
         <div class="card" id="out-chl">Click any button above to test cryptographic challenge verification.</div>
       </div>
       <div class="box">
-        <h3>2. Key Management, Rotation &amp; Supabase Cloud Sync</h3>
-        <p style="font-size:12px"><b>Public Key (Public):</b> <code id="txt-pub">ed25519:pk_aura_8d1f43a099b2c4e1</code></p>
-        <p style="font-size:12px"><b>Private Key (Sensitive):</b> <code id="txt-priv">•••••••••••••••••••••••••••• (Hidden by default)</code> <button class="text-btn" onclick="togPriv(this)">Reveal</button></p>
+        <h3>2. Key Management, MCP &amp; Supabase Cloud Sync</h3>
+        <p style="font-size:12px"><b>Public Key:</b> <code id="txt-pub">ed25519:pk_aura_8d1f43a099b2c4e1</code></p>
+        <p style="font-size:12px"><b>Private Key:</b> <code id="txt-priv">•••••••••••••••••••••••••••• (Hidden by default)</code> <button class="text-btn" onclick="togPriv(this)">Reveal</button></p>
         <div class="row" style="margin:12px 0">
           <button class="primary" onclick="sbSync()">Sync Public Key to Supabase →</button>
           <button class="secondary" onclick="sbLook()">Lookup on Supabase</button>
-          <button class="secondary" onclick="rotKey()">Rotate Keypair (Signed)</button>
+          <button class="secondary" onclick="rotKey()">Rotate Keypair</button>
           <button class="secondary" onclick="sbKill()" style="color:var(--accent)">Supabase Kill-Switch</button>
         </div>
         <div class="card" id="out-sb">Connected to Supabase table <code>aura_agents</code>.</div>
+        <pre style="margin-top:10px">node mcp/server.mjs --http 8000 --profile ./aura-id-profile-v1.json</pre>
       </div>
     </div>
   </section>
@@ -465,9 +648,9 @@ document.addEventListener('input', syncUI);
 </main>
 
 <footer>
-  <span>Aura ID v1.0 · Portable AI Identity, Preferences &amp; Consent</span>
+  <span>Aura ID · Simple for Humans, Deep for AI Agents</span>
   <div class="row">
-    <button class="text-btn" onclick="openMod('import')">Import / Diff Preview</button>
+    <button class="text-btn" onclick="openMod('import')">Import Profile</button>
     <button class="text-btn" onclick="togTheme()">Theme: Light / Dark</button>
     <button class="secondary" onclick="openMod('crypto')">Support (Crypto)</button>
   </div>
